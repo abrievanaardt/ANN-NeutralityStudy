@@ -7,5 +7,5 @@ Neural network error landscapes are known for their long plateaus that make popu
 - As activation function, stick to sigmoid.
 - Only quality of solution is considered to measure the performance of the training algorithm (in context of NNs)
 
-For now the goal of the study excludes the following: 
+For now the study excludes the following: 
 - Factors contributing to neutrality (activation functions, # layers, overall network dimensionality).
