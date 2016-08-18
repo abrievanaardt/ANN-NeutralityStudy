@@ -41,7 +41,7 @@ public class Dataset implements Iterable {
         ClassLoader classLoader = Dataset.class.getClassLoader();
         fileScanner = new Scanner(
                 new File(classLoader.getResource(resourceName).getFile()));
-        fileScanner.useDelimiter("[" + System.lineSeparator() + "\\s]");
+        fileScanner.useDelimiter("\\n|\\r\\n|\\r|\\s");
 
         //try to parse the number of inputs and targets from the file
         try {
