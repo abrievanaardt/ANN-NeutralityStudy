@@ -1,5 +1,6 @@
 package ac.up.cos700.neutralitystudy.function;
 
+import ac.up.cos700.neutralitystudy.data.Dataset;
 import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
 
@@ -10,8 +11,8 @@ import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
  */
 public class SumSquaredError extends NetworkError {
 
-    public SumSquaredError(IFFNeuralNet _network) {
-        super(_network);
+    public SumSquaredError(IFFNeuralNet _network, Dataset _dataset) {
+        super(_network, _dataset);
     }
 
     /**

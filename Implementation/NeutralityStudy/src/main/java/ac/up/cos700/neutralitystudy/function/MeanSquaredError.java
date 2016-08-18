@@ -3,7 +3,7 @@ package ac.up.cos700.neutralitystudy.function;
 import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
 
 /**
- *
+ * 
  * 
  * @author Abrie van Aardt
  */
