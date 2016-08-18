@@ -30,9 +30,7 @@ public class FFNeuralNetBuilder {
         try {
             layerConfig.activationFunction = (IFunction) activationFunction.newInstance();
         }
-        catch (InstantiationException e) {
-            throw new NotAFunctionException();
-        } catch (IllegalAccessException e){
+        catch (InstantiationException | IllegalAccessException | ClassCastException e) {
             throw new NotAFunctionException();
         }
         
