@@ -8,6 +8,7 @@ import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
  */
 public class NormalisedMeanSquaredError extends MeanSquaredError{
     @Override
+    //TODO: normalise
     public double evaluate(double... x) throws UnequalArgsDimensionException{
         return super.evaluate(x);
     }

@@ -19,9 +19,13 @@ public class FFNeuralNetBuilder {
      * @return FFNeuralNetBuilder
      * @throws NotAFunctionException 
      */
-    public FFNeuralNetBuilder addLayer(int neuronCount, Class activationFunction) throws NotAFunctionException {
-
+    public FFNeuralNetBuilder addLayer(int neuronCount, Class activationFunction) 
+            throws NotAFunctionException, ZeroNeuronException {
+        
         LayerConfig layerConfig = new LayerConfig();
+        
+        if (neuronCount < 1)
+            throw new ZeroNeuronException();
 
         try {
             layerConfig.activationFunction = (IFunction) activationFunction.newInstance();
@@ -37,7 +41,8 @@ public class FFNeuralNetBuilder {
         } else {//dealing with hidden/output layer
             LayerConfig prevLayerConfig =
                     config.layers.get(config.layers.size()-1);
-            //add 1 additional weight to act as the bias for this layer
+            //add 1 additional weight to act as the bias for neurons in
+            //this layer
             layerConfig.weightCountPerNeuron = prevLayerConfig.neuronCount + 1;                    
         }
         
