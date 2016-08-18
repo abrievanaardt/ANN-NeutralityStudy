@@ -10,7 +10,7 @@ import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
  *
  * @author Abrie van Aardt
  */
-public class NetworkError implements IFunction{
+public abstract class NetworkError implements IFunction{
     private IFFNeuralNet network;
     //private Idataset
     
@@ -41,11 +41,7 @@ public class NetworkError implements IFunction{
      * @throws UnequalArgsDimensionException 
      */
     @Override
-    public double evaluate(double... x) throws UnequalArgsDimensionException {
-        if (x.length != network.getDimensionality())
-            throw new UnequalArgsDimensionException();
-        return 0.0;
-    }
+    public abstract double evaluate(double... x) throws UnequalArgsDimensionException ;
     
     
 }
