@@ -1,5 +1,6 @@
 package ac.up.cos700.neutralitystudy.function;
 
+import ac.up.cos700.neutralitystudy.data.Dataset;
 import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
 
@@ -12,11 +13,12 @@ import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
  */
 public abstract class NetworkError implements IFunction{
     private IFFNeuralNet network;
-    //private Idataset
+    private Dataset dataset;
     
     //todo: add dataset as parameter here
-    public NetworkError(IFFNeuralNet _network) {
+    public NetworkError(IFFNeuralNet _network, Dataset _dataset) {
         network = _network;
+        dataset = _dataset;
     }
     
     /**
