@@ -42,18 +42,21 @@ public class Neuron {
     public void setWeight(int index, double value) {
         weightVector[index] = value;
     }
-
+    
     /**
      * Augments the input signal using a weight vector. Then calculates an
      * output signal using an activation function.
      *
+     * 
+     * 
      * @param inputVector
      * @return Output signal
      * @throws UnequalInputWeightException
      * @throws UnequalArgsDimensionException
      */
     public double feed(double... inputVector) throws UnequalInputWeightException, UnequalArgsDimensionException {
-        if (inputVector.length != weightVector.length - 1) {
+        if (inputVector.length != weightVector.length - 1 &&
+                (inputVector.length != 1 || weightVector.length != 0)) {
             throw new UnequalInputWeightException();
         }
 
