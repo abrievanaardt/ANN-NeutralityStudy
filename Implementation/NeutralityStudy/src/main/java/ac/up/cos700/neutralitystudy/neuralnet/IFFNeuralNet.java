@@ -4,7 +4,7 @@ import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
 
 /**
- * Interface to a fully connected feed forward neural network for 
+ * Interface to a fully connected feed forward neural network for
  * classification.
  *
  * @author Abrie van Aardt
@@ -20,12 +20,12 @@ public interface IFFNeuralNet {
      * @throws UnequalInputWeightException
      * @throws UnequalArgsDimensionException
      */
-    public double[] classify(double... inputPattern) 
+    public double[] classify(double... inputPattern)
             throws UnequalInputWeightException, UnequalArgsDimensionException;
 
     /**
-     * Return an array (vector) of the weights in the network in order 
-     * of layer occurrence.
+     * Return an array (vector) of the weights in the network in order of layer
+     * occurrence.
      *
      * @return weightVector
      */
@@ -42,7 +42,7 @@ public interface IFFNeuralNet {
             throws UnequalArgsDimensionException;
 
     /**
-     * Gets the number of weights in the entire network, including weight 
+     * Gets the number of weights in the entire network, including weight
      * biases.
      *
      * @return network dimensionality
@@ -57,4 +57,5 @@ public interface IFFNeuralNet {
      * @return Zagged 2D array of Neurons
      */
     public Neuron[][] getNetworkLayers();
+
 }
