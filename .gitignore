@@ -8,4 +8,5 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 /Implementation/NeutralityStudy/nbproject/
-/Implementation/NeutralityStudy/*log*
+/Implementation/NeutralityStudy/*.txt
+/Implementation/NeutralityStudy/*.lck
