@@ -6,16 +6,14 @@ import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
 
 /**
  * Default implementation of an {@link IFFNeuralNet}.
- * 
+ *
  * @author Abrie van Aardt
  */
 public class FFNeuralNet implements IFFNeuralNet {
 
-    private Neuron[][] layers;
-
     public FFNeuralNet(FFNeuralNetConfig config) {
-        layers = new Neuron[config.layers.size()][];
-
+        layers = new Neuron[config.layers.size()][];        
+        
         for (int i = 0; i < layers.length; i++) {
             layers[i] = new Neuron[config.layers.get(i).neuronCount];
             for (int j = 0; j < layers[i].length; j++) {
@@ -84,10 +82,10 @@ public class FFNeuralNet implements IFFNeuralNet {
     }
 
     @Override
-    public void setWeightVector(double... _weightVector) throws UnequalArgsDimensionException{
+    public void setWeightVector(double... _weightVector) throws UnequalArgsDimensionException {
         if (_weightVector.length != getDimensionality())
             throw new UnequalArgsDimensionException();
-        
+
         int weightVectorIndex = 0;
         for (int i = 0; i < layers.length; i++) {
             for (int j = 0; j < layers[i].length; j++) {
@@ -103,5 +101,9 @@ public class FFNeuralNet implements IFFNeuralNet {
         //handle with care, no pun intended
         return layers;
     }
+    
+    private Neuron[][] layers;  
+
+    
 
 }

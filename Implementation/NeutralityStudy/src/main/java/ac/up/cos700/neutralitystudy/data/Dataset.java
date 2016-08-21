@@ -10,7 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import javafx.util.Pair;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class representing a dataset for neural network training. This class is also
@@ -33,9 +34,9 @@ import javafx.util.Pair;
 public class Dataset implements Iterable {
 
     //TODO: check the scale of the data, [root(3), root(3)] for sigmoid
-    
     public static Dataset fromFile(String resourceName)
             throws FileNotFoundException, IncorrectFileFormatException {
+
         Scanner fileScanner;
         Dataset dataset = new Dataset();
         ClassLoader classLoader = Dataset.class.getClassLoader();
@@ -45,12 +46,20 @@ public class Dataset implements Iterable {
 
         //try to parse the number of inputs and targets from the file
         try {
-            dataset.inputCount = Integer.parseInt(
-                    fileScanner.findInLine("\\d+"));
+            if (fileScanner.findInLine("i") == null) {
+                throw new IncorrectFileFormatException();
+            }
+
+            dataset.inputCount = Integer.parseInt(fileScanner.findInLine("\\d+"));
             fileScanner.nextLine();
-            dataset.targetCount = Integer.parseInt(
-                    fileScanner.findInLine("\\d+"));
+
+            if (fileScanner.findInLine("t") == null) {
+                throw new IncorrectFileFormatException();
+            }
+
+            dataset.targetCount = Integer.parseInt(fileScanner.findInLine("\\d+"));
             fileScanner.nextLine();
+
         }
         catch (NumberFormatException e) {
             throw new IncorrectFileFormatException();
@@ -68,13 +77,22 @@ public class Dataset implements Iterable {
             for (int i = 0; i < targets.length; i++) {
                 targets[i] = fileScanner.nextDouble();
             }
-            
+
             Pattern p = new Pattern();
             p.setInputs(inputs);
             p.setTargets(targets);
-            
+
             dataset.data.add(p);
         }
+
+        Logger logger = Logger.getLogger(Dataset.class.getName());
+        logger.log(Level.INFO, "Loaded {3} pattern(s) with {1} input(s) "
+                + "and {2} class(es) from dataset: {0}.", new Object[]{
+                    resourceName.substring(resourceName.lastIndexOf('/') + 1),
+                    dataset.inputCount,
+                    dataset.targetCount,
+                    dataset.size()
+                });
 
         return dataset;
     }
@@ -85,11 +103,10 @@ public class Dataset implements Iterable {
     }
 
     /**
-     * Splits the dataset into a training and testing set. This method
-     * provides respective views for the training and testing dataset. 
-     * Both views are backed by the same underlying dataset. trainingRatio
-     * is the portion of the dataset that will be dedicated to training
-     * patterns.
+     * Splits the dataset into a training and testing set. This method provides
+     * respective views for the training and testing dataset. Both views are
+     * backed by the same underlying dataset. trainingRatio is the portion of
+     * the dataset that will be dedicated to training patterns.
      *
      * @param trainingRatio
      * @return TrainingTestingTuple
@@ -97,26 +114,45 @@ public class Dataset implements Iterable {
     public TrainingTestingTuple split(double trainingRatio) {
         Dataset training = new Dataset();
         Dataset testing = new Dataset();
-        
+
         training.inputCount = inputCount;
         training.targetCount = targetCount;
         testing.inputCount = inputCount;
-        testing.targetCount = targetCount;                
-               
-        int trainingUpperIndex = (int)(trainingRatio * data.size());
-        
+        testing.targetCount = targetCount;
+
+        int trainingUpperIndex = (int) (trainingRatio * data.size());
+
         training.data = data.subList(0, trainingUpperIndex);
-        testing.data = data.subList(trainingUpperIndex,data.size());
-        
+        testing.data = data.subList(trainingUpperIndex, data.size());
+
+        logger.log(Level.INFO, "Using "
+                + String.format("%.2f", trainingRatio * 100)
+                + "% of the patterns for training and the remainder for "
+                + "testing generalisation.");
+
         return new TrainingTestingTuple(training, testing);
     }
-    
-    public Dataset shuffle(){
-        Collections.shuffle(data, new Random(System.nanoTime()));
+
+    public Dataset shuffle() {
+        Collections.shuffle(data, random);
         return this;
+    }
+
+    public int size() {
+        return data.size();
+    }
+
+    public int getInputCount() {
+        return inputCount;
+    }
+
+    public int getTargetCount() {
+        return targetCount;
     }
 
     private List<Pattern> data = new ArrayList<>();
     private int inputCount;
     private int targetCount;
+    private Random random = new Random(System.nanoTime());
+    private Logger logger = Logger.getLogger(getClass().getName());
 }

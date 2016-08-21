@@ -43,11 +43,13 @@ public class Neuron {
         weightVector[index] = value;
     }
     
+    public double getOutput(){
+        return output;
+    }
+    
     /**
      * Augments the input signal using a weight vector. Then calculates an
-     * output signal using an activation function.
-     *
-     * 
+     * output signal using an activation function. 
      * 
      * @param inputVector
      * @return Output signal
@@ -59,8 +61,9 @@ public class Neuron {
                 (inputVector.length != 1 || weightVector.length != 0)) {
             throw new UnequalInputWeightException();
         }
-
-        return activationFunction.evaluate(aggregate(inputVector));
+        
+        output = activationFunction.evaluate(aggregate(inputVector));
+        return output;
     }
 
     /**
@@ -91,5 +94,7 @@ public class Neuron {
 
     //the last position in the array is used to store the bias
     private double[] weightVector;
+    //store neuron output to facilitate some training algorithms
+    private double output;
     private IFunction activationFunction;
 }
