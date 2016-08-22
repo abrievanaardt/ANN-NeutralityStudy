@@ -11,6 +11,6 @@ import ac.up.cos700.neutralitystudy.function.Sigmoid;
  */
 public class LayerConfig {
     public IFunction activationFunction = new Sigmoid();
-    public int weightCountPerNeuron = 2;
+    public int weightCountPerNeuron = 0;
     public int neuronCount = 1;
 }

@@ -3,6 +3,9 @@ package ac.up.cos700.neutralitystudy.neuralnet.util;
 import ac.up.cos700.neutralitystudy.function.IFunction;
 import ac.up.cos700.neutralitystudy.function.util.NotAFunctionException;
 import ac.up.cos700.neutralitystudy.neuralnet.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  *
@@ -10,6 +13,12 @@ import ac.up.cos700.neutralitystudy.neuralnet.*;
  */
 public class FFNeuralNetBuilder {
 
+    public FFNeuralNetBuilder(){
+         Logger
+                .getLogger(getClass().getName())
+                .log(Level.INFO,"Building feed-Forward neural network...");
+    }
+    
     /**
      * Adds configuration information for an additional layer in the neural
      * network.
@@ -47,6 +56,15 @@ public class FFNeuralNetBuilder {
         layerConfig.neuronCount = neuronCount;
         config.layers.add(layerConfig);
 
+         Logger
+                .getLogger(getClass().getName())
+                .log(Level.INFO,"Layer {0}: {1} neuron(s), {2} activation "
+                        + "function.", new Object[]{
+                            config.layers.size(),
+                            layerConfig.neuronCount,
+                            layerConfig.activationFunction.getClass().getSimpleName()                            
+                        });
+        
         return this;
     }
     
@@ -60,6 +78,7 @@ public class FFNeuralNetBuilder {
         //clear configuration to reuse this bulder instance
         FFNeuralNetConfig tempConfig = config;
         config = new FFNeuralNetConfig();
+        
         return new FFNeuralNet(tempConfig);
     }
 

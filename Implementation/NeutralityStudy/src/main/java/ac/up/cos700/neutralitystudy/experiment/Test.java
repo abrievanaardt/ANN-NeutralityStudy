@@ -3,6 +3,7 @@ package ac.up.cos700.neutralitystudy.experiment;
 import ac.up.cos700.neutralitystudy.data.Dataset;
 import ac.up.cos700.neutralitystudy.data.Pattern;
 import ac.up.cos700.neutralitystudy.data.util.IncorrectFileFormatException;
+import ac.up.cos700.neutralitystudy.data.util.StudyLogFormatter;
 import ac.up.cos700.neutralitystudy.data.util.TrainingTestingTuple;
 import ac.up.cos700.neutralitystudy.function.Identity;
 import ac.up.cos700.neutralitystudy.function.Sigmoid;
@@ -16,6 +17,7 @@ import ac.up.cos700.neutralitystudy.neuralnet.util.ZeroNeuronException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -32,6 +34,10 @@ public class Test {
     public static void main(String[] args) {
         try {
             setupLogging();
+            
+            Logger
+                    .getLogger(Test.class.getName())
+                    .log(Level.INFO, "Configuring experiment...");
 
             Dataset dataset = Dataset.fromFile("ac/up/cos700/neutralitystudy/data/cancer.nsds");
 
@@ -39,7 +45,7 @@ public class Test {
 
             IFFNeuralNet network = new FFNeuralNetBuilder()
                     .addLayer(dataset.getInputCount(), Identity.class)
-                    .addLayer(6, Sigmoid.class)
+                    .addLayer(0, Sigmoid.class)
                     .addLayer(dataset.getTargetCount(), Sigmoid.class)
                     .build();
 
@@ -64,20 +70,26 @@ public class Test {
 
         }
         catch (IOException | IncorrectFileFormatException | NotAFunctionException | ZeroNeuronException | UnequalInputWeightException | UnequalArgsDimensionException ex) {
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, "", ex);
         }
 
     }
 
     private static void setupLogging() throws IOException {
+        Formatter logFormatter = new StudyLogFormatter();
         Logger.getLogger(Test.class.getName()).setLevel(Level.CONFIG);
-        Logger logger = Logger.getLogger("");
-        FileHandler fileHandler = new FileHandler("study-log-%u.txt", true);
-        fileHandler.setFormatter(new SimpleFormatter());
-        logger.addHandler(fileHandler);
+        Logger logger = Logger.getLogger("");        
+        FileHandler logFileHandler = new FileHandler("study.log", true);
+        FileHandler detailedLogFileHandler = new FileHandler("study.detailed.log", true);
+        logFileHandler.setFormatter(logFormatter);
+        detailedLogFileHandler.setFormatter(logFormatter);
+        logger.addHandler(logFileHandler);
+        logger.addHandler(detailedLogFileHandler);
         logger.setLevel(Level.ALL);
-        logger.getHandlers()[0].setLevel(Level.CONFIG);
-        logger.getHandlers()[1].setLevel(Level.ALL);
+        logger.getHandlers()[0].setFormatter(logFormatter);
+        logger.getHandlers()[0].setLevel(Level.CONFIG);//console output
+        logger.getHandlers()[1].setLevel(Level.CONFIG);//normal log file
+        logger.getHandlers()[2].setLevel(Level.ALL);//detailed log file
     }
 
 }
