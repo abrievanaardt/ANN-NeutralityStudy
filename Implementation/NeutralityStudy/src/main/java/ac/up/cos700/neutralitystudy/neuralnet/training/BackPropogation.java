@@ -6,9 +6,10 @@ import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
 import ac.up.cos700.neutralitystudy.neuralnet.Neuron;
 import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Implements the BackPropogation algorithm, assuming the Sigmoid activation
@@ -21,9 +22,8 @@ import java.util.Random;
  */
 public class BackPropogation implements IFFNeuralNetTrainer {
 
-    //TODO: make sure that error can be compared with = and not > or <
     //TODO: method for normalising total network error is under scrutiny
-    //TODO: maybe make use of a x-Squared Error function to decide when to stop
+    //TODO: maybe make use of an x-Squared Error function to decide when to stop
     public BackPropogation() {
         errorDelta = 0.1;//todo: find good value
         learningRate = 0.01;//todo: find good value
@@ -37,11 +37,17 @@ public class BackPropogation implements IFFNeuralNetTrainer {
     @Override
     public void train(IFFNeuralNet network, Dataset dataset)
             throws UnequalInputWeightException, UnequalArgsDimensionException {
+
+        Logger.getLogger(getClass().getName())
+                .log(Level.INFO, "Started neural network training...");
+
         initialise(network);
         double networkError;
         double[] outputs;
         double[] targets;
         double[] errors;
+        int epoch = 0;
+        long duration = System.nanoTime();
 
         do {
             //prevent memorisation of pattern order
@@ -63,16 +69,30 @@ public class BackPropogation implements IFFNeuralNetTrainer {
                     networkError += Math.abs(errors[i]) / (0.9 * errors.length);
                 }
 
-                backPropogateError(network, errors, outputs, targets);
+                backPropogateError(network, errors, outputs);
             }
 
             //normalize the network error
-            networkError /= dataset.size();//range [0,1)     
+            networkError /= dataset.size();//range [0,1)   
+            
+            ++epoch;
         }
         while (networkError > errorDelta);
+        
+        duration = System.nanoTime() - duration;
+
+        Logger.getLogger(getClass().getName())
+                .log(Level.INFO, "Training completed in {0} epochs ({1}s) with "
+                        + "acceptable classification error of {2}.",
+                        new Object[]{
+                            epoch,
+                            duration/1000000000,
+                            networkError
+                        }
+                );
     }
 
-    private void backPropogateError(IFFNeuralNet network, double[] errors, double[] outputs, double[] targets) {
+    private void backPropogateError(IFFNeuralNet network, double[] errors, double[] outputs) {
         //obtain neurons
         Neuron[][] layers = network.getNetworkLayers();
 
@@ -84,6 +104,7 @@ public class BackPropogation implements IFFNeuralNetTrainer {
 
         int biasIndex;
         double[] newErrorSignals;
+
         //iterate through layers, from last to second to update weights
         //input layer is excluded since identity function is assumed
         for (int i = layers.length - 1; i >= 1; i--) {
@@ -98,7 +119,7 @@ public class BackPropogation implements IFFNeuralNetTrainer {
                 }
                 //now adjust the bias weight
                 biasIndex = layers[i][j].getWeightCount() - 1;
-                updateWeight(layers, errorSignals, i, j, biasIndex, WeightType.BIAS);                
+                updateWeight(layers, errorSignals, i, j, biasIndex, WeightType.BIAS);
             }
 
             //update error signals to be used for the next layer
@@ -119,7 +140,7 @@ public class BackPropogation implements IFFNeuralNetTrainer {
         else if (type == WeightType.BIAS) {
             newWeight *= -1;//input = -1 for bias            
         }
-        
+
         newWeight += oldWeight;
 
         layers[i][j].setWeight(k, newWeight);

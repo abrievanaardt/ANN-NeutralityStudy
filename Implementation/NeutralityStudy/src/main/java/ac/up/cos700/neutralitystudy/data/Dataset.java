@@ -22,43 +22,62 @@ import java.util.logging.Logger;
  * <br>
  * <pre>
  * i=input_count
+ * h=hidden_count
  * t=target_count
  * [pattern1]
  * ...
  * [patternN]</pre>
  * <br>
  * where every value in [patternK] is separated by a white space.
- *
+ *<br>
+ * The dataset will will assume that NN architecture will only consist of 3
+ * layers. An input, hidden and output layer.
+ * 
  * @author Abrie van Aardt
  */
 public class Dataset implements Iterable {
 
-    //TODO: check the scale of the data, [root(3), root(3)] for sigmoid
+    /**
+     * A dataset object can only be instantiated via a call to the static
+     * {@link Dataset#fromFile(java.lang.String)} method, or a call to
+     * {@link Dataset#split(double)} on an existing Dataset object.
+     */
+    private Dataset() {
+    }
+
+    //TODO: data is scaled to [-1,1]. Double check that [root(3), root(3)] is
+    //not preferred
     public static Dataset fromFile(String resourceName)
             throws FileNotFoundException, IncorrectFileFormatException {
 
-        Scanner fileScanner;
+        Scanner scanner;
         Dataset dataset = new Dataset();
         ClassLoader classLoader = Dataset.class.getClassLoader();
-        fileScanner = new Scanner(
-                new File(classLoader.getResource(resourceName).getFile()));
-        fileScanner.useDelimiter("\\n|\\r\\n|\\r|\\s");
+        scanner = new Scanner(classLoader.getResourceAsStream(resourceName));
+        scanner.useDelimiter("\\n|\\r\\n|\\r|\\s");
 
         //try to parse the number of inputs and targets from the file
         try {
-            if (fileScanner.findInLine("i") == null) {
+            if (scanner.findInLine("i") == null) {
                 throw new IncorrectFileFormatException();
             }
 
-            dataset.inputCount = Integer.parseInt(fileScanner.findInLine("\\d+"));
-            fileScanner.nextLine();
+            dataset.inputCount = Integer.parseInt(scanner.findInLine("\\d+"));
+            scanner.nextLine();
 
-            if (fileScanner.findInLine("t") == null) {
+            if (scanner.findInLine("h") == null) {
                 throw new IncorrectFileFormatException();
             }
 
-            dataset.targetCount = Integer.parseInt(fileScanner.findInLine("\\d+"));
-            fileScanner.nextLine();
+            dataset.hiddenCount = Integer.parseInt(scanner.findInLine("\\d+"));
+            scanner.nextLine();
+
+            if (scanner.findInLine("t") == null) {
+                throw new IncorrectFileFormatException();
+            }
+
+            dataset.targetCount = Integer.parseInt(scanner.findInLine("\\d+"));
+            scanner.nextLine();
 
         }
         catch (NumberFormatException e) {
@@ -69,13 +88,13 @@ public class Dataset implements Iterable {
         double[] inputs = new double[dataset.inputCount];
         double[] targets = new double[dataset.targetCount];
 
-        while (fileScanner.hasNextDouble()) {
+        while (scanner.hasNextDouble()) {
             for (int i = 0; i < inputs.length; i++) {
-                inputs[i] = fileScanner.nextDouble();
+                inputs[i] = scanner.nextDouble();
             }
 
             for (int i = 0; i < targets.length; i++) {
-                targets[i] = fileScanner.nextDouble();
+                targets[i] = scanner.nextDouble();
             }
 
             Pattern p = new Pattern();
@@ -93,7 +112,15 @@ public class Dataset implements Iterable {
                     dataset.targetCount,
                     dataset.size()
                 });
+        
+        logger.log(Level.INFO, "{0} has an optimal 3-layered NN configuration"
+                + " requiring {1} hidden units.", new Object[]{
+                    resourceName.substring(resourceName.lastIndexOf('/') + 1),
+                    dataset.hiddenCount
+                });
 
+        dataset.shuffle();
+        
         return dataset;
     }
 
@@ -105,8 +132,8 @@ public class Dataset implements Iterable {
     /**
      * Splits the dataset into a training and testing set. This method provides
      * respective views for the training and testing dataset. Both views are
-     * backed by the same underlying dataset. trainingRatio is the portion of
-     * the dataset that will be dedicated to training patterns.
+     * backed by the same underlying dataset. trainingRatio is the 
+     * proportion of the dataset that will be dedicated to training patterns.
      *
      * @param trainingRatio
      * @return TrainingTestingTuple
@@ -116,8 +143,10 @@ public class Dataset implements Iterable {
         Dataset testing = new Dataset();
 
         training.inputCount = inputCount;
+        training.hiddenCount = hiddenCount;
         training.targetCount = targetCount;
         testing.inputCount = inputCount;
+        testing.hiddenCount = hiddenCount;
         testing.targetCount = targetCount;
 
         int trainingUpperIndex = (int) (trainingRatio * data.size());
@@ -125,14 +154,14 @@ public class Dataset implements Iterable {
         training.data = data.subList(0, trainingUpperIndex);
         testing.data = data.subList(trainingUpperIndex, data.size());
 
-        logger.log(Level.INFO, "Using "
-                + String.format("%.2f", trainingRatio * 100)
+        logger.log(Level.INFO, "Using {0}"
                 + "% of the patterns for training and the remainder for "
-                + "testing generalisation.");
+                + "testing generalisation.", String.format("%.2f", trainingRatio * 100));
 
         return new TrainingTestingTuple(training, testing);
     }
 
+    
     public Dataset shuffle() {
         Collections.shuffle(data, random);
         return this;
@@ -149,9 +178,14 @@ public class Dataset implements Iterable {
     public int getTargetCount() {
         return targetCount;
     }
+    
+    public int getHiddenCount(){
+        return hiddenCount;
+    }
 
     private List<Pattern> data = new ArrayList<>();
     private int inputCount;
+    private int hiddenCount;
     private int targetCount;
     private Random random = new Random(System.nanoTime());
     private Logger logger = Logger.getLogger(getClass().getName());

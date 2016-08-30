@@ -20,7 +20,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 /**
  *
@@ -39,17 +38,17 @@ public class Test {
                     .getLogger(Test.class.getName())
                     .log(Level.INFO, "Configuring experiment...");
 
-            Dataset dataset = Dataset.fromFile("ac/up/cos700/neutralitystudy/data/cancer.nsds");
+            Dataset dataset = Dataset.fromFile("ac/up/cos700/neutralitystudy/data/diabetes.nsds");
 
             TrainingTestingTuple datasets = dataset.split(0.8);
 
             IFFNeuralNet network = new FFNeuralNetBuilder()
                     .addLayer(dataset.getInputCount(), Identity.class)
-                    .addLayer(0, Sigmoid.class)
+                    .addLayer(dataset.getHiddenCount(), Sigmoid.class)
                     .addLayer(dataset.getTargetCount(), Sigmoid.class)
                     .build();
 
-            new BackPropogation(0.05, 0.001).train(network, datasets.training);
+            new BackPropogation(0.2, 0.05).train(network, datasets.training);
 
             Iterator<Pattern> testIt = datasets.testing.iterator();
             while (testIt.hasNext()) {

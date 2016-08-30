@@ -3,6 +3,9 @@ package ac.up.cos700.neutralitystudy.neuralnet;
 import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.util.FFNeuralNetConfig;
 import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Default implementation of an {@link IFFNeuralNet}.
@@ -53,6 +56,7 @@ public class FFNeuralNet implements IFFNeuralNet {
             }
             tempInputPattern = tempOutputPattern;
         }
+        
         return tempOutputPattern;
     }
 
