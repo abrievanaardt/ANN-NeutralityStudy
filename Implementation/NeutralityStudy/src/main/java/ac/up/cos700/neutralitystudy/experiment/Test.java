@@ -10,8 +10,9 @@ import ac.up.cos700.neutralitystudy.function.Sigmoid;
 import ac.up.cos700.neutralitystudy.function.util.NotAFunctionException;
 import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
-import ac.up.cos700.neutralitystudy.neuralnet.training.BackPropogation;
+import ac.up.cos700.neutralitystudy.neuralnet.training.BackPropagation;
 import ac.up.cos700.neutralitystudy.neuralnet.util.FFNeuralNetBuilder;
+import ac.up.cos700.neutralitystudy.neuralnet.util.ThresholdOutOfBoundsException;
 import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ZeroNeuronException;
 import java.io.IOException;
@@ -48,7 +49,13 @@ public class Test {
                     .addLayer(dataset.getTargetCount(), Sigmoid.class)
                     .build();
 
-            new BackPropogation(0.2, 0.05).train(network, datasets.training);
+            new BackPropagation(
+                    0.2,//stopping condition: acceptable error
+                    0.05,//learning rate
+                    10,//bin size for mini-batch
+                    0.2,//classification rigor (θ)
+                    20//stopping condition: max epochs
+            ).train(network, datasets.training, datasets.training);
 
             Iterator<Pattern> testIt = datasets.testing.iterator();
             while (testIt.hasNext()) {
@@ -68,7 +75,7 @@ public class Test {
             }
 
         }
-        catch (IOException | IncorrectFileFormatException | NotAFunctionException | ZeroNeuronException | UnequalInputWeightException | UnequalArgsDimensionException ex) {
+        catch (ThresholdOutOfBoundsException |IOException | IncorrectFileFormatException | NotAFunctionException | ZeroNeuronException | UnequalInputWeightException | UnequalArgsDimensionException ex) {
             Logger.getLogger(Test.class.getName()).log(Level.SEVERE, "", ex);
         }
 
