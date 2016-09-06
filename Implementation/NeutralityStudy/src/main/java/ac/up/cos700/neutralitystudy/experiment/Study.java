@@ -1,28 +1,30 @@
 package ac.up.cos700.neutralitystudy.experiment;
 
 import ac.up.cos700.neutralitystudy.data.Dataset;
-import ac.up.cos700.neutralitystudy.data.Pattern;
 import ac.up.cos700.neutralitystudy.data.Results;
 import ac.up.cos700.neutralitystudy.data.util.IncorrectFileFormatException;
 import ac.up.cos700.neutralitystudy.data.util.StudyLogFormatter;
 import ac.up.cos700.neutralitystudy.data.util.TrainingTestingTuple;
+import ac.up.cos700.neutralitystudy.experiment.util.StudyConfigException;
 import ac.up.cos700.neutralitystudy.function.Identity;
 import ac.up.cos700.neutralitystudy.function.Sigmoid;
 import ac.up.cos700.neutralitystudy.function.util.NotAFunctionException;
-import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
+import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
 import ac.up.cos700.neutralitystudy.neuralnet.metric.ClassificationAccuracy;
 import ac.up.cos700.neutralitystudy.neuralnet.metric.DefaultNetworkError;
 import ac.up.cos700.neutralitystudy.neuralnet.training.BackPropagation;
 import ac.up.cos700.neutralitystudy.neuralnet.util.FFNeuralNetBuilder;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ThresholdOutOfBoundsException;
-import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ZeroNeuronException;
+import com.sun.javafx.binding.Logging;
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -41,24 +43,20 @@ public class Study {
             setupLogging();
         }
         catch (IOException e) {
-
+            Logger.getLogger(Study.class.getName()).log(Level.SEVERE, "", e);
         }
 
         Logger
                 .getLogger(Study.class.getName())
                 .log(Level.INFO, "Configuring experiment.");
 
-        expUsingAllInputs();
+        test();
         
     }
 
-    private static void expUsingAllInputs() {
+    private static void test() {
 
-        Logger
-                .getLogger(Study.class.getName())
-                .log(Level.INFO, "============ Using All Inputs ============");
-
-        String expName = "Exp_All_Inputs";
+        String expName = "Test";
         StudyConfig config;
         BackPropagation backPropagation;
 
@@ -67,6 +65,8 @@ public class Study {
 
             double[] trainingErrorHistory = new double[config.maxEpoch];
             double[] validationErrorHistory = new double[config.maxEpoch];
+            double[] trainingAccHistory = new double[config.maxEpoch];
+            double[] validationAccHistory = new double[config.maxEpoch];
 
             Logger
                     .getLogger(Study.class.getName())
@@ -78,17 +78,18 @@ public class Study {
                         .getLogger(Study.class.getName())
                         .log(Level.INFO, "Starting simulation {0}.", i);
 
-                TrainingTestingTuple trainingValidationSets = Dataset
-                        .fromFile("ac/up/cos711/digitrecognitionstudy/data/train")
-                        .split(0.8);
+                List<Dataset> datasets = Dataset
+                        .fromFile("ac/up/cos700/neutralitystudy/data/iris.nsds")
+                        .shuffle()
+                        .split(0.6, 0.2, 0.2);
 
-                Dataset trainingset = trainingValidationSets.training;
-                Dataset validationset = trainingValidationSets.testing;
-                Dataset generalisationset = Dataset.fromFile("ac/up/cos711/digitrecognitionstudy/data/t10k");
-
+                Dataset trainingset = datasets.get(0);
+                Dataset validationset = datasets.get(1);
+                Dataset generalisationset = datasets.get(2);
+                
                 IFFNeuralNet network = new FFNeuralNetBuilder()
                         .addLayer(trainingset.getInputCount(), Identity.class)
-                        .addLayer(config.hiddenUnits, Sigmoid.class)
+                        .addLayer(trainingset.getHiddenCount(), Sigmoid.class)
                         .addLayer(trainingset.getTargetCount(), Sigmoid.class)
                         .build();
 
@@ -103,11 +104,13 @@ public class Study {
 
                 //consolidate results
                 double trainingError = backPropagation.getTrainingError();
-                double validationError = backPropagation.getValidationError();
+                double validationError = backPropagation.getValidationError();                
                 double[] tempTrainingErrorHistory = backPropagation.getTrainingErrorHistory();
                 double[] tempValidationErrorHistory = backPropagation.getValidationErorrHistory();
+                double[] tempTrainingAccHistory = backPropagation.getTrainingAccHistory();
+                double[] tempValidationAccHistory = backPropagation.getValidationAccHistory();
+                
                 double generalisationError = new DefaultNetworkError().measure(network, generalisationset);
-                //todo: classificationAccuracy is measured on the generalisation set, check correctness
                 double classificationAccuracy = new ClassificationAccuracy(config.classificationRigor).measure(network, generalisationset);
 
                 //send results to disk
@@ -121,6 +124,8 @@ public class Study {
                 for (int j = 0; j < trainingErrorHistory.length; j++) {
                     trainingErrorHistory[j] += tempTrainingErrorHistory[j];
                     validationErrorHistory[j] += tempValidationErrorHistory[j];
+                    trainingAccHistory[j] += tempTrainingAccHistory[j];
+                    validationAccHistory[j] += tempValidationAccHistory[j];
                 }
 
                 Logger.getLogger(Study.class.getName()).log(Level.INFO,
@@ -131,17 +136,22 @@ public class Study {
             for (int j = 0; j < trainingErrorHistory.length; j++) {
                 trainingErrorHistory[j] /= config.simulations;
                 validationErrorHistory[j] /= config.simulations;
+                trainingAccHistory[j] /= config.simulations;
+                validationAccHistory[j] /= config.simulations;
             }
             
-            Results.writeToFile(expName, "E_t_vs_Epoch", trainingErrorHistory);
-            Results.writeToFile(expName, "E_v_vs_Epoch", validationErrorHistory);
+            Results.writeToFile(expName, "E_vs_Epoch", trainingErrorHistory);
+            Results.writeToFile(expName, "E_vs_Epoch", validationErrorHistory);
+            Results.writeToFile(expName, "A_vs_Epoch", trainingAccHistory);
+            Results.writeToFile(expName, "A_vs_Epoch", validationAccHistory);
+            
 
         }
-        catch (IOException | IncorrectFileFormatException | NotAFunctionException | ZeroNeuronException | UnequalInputWeightException | UnequalArgsDimensionException | ThresholdOutOfBoundsException ex) {
-            Logger.getLogger(Study.class.getName()).log(Level.SEVERE, "", ex);
+        catch (StudyConfigException | IOException | IncorrectFileFormatException | NotAFunctionException | ZeroNeuronException | UnequalArgsDimensionException | ThresholdOutOfBoundsException e) {            Logger.getLogger(Study.class.getName()).log(Level.SEVERE, "", e);
         }
     }
 
+    //todo: this should ideally be done with a config file or by specifying a class
     private static void setupLogging() throws IOException {
         Formatter logFormatter = new StudyLogFormatter();
         Logger.getLogger(Study.class.getName()).setLevel(Level.CONFIG);

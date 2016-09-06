@@ -1,9 +1,8 @@
 package ac.up.cos700.neutralitystudy.neuralnet.training;
 
 import ac.up.cos700.neutralitystudy.data.Dataset;
-import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
+import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
-import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
 
 /**
  * Interface to the functionality to train a fully connected feed forward
@@ -24,9 +23,8 @@ public interface IFFNeuralNetTrainer{
      * @param network
      * @param dataset
      * @param validationset
-     * @throws UnequalInputWeightException
      * @throws UnequalArgsDimensionException 
      */
     public void train(IFFNeuralNet network, Dataset dataset, Dataset validationset)
-            throws UnequalInputWeightException, UnequalArgsDimensionException;
+            throws UnequalArgsDimensionException;
 }

@@ -1,8 +1,11 @@
 package ac.up.cos700.neutralitystudy.function;
 
 import ac.up.cos700.neutralitystudy.data.Dataset;
-import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
+import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
+import ac.up.cos700.neutralitystudy.neuralnet.metric.DefaultNetworkError;
+import ac.up.cos700.neutralitystudy.neuralnet.metric.INetworkError;
+
 
 /**
  * This class provides functionality to evaluate neural network classification
@@ -11,14 +14,15 @@ import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
  *
  * @author Abrie van Aardt
  */
-public abstract class NetworkError implements IFunction{
-    private IFFNeuralNet network;
-    private Dataset dataset;
+public class NetworkError implements IFunction{
+    private final IFFNeuralNet network;
+    private final Dataset dataset;
+    private final INetworkError networkError;
     
-    //todo: add dataset as parameter here
-    public NetworkError(IFFNeuralNet _network, Dataset _dataset) {
-        network = _network;
+    public NetworkError(IFFNeuralNet _network, Dataset _dataset, INetworkError _networkError) {
+        network = _network.clone();//deep copy
         dataset = _dataset;
+        networkError = _networkError;
     }
     
     /**
@@ -34,16 +38,20 @@ public abstract class NetworkError implements IFunction{
 
     /**
      * Evaluates the classification error of the network given all the weights
-     * that should be used in the network, together with the dataset.
-     * This method is intended to be overridden by specialized network error 
-     * functions such as {@link SumSquaredError}.
+     * that should be used in the network, together with the dataset. 
      * 
      * @param x
      * @return network error 
      * @throws UnequalArgsDimensionException 
      */
     @Override
-    public abstract double evaluate(double... x) throws UnequalArgsDimensionException ;
+    public double evaluate(double... x) throws UnequalArgsDimensionException{
+        if (x.length != network.getDimensionality())
+            throw new UnequalArgsDimensionException();
+        
+        network.setWeightVector(x);
+        return networkError.measure(network, dataset);      
+    }
     
     
 }

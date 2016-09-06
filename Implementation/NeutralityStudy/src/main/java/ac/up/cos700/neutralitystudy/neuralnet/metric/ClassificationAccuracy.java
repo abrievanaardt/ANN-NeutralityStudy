@@ -2,10 +2,9 @@ package ac.up.cos700.neutralitystudy.neuralnet.metric;
 
 import ac.up.cos700.neutralitystudy.data.Dataset;
 import ac.up.cos700.neutralitystudy.data.Pattern;
-import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
+import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ThresholdOutOfBoundsException;
-import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
 import java.util.Iterator;
 
 /**
@@ -40,7 +39,7 @@ public class ClassificationAccuracy implements INetworkError {
      */
     @Override
     public double measure(IFFNeuralNet network, Dataset testingSet)
-            throws UnequalInputWeightException, UnequalArgsDimensionException {
+            throws UnequalArgsDimensionException {
 
         int correctClassCount = 0;
 

@@ -1,44 +1,43 @@
 package ac.up.cos700.neutralitystudy.experiment;
 
+import ac.up.cos700.neutralitystudy.experiment.util.StudyConfigException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
- * todo: no exceptions if entries aren't found
- * todo: adjust for this study
+ * Class representing the configuration for an experiment.
+ *
  * @author Abrie van Aardt
  */
 public class StudyConfig {
 
-    public int hiddenUnits;
     public double acceptableTrainingError;
     public double learningRate;
     public int binSize;
     public double classificationRigor;
     public int maxEpoch;
     public int simulations;
-    public int pixelBlockSize;
 
-    public static StudyConfig fromFile(String expName) throws FileNotFoundException {
+    public static StudyConfig fromFile(String expName) throws FileNotFoundException, StudyConfigException {
         StudyConfig config = new StudyConfig();
         Scanner fileScanner = new Scanner(new File("study.config"));
         fileScanner.useDelimiter("\\r|\\r\\n|\\n|\\s=\\s");
 
-        fileScanner.findWithinHorizon(expName, 1000);
-        fileScanner.next();
+        if (fileScanner.findWithinHorizon(expName, 1000) == null)
+            throw new StudyConfigException("Could not find an entry for this experiment.");
+        
+        fileScanner.next();              
 
         while (fileScanner.hasNext()) {
-            String next = fileScanner.next();
-            
-            if (next.length() > 0 && next.charAt(0) == '/'){
+            String next = fileScanner.next();            
+
+            //skip the first line (the name of the experiment)
+            if (next.length() > 0 && next.charAt(0) == '/') {
                 break;
             }
-            
-            if (null != next) switch (next) {
-                case "hiddenUnits":
-                    config.hiddenUnits = fileScanner.nextInt();
-                    break;
+
+            switch (next) {
                 case "acceptableTrainingError":
                     config.acceptableTrainingError = fileScanner.nextDouble();
                     break;
@@ -56,11 +55,6 @@ public class StudyConfig {
                     break;
                 case "simulations":
                     config.simulations = fileScanner.nextInt();
-                    break;
-                case "pixelBlockSize":
-                    config.pixelBlockSize = fileScanner.nextInt();
-                    break;
-                default:
                     break;
             }
         }

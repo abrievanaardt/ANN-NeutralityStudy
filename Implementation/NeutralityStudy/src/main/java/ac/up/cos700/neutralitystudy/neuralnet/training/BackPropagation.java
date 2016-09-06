@@ -2,14 +2,13 @@ package ac.up.cos700.neutralitystudy.neuralnet.training;
 
 import ac.up.cos700.neutralitystudy.data.Dataset;
 import ac.up.cos700.neutralitystudy.data.Pattern;
-import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
+import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
 import ac.up.cos700.neutralitystudy.neuralnet.Neuron;
 import ac.up.cos700.neutralitystudy.neuralnet.metric.ClassificationAccuracy;
 import ac.up.cos700.neutralitystudy.neuralnet.metric.DefaultNetworkError;
 import ac.up.cos700.neutralitystudy.neuralnet.metric.INetworkError;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ThresholdOutOfBoundsException;
-import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.logging.Level;
@@ -53,11 +52,13 @@ public class BackPropagation implements IFFNeuralNetTrainer {
         classificationAccuracy = new ClassificationAccuracy(_classificationRigor);
         trainingErrorHistory = new double[MAX_EPOCH];
         validationErrorHistory = new double[MAX_EPOCH];
+        trainingAccHistory = new double[MAX_EPOCH];
+        validationAccHistory = new double[MAX_EPOCH];
     }
 
     @Override
     public void train(IFFNeuralNet network, Dataset trainingset, Dataset validationset)
-            throws UnequalInputWeightException, UnequalArgsDimensionException {
+            throws UnequalArgsDimensionException {
 
         Logger.getLogger(getClass().getName())
                 .log(Level.INFO, "Started neural network training...");
@@ -111,21 +112,21 @@ public class BackPropagation implements IFFNeuralNetTrainer {
             
             trainingErrorHistory[epoch-1] = trainingError;
             validationErrorHistory[epoch-1] = validationError;
-            
+            trainingAccHistory[epoch-1] = classificationAccuracy.measure(network, trainingset);
+            validationAccHistory[epoch-1] = classificationAccuracy.measure(network, validationset);
+                        
             Logger.getLogger(getClass().getName())
                 .log(Level.FINER, "Epoch {0}: E_t = {1}, E_v = {2}, E_v` = {3}, stdDev(E_v) = {4}",
                         new Object[]{
                             epoch,                            
-                            trainingError,
-                            validationError,
-                            avgValidationError,
-                            stdDevValidationError
+                            String.format("%.4f", trainingError),
+                            String.format("%.4f", validationError),
+                            String.format("%.4f", avgValidationError),
+                            String.format("%.4f", stdDevValidationError)
                         }
                 );
         }
-        while (trainingError > ACCEPTABLE_TRAINING_ERROR 
-                && (validationError <= (avgValidationError + stdDevValidationError))
-                && epoch < MAX_EPOCH);
+        while (epoch < MAX_EPOCH);
 
         duration = System.nanoTime() - duration;      
 
@@ -135,8 +136,8 @@ public class BackPropagation implements IFFNeuralNetTrainer {
                         new Object[]{
                             epoch,
                             duration / 1000000000,
-                            trainingError,
-                            validationError
+                            String.format("%.4f", trainingError),
+                            String.format("%.4f", validationError)
                         }
                 );
     }
@@ -155,6 +156,14 @@ public class BackPropagation implements IFFNeuralNetTrainer {
     
     public double[] getValidationErorrHistory(){
         return validationErrorHistory;
+    }
+    
+    public double[] getTrainingAccHistory() {
+        return trainingAccHistory;
+    }
+
+    public double[] getValidationAccHistory() {
+        return validationAccHistory;
     }
     
     private void backPropogateError(IFFNeuralNet network, double[] targets, double[] outputs) {
@@ -269,6 +278,8 @@ public class BackPropagation implements IFFNeuralNetTrainer {
     private double validationError;
     private double[] trainingErrorHistory;
     private double[] validationErrorHistory;
+    private double[] trainingAccHistory;
+    private double[] validationAccHistory;    
     
     private enum WeightType {
         BIAS, NORMAL

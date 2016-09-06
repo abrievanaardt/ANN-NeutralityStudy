@@ -1,7 +1,6 @@
 package ac.up.cos700.neutralitystudy.neuralnet;
 
-import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
-import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
+import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 
 /**
  * Interface to a fully connected feed forward neural network for
@@ -9,7 +8,7 @@ import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
  *
  * @author Abrie van Aardt
  */
-public interface IFFNeuralNet {
+public interface IFFNeuralNet extends Cloneable{
 
     /**
      * Computes class probabilities for the given input pattern (classifies the
@@ -21,7 +20,7 @@ public interface IFFNeuralNet {
      * @throws UnequalArgsDimensionException
      */
     public double[] classify(double... inputPattern)
-            throws UnequalInputWeightException, UnequalArgsDimensionException;
+            throws UnequalArgsDimensionException;
 
     /**
      * Return an array (vector) of the weights in the network in order of layer
@@ -56,6 +55,14 @@ public interface IFFNeuralNet {
      *
      * @return Zagged 2D array of Neurons
      */
-    public Neuron[][] getNetworkLayers();
-
+    public Neuron[][] getNetworkLayers();       
+    
+    
+    /**
+     * Allows objects implementing this interface to be cloneable.
+     * 
+     * @return 
+     */
+    public IFFNeuralNet clone();
+    
 }

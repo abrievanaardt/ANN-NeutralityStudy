@@ -8,12 +8,11 @@ import ac.up.cos700.neutralitystudy.data.util.TrainingTestingTuple;
 import ac.up.cos700.neutralitystudy.function.Identity;
 import ac.up.cos700.neutralitystudy.function.Sigmoid;
 import ac.up.cos700.neutralitystudy.function.util.NotAFunctionException;
-import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
+import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
 import ac.up.cos700.neutralitystudy.neuralnet.training.BackPropagation;
 import ac.up.cos700.neutralitystudy.neuralnet.util.FFNeuralNetBuilder;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ThresholdOutOfBoundsException;
-import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ZeroNeuronException;
 import java.io.IOException;
 import java.util.Iterator;
@@ -32,52 +31,52 @@ public class Test {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        try {
-            setupLogging();
-            
-            Logger
-                    .getLogger(Test.class.getName())
-                    .log(Level.INFO, "Configuring experiment...");
-
-            Dataset dataset = Dataset.fromFile("ac/up/cos700/neutralitystudy/data/diabetes.nsds");
-
-            TrainingTestingTuple datasets = dataset.split(0.8);
-
-            IFFNeuralNet network = new FFNeuralNetBuilder()
-                    .addLayer(dataset.getInputCount(), Identity.class)
-                    .addLayer(dataset.getHiddenCount(), Sigmoid.class)
-                    .addLayer(dataset.getTargetCount(), Sigmoid.class)
-                    .build();
-
-            new BackPropagation(
-                    0.2,//stopping condition: acceptable error
-                    0.05,//learning rate
-                    10,//bin size for mini-batch
-                    0.2,//classification rigor (θ)
-                    20//stopping condition: max epochs
-            ).train(network, datasets.training, datasets.training);
-
-            Iterator<Pattern> testIt = datasets.testing.iterator();
-            while (testIt.hasNext()) {
-                Pattern p = testIt.next();
-                double[] outputs = network.classify(p.getInputs());
-                System.out.println("===== Pattern ====");
-                for (int i = 0; i < outputs.length; i++) {
-                    System.out.print(String.format("%.3f", outputs[i]) + "\t");
-                }
-                System.out.println();
-                for (int i = 0; i < outputs.length; i++) {
-                    System.out.print(String.format("%.3f", p.getTargets()[i]) + "\t");
-                }
-                System.out.println();
-                System.out.println();
-                System.out.println();
-            }
-
-        }
-        catch (ThresholdOutOfBoundsException |IOException | IncorrectFileFormatException | NotAFunctionException | ZeroNeuronException | UnequalInputWeightException | UnequalArgsDimensionException ex) {
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, "", ex);
-        }
+//        try {
+//            setupLogging();
+//            
+//            Logger
+//                    .getLogger(Test.class.getName())
+//                    .log(Level.INFO, "Configuring experiment...");
+//
+//            Dataset dataset = Dataset.fromFile("ac/up/cos700/neutralitystudy/data/diabetes.nsds");
+//
+//            TrainingTestingTuple datasets = dataset.split(0.8);
+//
+//            IFFNeuralNet network = new FFNeuralNetBuilder()
+//                    .addLayer(dataset.getInputCount(), Identity.class)
+//                    .addLayer(dataset.getHiddenCount(), Sigmoid.class)
+//                    .addLayer(dataset.getTargetCount(), Sigmoid.class)
+//                    .build();
+//
+//            new BackPropagation(
+//                    0.2,//stopping condition: acceptable error
+//                    0.05,//learning rate
+//                    10,//bin size for mini-batch
+//                    0.2,//classification rigor (θ)
+//                    20//stopping condition: max epochs
+//            ).train(network, datasets.training, datasets.training);
+//
+//            Iterator<Pattern> testIt = datasets.testing.iterator();
+//            while (testIt.hasNext()) {
+//                Pattern p = testIt.next();
+//                double[] outputs = network.classify(p.getInputs());
+//                System.out.println("===== Pattern ====");
+//                for (int i = 0; i < outputs.length; i++) {
+//                    System.out.print(String.format("%.3f", outputs[i]) + "\t");
+//                }
+//                System.out.println();
+//                for (int i = 0; i < outputs.length; i++) {
+//                    System.out.print(String.format("%.3f", p.getTargets()[i]) + "\t");
+//                }
+//                System.out.println();
+//                System.out.println();
+//                System.out.println();
+//            }
+//
+//        }
+//        catch (ThresholdOutOfBoundsException |IOException | IncorrectFileFormatException | NotAFunctionException | ZeroNeuronException | UnequalArgsDimensionException ex) {
+//            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, "", ex);
+//        }
 
     }
 

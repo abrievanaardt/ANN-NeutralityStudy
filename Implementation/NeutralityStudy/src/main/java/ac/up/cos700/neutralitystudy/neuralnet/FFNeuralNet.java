@@ -1,22 +1,22 @@
 package ac.up.cos700.neutralitystudy.neuralnet;
 
-import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
+import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.util.FFNeuralNetConfig;
-import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Default implementation of an {@link IFFNeuralNet}.
  *
  * @author Abrie van Aardt
  */
-public class FFNeuralNet implements IFFNeuralNet {
+public class FFNeuralNet implements IFFNeuralNet, Cloneable {
+
+    private FFNeuralNet() {
+
+    }
 
     public FFNeuralNet(FFNeuralNetConfig config) {
-        layers = new Neuron[config.layers.size()][];        
-        
+        layers = new Neuron[config.layers.size()][];
+
         for (int i = 0; i < layers.length; i++) {
             layers[i] = new Neuron[config.layers.get(i).neuronCount];
             for (int j = 0; j < layers[i].length; j++) {
@@ -28,13 +28,13 @@ public class FFNeuralNet implements IFFNeuralNet {
     }
 
     @Override
-    public double[] classify(double... inputPattern) throws UnequalInputWeightException, UnequalArgsDimensionException {
+    public double[] classify(double... inputPattern) throws UnequalArgsDimensionException {
         double[] tempInputPattern;
         double[] tempOutputPattern;
 
         //input pattern dimension must match number of input neurons
         if (inputPattern.length != layers[0].length)
-            throw new UnequalArgsDimensionException();
+            throw new UnequalArgsDimensionException("Input pattern dimension does not match number of input neurons.");
 
         //set output pattern length to number of neurons in this layer
         tempOutputPattern = new double[inputPattern.length];
@@ -56,7 +56,7 @@ public class FFNeuralNet implements IFFNeuralNet {
             }
             tempInputPattern = tempOutputPattern;
         }
-        
+
         return tempOutputPattern;
     }
 
@@ -88,7 +88,7 @@ public class FFNeuralNet implements IFFNeuralNet {
     @Override
     public void setWeightVector(double... _weightVector) throws UnequalArgsDimensionException {
         if (_weightVector.length != getDimensionality())
-            throw new UnequalArgsDimensionException();
+            throw new UnequalArgsDimensionException("Length of weight vector does not match the network dimensionality.");
 
         int weightVectorIndex = 0;
         for (int i = 0; i < layers.length; i++) {
@@ -105,9 +105,24 @@ public class FFNeuralNet implements IFFNeuralNet {
         //handle with care, no pun intended
         return layers;
     }
-    
-    private Neuron[][] layers;  
 
-    
+    @Override
+    public IFFNeuralNet clone() {
+        Neuron[][] clonedLayers = new Neuron[layers.length][];
+
+        for (int i = 0; i < clonedLayers.length; i++) {
+            layers[i] = new Neuron[layers[i].length];
+            for (int j = 0; j < layers[i].length; j++) {
+                clonedLayers[i][j] = layers[i][j].clone();
+            }
+        }
+
+        FFNeuralNet n = new FFNeuralNet();
+        n.layers = clonedLayers;
+
+        return n;
+    }
+
+    private Neuron[][] layers;
 
 }

@@ -4,10 +4,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Locale;
 
 /**
- *
+ * Allows for experiment data to be written to file and/or directly transformed
+ * into plots using JavaPlot/GNUPlot in conjunction with the swing API.
+ * 
  * @author Abrie van Aardt
  */
 public class Results {
@@ -21,18 +22,19 @@ public class Results {
      * @param values
      * @throws IOException
      */
-    public static void writeToFile(String experimentName, String resultType, double... values) throws IOException {
+    public synchronized static void writeToFile(String experimentName, String resultType, double... values) throws IOException {
         BufferedWriter writer = null;
         try {
             File directory = new File(experimentName + "/" + resultType + ".csv");
             directory.getParentFile().mkdirs();
             writer = new BufferedWriter(new FileWriter(directory, true));
             
-            for (int i = 0; i < values.length; i++) {
-                writer.write(String.format(Locale.forLanguageTag("en_ZA"), "%f", values[i]));
-                writer.newLine();
+            writer.write(Double.toString(values[0]));
+            for (int i = 1; i < values.length; i++) {
+                writer.write(", " + Double.toString(values[i]));               
             }
             
+            writer.newLine();            
             writer.flush();
         }
         finally {
@@ -44,6 +46,10 @@ public class Results {
                 }
             }
         }
+    }
+    
+    public synchronized static void plot(double... values){
+        
     }
 
 }

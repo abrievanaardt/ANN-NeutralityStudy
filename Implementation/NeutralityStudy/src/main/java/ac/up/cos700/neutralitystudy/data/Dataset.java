@@ -2,9 +2,9 @@ package ac.up.cos700.neutralitystudy.data;
 
 import ac.up.cos700.neutralitystudy.data.util.IncorrectFileFormatException;
 import ac.up.cos700.neutralitystudy.data.util.TrainingTestingTuple;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 /**
  * Class representing a dataset for neural network training. This class is also
@@ -29,10 +30,10 @@ import java.util.logging.Logger;
  * [patternN]</pre>
  * <br>
  * where every value in [patternK] is separated by a white space.
- *<br>
+ * <br>
  * The dataset will will assume that NN architecture will only consist of 3
  * layers. An input, hidden and output layer.
- * 
+ *
  * @author Abrie van Aardt
  */
 public class Dataset implements Iterable {
@@ -112,7 +113,7 @@ public class Dataset implements Iterable {
                     dataset.targetCount,
                     dataset.size()
                 });
-        
+
         logger.log(Level.INFO, "{0} has an optimal 3-layered NN configuration"
                 + " requiring {1} hidden units.", new Object[]{
                     resourceName.substring(resourceName.lastIndexOf('/') + 1),
@@ -120,7 +121,7 @@ public class Dataset implements Iterable {
                 });
 
         dataset.shuffle();
-        
+
         return dataset;
     }
 
@@ -132,36 +133,47 @@ public class Dataset implements Iterable {
     /**
      * Splits the dataset into a training and testing set. This method provides
      * respective views for the training and testing dataset. Both views are
-     * backed by the same underlying dataset. trainingRatio is the 
-     * proportion of the dataset that will be dedicated to training patterns.
+     * backed by the same underlying dataset. trainingRatio is the proportion of
+     * the dataset that will be dedicated to training patterns.
      *
-     * @param trainingRatio
+     * @param ratios the ratio in which the dataset should be divided
      * @return TrainingTestingTuple
      */
-    public TrainingTestingTuple split(double trainingRatio) {
-        Dataset training = new Dataset();
-        Dataset testing = new Dataset();
+    public List<Dataset> split(double... ratios) {
 
-        training.inputCount = inputCount;
-        training.hiddenCount = hiddenCount;
-        training.targetCount = targetCount;
-        testing.inputCount = inputCount;
-        testing.hiddenCount = hiddenCount;
-        testing.targetCount = targetCount;
+        if (Arrays.stream(ratios).sum() != 1.0)
+            throw new IllegalArgumentException("Ratios in call to split dataset do not add up to 1");
 
-        int trainingUpperIndex = (int) (trainingRatio * data.size());
+        List<Dataset> datasets = new ArrayList<>();
 
-        training.data = data.subList(0, trainingUpperIndex);
-        testing.data = data.subList(trainingUpperIndex, data.size());
+        int lowerIndex = 0;
+        int upperIndex;
 
-        logger.log(Level.INFO, "Using {0}"
-                + "% of the patterns for training and the remainder for "
-                + "testing generalisation.", String.format("%.2f", trainingRatio * 100));
+        for (int i = 0; i < ratios.length; i++) {
+            Dataset dataset = new Dataset();
 
-        return new TrainingTestingTuple(training, testing);
+            dataset.inputCount = inputCount;
+            dataset.hiddenCount = hiddenCount;
+            dataset.targetCount = targetCount;
+
+            upperIndex = lowerIndex + (int) (ratios[i] * data.size());
+            dataset.data = data.subList(lowerIndex, upperIndex);
+            lowerIndex = upperIndex;
+
+            datasets.add(dataset);
+        }
+
+        String parts = Arrays.toString(Arrays.stream(ratios).map(r -> r * 100.0).toArray());
+        
+        LOGGER.log(Level.INFO, "Split dataset into {0} part(s): {1}",
+                new Object[]{
+                    ratios.length,
+                    parts
+                });
+        
+        return datasets;
     }
 
-    
     public Dataset shuffle() {
         Collections.shuffle(data, random);
         return this;
@@ -178,8 +190,8 @@ public class Dataset implements Iterable {
     public int getTargetCount() {
         return targetCount;
     }
-    
-    public int getHiddenCount(){
+
+    public int getHiddenCount() {
         return hiddenCount;
     }
 
@@ -187,6 +199,6 @@ public class Dataset implements Iterable {
     private int inputCount;
     private int hiddenCount;
     private int targetCount;
-    private Random random = new Random(System.nanoTime());
-    private Logger logger = Logger.getLogger(getClass().getName());
+    private final Random random = new Random(System.nanoTime());
+    private static final Logger LOGGER = Logger.getLogger(Dataset.class.getName());
 }

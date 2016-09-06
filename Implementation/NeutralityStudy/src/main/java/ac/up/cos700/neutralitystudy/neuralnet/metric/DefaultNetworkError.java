@@ -4,9 +4,8 @@ import ac.up.cos700.neutralitystudy.data.Dataset;
 import ac.up.cos700.neutralitystudy.data.Pattern;
 import ac.up.cos700.neutralitystudy.function.IFunction;
 import ac.up.cos700.neutralitystudy.function.SquaredError;
-import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
+import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
-import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
 import ac.up.cos700.neutralitystudy.neuralnet.metric.INetworkError;
 import java.util.Iterator;
 
@@ -17,27 +16,26 @@ import java.util.Iterator;
  *
  * @author Abrie van Aardt
  */
-public class DefaultNetworkError implements ac.up.cos700.neutralitystudy.neuralnet.metric.INetworkError {
+public class DefaultNetworkError implements INetworkError {
 
     @Override
-    public double measure(IFFNeuralNet network, Dataset testingSet)
-            throws UnequalInputWeightException, UnequalArgsDimensionException {
+    public double measure(IFFNeuralNet network, Dataset testingSet) throws UnequalArgsDimensionException {
         double error = 0;
 
         Iterator<Pattern> patterns = testingSet.iterator();
         double[] outputs = new double[1];
         double[] targets = new double[1];
-        
+
         while (patterns.hasNext()) {
 
             Pattern p = patterns.next();
             outputs = network.classify(p.getInputs());
             targets = p.getTargets();
-            error += errorForPattern(targets, outputs);      
+            error += errorForPattern(targets, outputs);
         }
 
         error /= (testingSet.size() * outputs.length);
-        
+
         return error;
     }
 
@@ -47,8 +45,8 @@ public class DefaultNetworkError implements ac.up.cos700.neutralitystudy.neuraln
             sum += outputError.evaluate(targets[i], outputs[i]);
         }
         return sum;
-    }    
-    
+    }
+
     private static final IFunction outputError = new SquaredError();
 
 }

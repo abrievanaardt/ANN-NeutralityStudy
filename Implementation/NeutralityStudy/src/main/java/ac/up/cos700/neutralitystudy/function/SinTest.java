@@ -1,24 +1,13 @@
 package ac.up.cos700.neutralitystudy.function;
 
-import ac.up.cos700.neutralitystudy.function.IFunction;
 import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 
 /**
- * Implementation of Sigmoid in 1D with λ = 1
- *
+ * Implements the Sine function for temporarily testing other features. 
+ * 
  * @author Abrie van Aardt
  */
-public class Sigmoid implements IFunction {
-
-    double lambda;
-
-    public Sigmoid() {
-        lambda = 1;
-    }
-    
-    public Sigmoid(double _lambda){
-        lambda = _lambda;
-    }
+public class SinTest implements IFunction{
 
     @Override
     public int getDimensionality() {
@@ -27,10 +16,10 @@ public class Sigmoid implements IFunction {
 
     @Override
     public double evaluate(double... x) throws UnequalArgsDimensionException {
-        if (x.length != 1)
+        if (x.length != getDimensionality())
             throw new UnequalArgsDimensionException();
-
-        return 1.0 / (1.0 + Math.pow(Math.E, -lambda * x[0]));
+        
+        return Math.sin(x[0]);
     }
 
 }

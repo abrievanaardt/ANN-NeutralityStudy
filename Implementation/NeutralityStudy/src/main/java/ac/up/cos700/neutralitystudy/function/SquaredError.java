@@ -1,6 +1,6 @@
 package ac.up.cos700.neutralitystudy.function;
 
-import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
+import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 
 /**
  *

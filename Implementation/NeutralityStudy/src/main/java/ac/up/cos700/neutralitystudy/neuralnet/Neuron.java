@@ -1,9 +1,9 @@
 package ac.up.cos700.neutralitystudy.neuralnet;
 
-import ac.up.cos700.neutralitystudy.neuralnet.util.UnequalInputWeightException;
-import ac.up.cos700.neutralitystudy.function.util.UnequalArgsDimensionException;
+import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.function.Sigmoid;
 import ac.up.cos700.neutralitystudy.function.IFunction;
+import java.util.Arrays;
 
 /**
  * This is an implementation of a neural network unit, or neuron. By default
@@ -12,7 +12,7 @@ import ac.up.cos700.neutralitystudy.function.IFunction;
  *
  * @author Abrie van Aardt
  */
-public class Neuron {
+public class Neuron{
 
     public Neuron() {
         weightVector = new double[0];        
@@ -67,10 +67,10 @@ public class Neuron {
      * @throws UnequalInputWeightException
      * @throws UnequalArgsDimensionException
      */
-    public double feed(double... inputVector) throws UnequalInputWeightException, UnequalArgsDimensionException {
+    public double feed(double... inputVector) throws UnequalArgsDimensionException {
         if (inputVector.length != weightVector.length - 1 &&
                 (inputVector.length != 1 || weightVector.length != 0)) {
-            throw new UnequalInputWeightException();
+            throw new UnequalArgsDimensionException("Number of inputs does not match the number of weights for this neuron");
         }
         
         output = activationFunction.evaluate(aggregate(inputVector));
@@ -101,6 +101,19 @@ public class Neuron {
         }
         
         return sumProduct;
+    }
+    
+    @Override
+    public Neuron clone(){
+        Neuron clonedNeuron = new Neuron();
+        
+        clonedNeuron.setWeightCount(this.getWeightCount());
+        clonedNeuron.activationFunction = this.activationFunction;//no state maintained in activation function
+        clonedNeuron.weightVector = Arrays.copyOf(this.weightVector, this.weightVector.length);
+        clonedNeuron.weightDeltaVector = Arrays.copyOf(this.weightDeltaVector, this.weightDeltaVector.length);
+        clonedNeuron.output = this.output;
+        
+        return clonedNeuron;        
     }
 
     //the last position in the array is used to store the bias
