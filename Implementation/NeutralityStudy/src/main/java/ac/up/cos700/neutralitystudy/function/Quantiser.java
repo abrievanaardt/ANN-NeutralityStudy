@@ -20,7 +20,7 @@ public class Quantiser implements IFunction{
      * @param _function the function to quantise
      * @param _q the quantum size defining the amount of neutrality
      */
-    public Quantiser(IFunction _function, int _q){
+    public Quantiser(IFunction _function, double _q){
         function = _function;
         q = _q;
     }
@@ -41,6 +41,6 @@ public class Quantiser implements IFunction{
     }
     
     private final IFunction function;
-    private final int q;
+    private final double q;
 
 }
