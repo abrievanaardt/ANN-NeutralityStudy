@@ -5,15 +5,14 @@ import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 /**
  * Implements the Stacking Plates optimisation scheme proposed by
  * <pre>
- * 
+ *
  * A. Owen and I. Harvey, "Adapting particle swarm optimisation for fitness
  * landscapes with neutrality" in Swarm Intelligence (SIS'07) IEEE Symposium
  * on, IEEE, 2007, pp. 258 - 265.
- * </pre>
- * todo: The fitness scoring mechanism can easily be adapted from a binary score
- * to one based on the inverse distance, which could lead to 'near' neutral
- * regions that will be useful to test a neutrality measure. This should be
- * investigated further.
+ * </pre> todo: The fitness scoring mechanism can easily be adapted from a
+ * binary score to one based on the inverse distance, which could lead to 'near'
+ * neutral regions that will be useful to test a neutrality measure. This should
+ * be investigated further.
  *
  * @author Abrie van Aardt
  */
@@ -57,13 +56,23 @@ public class PlateStacker implements IFunction {
 
                 distance = new Distance().evaluate(xLeft, yLeft, xRight, yRight);
 
-                if (distance < 2 * plateRadius){
+                if (distance < 2 * plateRadius) {
                     ++score;
-                }                
+                }
             }
         }
-        
+
         return score;
+    }
+
+    @Override
+    public double getLowerBound() {
+        return Double.NEGATIVE_INFINITY;
+    }
+
+    @Override
+    public double getUpperBound() {
+        return Double.POSITIVE_INFINITY;
     }
 
     private final double plateRadius;

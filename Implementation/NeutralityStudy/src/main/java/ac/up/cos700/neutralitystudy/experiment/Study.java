@@ -3,13 +3,14 @@ package ac.up.cos700.neutralitystudy.experiment;
 import ac.up.cos700.neutralitystudy.data.Dataset;
 import ac.up.cos700.neutralitystudy.data.Results;
 import ac.up.cos700.neutralitystudy.data.util.IncorrectFileFormatException;
+import ac.up.cos700.neutralitystudy.data.util.ResultsException;
 import ac.up.cos700.neutralitystudy.data.util.StudyLogFormatter;
 import ac.up.cos700.neutralitystudy.data.util.TrainingTestingTuple;
 import ac.up.cos700.neutralitystudy.experiment.util.StudyConfigException;
 import ac.up.cos700.neutralitystudy.function.Identity;
 import ac.up.cos700.neutralitystudy.function.Quantiser;
 import ac.up.cos700.neutralitystudy.function.Sigmoid;
-import ac.up.cos700.neutralitystudy.function.SinTest;
+import ac.up.cos700.neutralitystudy.function.Test;
 import ac.up.cos700.neutralitystudy.function.util.NotAFunctionException;
 import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
@@ -19,7 +20,9 @@ import ac.up.cos700.neutralitystudy.neuralnet.training.BackPropagation;
 import ac.up.cos700.neutralitystudy.neuralnet.util.FFNeuralNetBuilder;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ThresholdOutOfBoundsException;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ZeroNeuronException;
+import com.panayotis.gnuplot.JavaPlot;
 import com.sun.javafx.binding.Logging;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -155,21 +158,15 @@ public class Study {
             Results.writeToFile(expName, "E_vs_Epoch", validationErrorHistory);
             Results.writeToFile(expName, "A_vs_Epoch", trainingAccHistory);
             Results.writeToFile(expName, "A_vs_Epoch", validationAccHistory);
-            
-            SinTest function = new SinTest();
-            Quantiser quantiser = new Quantiser(function, 0.15);
-            
-            double[] xTest = new double[300];
-            Random random = new Random(System.nanoTime());
-            
-            for (int i = 0; i < xTest.length; i++) {
-                xTest[i] = 2*Math.PI/300 * i;
-            }
-            
-            Results.plot(quantiser, "Graph Name","Plot 1","X Label","Y Label", xTest);
+
+            Test function = new Test();
+
+            JavaPlot graph = Results.newGraph("TestGraph", "Testx", "Texty");
+            Results.addPlot(graph, "TestPlot", function, -100, 100, 3);
+            graph.plot();
 
         }
-        catch (StudyConfigException | IOException | IncorrectFileFormatException | NotAFunctionException | ZeroNeuronException | UnequalArgsDimensionException | ThresholdOutOfBoundsException e) {
+        catch (ResultsException | FileNotFoundException | StudyConfigException | IncorrectFileFormatException | NotAFunctionException | ZeroNeuronException | UnequalArgsDimensionException | ThresholdOutOfBoundsException e) {
             Logger.getLogger(Study.class.getName()).log(Level.SEVERE, "", e);
         }
     }
