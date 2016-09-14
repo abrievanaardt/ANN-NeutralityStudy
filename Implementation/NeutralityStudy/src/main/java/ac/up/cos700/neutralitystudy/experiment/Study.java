@@ -1,16 +1,16 @@
 package ac.up.cos700.neutralitystudy.experiment;
 
 import ac.up.cos700.neutralitystudy.data.Dataset;
+import ac.up.cos700.neutralitystudy.data.Graph;
 import ac.up.cos700.neutralitystudy.data.Results;
+import ac.up.cos700.neutralitystudy.data.util.GraphException;
 import ac.up.cos700.neutralitystudy.data.util.IncorrectFileFormatException;
 import ac.up.cos700.neutralitystudy.data.util.ResultsException;
 import ac.up.cos700.neutralitystudy.data.util.StudyLogFormatter;
-import ac.up.cos700.neutralitystudy.data.util.TrainingTestingTuple;
 import ac.up.cos700.neutralitystudy.experiment.util.StudyConfigException;
 import ac.up.cos700.neutralitystudy.function.Identity;
 import ac.up.cos700.neutralitystudy.function.Quantiser;
 import ac.up.cos700.neutralitystudy.function.Sigmoid;
-import ac.up.cos700.neutralitystudy.function.Test;
 import ac.up.cos700.neutralitystudy.function.util.NotAFunctionException;
 import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
@@ -20,17 +20,12 @@ import ac.up.cos700.neutralitystudy.neuralnet.training.BackPropagation;
 import ac.up.cos700.neutralitystudy.neuralnet.util.FFNeuralNetBuilder;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ThresholdOutOfBoundsException;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ZeroNeuronException;
-import com.panayotis.gnuplot.JavaPlot;
-import com.sun.javafx.binding.Logging;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -47,11 +42,6 @@ public class Study {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
-        //an incorrect path will produce an exception
-        if (args.length != 0) {
-            Results.gnuplotPath = args[0];
-        }
 
         try {
             setupLogging();
@@ -158,13 +148,11 @@ public class Study {
             Results.writeToFile(expName, "E_vs_Epoch", validationErrorHistory);
             Results.writeToFile(expName, "A_vs_Epoch", trainingAccHistory);
             Results.writeToFile(expName, "A_vs_Epoch", validationAccHistory);
-
-            Test function = new Test();
-
-            JavaPlot graph = Results.newGraph("TestGraph", "Testx", "Texty");
-            Results.addPlot(graph, "TestPlot", function, -100, 100, 3);
-            graph.plot();
-
+            
+            Results.newGraph(expName, "Graph", "x", "y", "z", 2);
+            Results.addPlot("Sigmoid", new Sigmoid(), -5, +5);
+            Results.addPlot("QuantisedSigmoid", new Quantiser(new Sigmoid(), 0.2), -5, +5);
+            Results.plot();
         }
         catch (ResultsException | FileNotFoundException | StudyConfigException | IncorrectFileFormatException | NotAFunctionException | ZeroNeuronException | UnequalArgsDimensionException | ThresholdOutOfBoundsException e) {
             Logger.getLogger(Study.class.getName()).log(Level.SEVERE, "", e);
