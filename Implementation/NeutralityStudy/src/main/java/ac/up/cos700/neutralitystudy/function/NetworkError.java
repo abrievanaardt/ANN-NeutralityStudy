@@ -52,6 +52,15 @@ public class NetworkError implements IFunction{
         network.setWeightVector(x);
         return networkError.measure(network, dataset);      
     }
-    
+
+    @Override
+    public double getLowerBound() {
+        return Double.NEGATIVE_INFINITY;
+    }
+
+    @Override
+    public double getUpperBound() {
+        return Double.POSITIVE_INFINITY;
+    }    
     
 }

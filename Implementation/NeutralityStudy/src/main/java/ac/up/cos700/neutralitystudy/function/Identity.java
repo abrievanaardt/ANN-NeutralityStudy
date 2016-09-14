@@ -20,4 +20,14 @@ public class Identity implements IFunction {
             throw new UnequalArgsDimensionException();
         return x[0];
     }
+
+    @Override
+    public double getLowerBound() {
+        return Double.NEGATIVE_INFINITY;
+    }
+
+    @Override
+    public double getUpperBound() {
+        return Double.POSITIVE_INFINITY;
+    }
 }

@@ -1,12 +1,15 @@
 package ac.up.cos700.neutralitystudy.experiment;
 
 import ac.up.cos700.neutralitystudy.data.Dataset;
+import ac.up.cos700.neutralitystudy.data.Graph;
 import ac.up.cos700.neutralitystudy.data.Results;
+import ac.up.cos700.neutralitystudy.data.util.GraphException;
 import ac.up.cos700.neutralitystudy.data.util.IncorrectFileFormatException;
+import ac.up.cos700.neutralitystudy.data.util.ResultsException;
 import ac.up.cos700.neutralitystudy.data.util.StudyLogFormatter;
-import ac.up.cos700.neutralitystudy.data.util.TrainingTestingTuple;
 import ac.up.cos700.neutralitystudy.experiment.util.StudyConfigException;
 import ac.up.cos700.neutralitystudy.function.Identity;
+import ac.up.cos700.neutralitystudy.function.Quantiser;
 import ac.up.cos700.neutralitystudy.function.Sigmoid;
 import ac.up.cos700.neutralitystudy.function.util.NotAFunctionException;
 import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
@@ -17,14 +20,12 @@ import ac.up.cos700.neutralitystudy.neuralnet.training.BackPropagation;
 import ac.up.cos700.neutralitystudy.neuralnet.util.FFNeuralNetBuilder;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ThresholdOutOfBoundsException;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ZeroNeuronException;
-import com.sun.javafx.binding.Logging;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -35,6 +36,9 @@ import java.util.logging.Logger;
 public class Study {
 
     /**
+     * Program can be invoked with an optional argument specifying the directory
+     * of the gnuplot command to be used for results.
+     *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
@@ -51,7 +55,7 @@ public class Study {
                 .log(Level.INFO, "Configuring experiment.");
 
         test();
-        
+
     }
 
     private static void test() {
@@ -86,7 +90,7 @@ public class Study {
                 Dataset trainingset = datasets.get(0);
                 Dataset validationset = datasets.get(1);
                 Dataset generalisationset = datasets.get(2);
-                
+
                 IFFNeuralNet network = new FFNeuralNetBuilder()
                         .addLayer(trainingset.getInputCount(), Identity.class)
                         .addLayer(trainingset.getHiddenCount(), Sigmoid.class)
@@ -104,12 +108,12 @@ public class Study {
 
                 //consolidate results
                 double trainingError = backPropagation.getTrainingError();
-                double validationError = backPropagation.getValidationError();                
+                double validationError = backPropagation.getValidationError();
                 double[] tempTrainingErrorHistory = backPropagation.getTrainingErrorHistory();
                 double[] tempValidationErrorHistory = backPropagation.getValidationErorrHistory();
                 double[] tempTrainingAccHistory = backPropagation.getTrainingAccHistory();
                 double[] tempValidationAccHistory = backPropagation.getValidationAccHistory();
-                
+
                 double generalisationError = new DefaultNetworkError().measure(network, generalisationset);
                 double classificationAccuracy = new ClassificationAccuracy(config.classificationRigor).measure(network, generalisationset);
 
@@ -139,15 +143,19 @@ public class Study {
                 trainingAccHistory[j] /= config.simulations;
                 validationAccHistory[j] /= config.simulations;
             }
-            
+
             Results.writeToFile(expName, "E_vs_Epoch", trainingErrorHistory);
             Results.writeToFile(expName, "E_vs_Epoch", validationErrorHistory);
             Results.writeToFile(expName, "A_vs_Epoch", trainingAccHistory);
             Results.writeToFile(expName, "A_vs_Epoch", validationAccHistory);
             
-
+            Results.newGraph(expName, "Graph", "x", "y", "z", 2);
+            Results.addPlot("Sigmoid", new Sigmoid(), -5, +5);
+            Results.addPlot("QuantisedSigmoid", new Quantiser(new Sigmoid(), 0.2), -5, +5);
+            Results.plot();
         }
-        catch (StudyConfigException | IOException | IncorrectFileFormatException | NotAFunctionException | ZeroNeuronException | UnequalArgsDimensionException | ThresholdOutOfBoundsException e) {            Logger.getLogger(Study.class.getName()).log(Level.SEVERE, "", e);
+        catch (ResultsException | FileNotFoundException | StudyConfigException | IncorrectFileFormatException | NotAFunctionException | ZeroNeuronException | UnequalArgsDimensionException | ThresholdOutOfBoundsException e) {
+            Logger.getLogger(Study.class.getName()).log(Level.SEVERE, "", e);
         }
     }
 
@@ -163,6 +171,6 @@ public class Study {
         logger.getHandlers()[0].setFormatter(logFormatter);
         logger.getHandlers()[0].setLevel(Level.ALL);//console output
         logger.getHandlers()[1].setLevel(Level.CONFIG);//normal log file
-    }   
+    }
 
 }

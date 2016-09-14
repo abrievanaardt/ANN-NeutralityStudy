@@ -44,11 +44,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <dependencies>
-        <dependency>
-            <groupId>org.clojars.cbilson</groupId>
-            <artifactId>javaplot</artifactId>
-            <version>0.4.0</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/com.github.lucarosellini.rJava/JRI -->
         <dependency>
             <groupId>com.github.lucarosellini.rJava</groupId>

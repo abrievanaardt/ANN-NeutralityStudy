@@ -27,4 +27,14 @@ public class Distance implements IFunction{
         return Math.sqrt(Math.pow(x[0] - x[2], 2) + Math.pow(x[1] - x[3], 2));
     }
 
+    @Override
+    public double getLowerBound() {
+        return Double.NEGATIVE_INFINITY;
+    }
+
+    @Override
+    public double getUpperBound() {
+        return Double.POSITIVE_INFINITY;
+    }
+
 }

@@ -32,5 +32,15 @@ public class Sigmoid implements IFunction {
 
         return 1.0 / (1.0 + Math.pow(Math.E, -lambda * x[0]));
     }
+    
+    @Override
+    public double getLowerBound() {
+        return Double.NEGATIVE_INFINITY;
+    }
+
+    @Override
+    public double getUpperBound() {
+        return Double.POSITIVE_INFINITY;
+    }
 
 }
