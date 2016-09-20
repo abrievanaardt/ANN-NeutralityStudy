@@ -1,6 +1,6 @@
 package ac.up.cos700.neutralitystudy.neuralnet.util;
 
-import ac.up.cos700.neutralitystudy.function.IFunction;
+import ac.up.cos700.neutralitystudy.function.Function;
 import ac.up.cos700.neutralitystudy.function.Sigmoid;
 
 /**
@@ -10,7 +10,7 @@ import ac.up.cos700.neutralitystudy.function.Sigmoid;
  * @author Abrie van Aardt
  */
 public class LayerConfig {
-    public IFunction activationFunction = new Sigmoid();
+    public Function activationFunction = new Sigmoid();
     public int weightCountPerNeuron = 0;
     public int neuronCount = 1;
 }

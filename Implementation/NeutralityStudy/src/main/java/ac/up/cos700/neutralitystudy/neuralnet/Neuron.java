@@ -2,7 +2,7 @@ package ac.up.cos700.neutralitystudy.neuralnet;
 
 import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.function.Sigmoid;
-import ac.up.cos700.neutralitystudy.function.IFunction;
+import ac.up.cos700.neutralitystudy.function.Function;
 import java.util.Arrays;
 
 /**
@@ -20,12 +20,12 @@ public class Neuron{
         activationFunction = new Sigmoid();
     }
 
-    public Neuron(IFunction _activationFunction) {
+    public Neuron(Function _activationFunction) {
         this();
         activationFunction = _activationFunction;
     }
 
-    public void setActivationFunction(IFunction function) {
+    public void setActivationFunction(Function function) {
         activationFunction = function;
     }
 
@@ -79,7 +79,7 @@ public class Neuron{
 
     /**
      * Calculates the net input to the neuron as the weighted sum of the input
-     * signal. This is not implemented as an {@link IFunction} since the strict
+     * signal. This is not implemented as an {@link Function} since the strict
      * requirement of the interface will impair performance (weights and inputs
      * would have to be combined on each call).
      *
@@ -122,5 +122,5 @@ public class Neuron{
     private double[] weightDeltaVector;
     //store neuron output to facilitate some training algorithms
     private double output;
-    private IFunction activationFunction;
+    private Function activationFunction;
 }

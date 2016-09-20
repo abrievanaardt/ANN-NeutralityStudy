@@ -6,11 +6,10 @@ import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
  *
  * @author Abrie van Aardt
  */
-public class SquaredError implements IFunction {
+public class SquaredError extends Function {
 
-    @Override
-    public int getDimensionality() {
-        return 2;
+    public SquaredError(){
+        dimensionality = 2;
     }
 
     /**
@@ -28,15 +27,6 @@ public class SquaredError implements IFunction {
 
         return Math.pow(x[0] - x[1], 2);
     }
-
-    @Override
-    public double getLowerBound() {
-        return Double.NEGATIVE_INFINITY;
-    }
-
-    @Override
-    public double getUpperBound() {
-        return Double.POSITIVE_INFINITY;
-    }
+    
 
 }

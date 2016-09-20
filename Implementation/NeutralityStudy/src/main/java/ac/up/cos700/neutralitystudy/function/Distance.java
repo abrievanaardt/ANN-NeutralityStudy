@@ -12,11 +12,10 @@ import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
  *
  * @author Abrie van Aardt
  */
-public class Distance implements IFunction{
+public class Distance extends Function{
 
-    @Override
-    public int getDimensionality() {
-        return 4;
+    public Distance(){
+        dimensionality = 4;
     }
 
     @Override
@@ -25,16 +24,5 @@ public class Distance implements IFunction{
             throw new UnequalArgsDimensionException("Distance measure is 4 dimensional: x1, y1, x2, y2");
         
         return Math.sqrt(Math.pow(x[0] - x[2], 2) + Math.pow(x[1] - x[3], 2));
-    }
-
-    @Override
-    public double getLowerBound() {
-        return Double.NEGATIVE_INFINITY;
-    }
-
-    @Override
-    public double getUpperBound() {
-        return Double.POSITIVE_INFINITY;
-    }
-
+    }   
 }

@@ -2,7 +2,8 @@ package ac.up.cos700.neutralitystudy.data;
 
 import ac.up.cos700.neutralitystudy.data.util.GraphException;
 import ac.up.cos700.neutralitystudy.data.util.ResultsException;
-import ac.up.cos700.neutralitystudy.function.IFunction;
+import ac.up.cos700.neutralitystudy.function.Function;
+import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -65,17 +66,17 @@ public class Results {
         }
     }
 
-    public synchronized static void addPlot(String title, IFunction function)
+    public synchronized static void addPlot(String title, RealProblem problem)
             throws ResultsException {
         try {
-            currentGraph.addPlot(title, function);
+            currentGraph.addPlot(title, problem);
         }
         catch (GraphException e) {
             throw new ResultsException(e.getMessage());
         }
     }
     
-    public synchronized static void addPlot(String title, IFunction function, int lowerbound, int upperbound)
+    public synchronized static void addPlot(String title, Function function, int lowerbound, int upperbound)
             throws ResultsException {
         try {
             currentGraph.addPlot(title, function, lowerbound, upperbound);

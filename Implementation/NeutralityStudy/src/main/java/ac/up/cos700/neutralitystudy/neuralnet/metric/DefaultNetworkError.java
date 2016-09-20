@@ -2,7 +2,7 @@ package ac.up.cos700.neutralitystudy.neuralnet.metric;
 
 import ac.up.cos700.neutralitystudy.data.Dataset;
 import ac.up.cos700.neutralitystudy.data.Pattern;
-import ac.up.cos700.neutralitystudy.function.IFunction;
+import ac.up.cos700.neutralitystudy.function.Function;
 import ac.up.cos700.neutralitystudy.function.SquaredError;
 import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
@@ -47,6 +47,6 @@ public class DefaultNetworkError implements INetworkError {
         return sum;
     }
 
-    private static final IFunction outputError = new SquaredError();
+    private static final Function outputError = new SquaredError();
 
 }

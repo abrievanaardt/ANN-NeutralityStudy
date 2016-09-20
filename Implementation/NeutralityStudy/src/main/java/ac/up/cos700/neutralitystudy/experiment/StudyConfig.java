@@ -12,12 +12,17 @@ import java.util.Scanner;
  */
 public class StudyConfig {
 
+    // NN Configuration
     public double acceptableTrainingError;
     public double learningRate;
     public int binSize;
     public double classificationRigor;
     public int maxEpoch;
+    
+    // General Experiment Configuration
     public int simulations;
+    
+    
 
     public static StudyConfig fromFile(String expName) throws FileNotFoundException, StudyConfigException {
         StudyConfig config = new StudyConfig();

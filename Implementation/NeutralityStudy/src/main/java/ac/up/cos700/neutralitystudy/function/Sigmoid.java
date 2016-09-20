@@ -1,6 +1,6 @@
 package ac.up.cos700.neutralitystudy.function;
 
-import ac.up.cos700.neutralitystudy.function.IFunction;
+import ac.up.cos700.neutralitystudy.function.Function;
 import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 
 /**
@@ -8,21 +8,17 @@ import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
  *
  * @author Abrie van Aardt
  */
-public class Sigmoid implements IFunction {
+public class Sigmoid extends Function {
 
     double lambda;
 
     public Sigmoid() {
         lambda = 1;
     }
-    
-    public Sigmoid(double _lambda){
-        lambda = _lambda;
-    }
 
-    @Override
-    public int getDimensionality() {
-        return 1;
+    public Sigmoid(double _lambda) {
+        lambda = _lambda;
+        dimensionality = 1;
     }
 
     @Override
@@ -31,16 +27,6 @@ public class Sigmoid implements IFunction {
             throw new UnequalArgsDimensionException();
 
         return 1.0 / (1.0 + Math.pow(Math.E, -lambda * x[0]));
-    }
-    
-    @Override
-    public double getLowerBound() {
-        return Double.NEGATIVE_INFINITY;
-    }
-
-    @Override
-    public double getUpperBound() {
-        return Double.POSITIVE_INFINITY;
     }
 
 }

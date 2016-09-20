@@ -1,6 +1,6 @@
 package ac.up.cos700.neutralitystudy.neuralnet.util;
 
-import ac.up.cos700.neutralitystudy.function.IFunction;
+import ac.up.cos700.neutralitystudy.function.Function;
 import ac.up.cos700.neutralitystudy.function.util.NotAFunctionException;
 import ac.up.cos700.neutralitystudy.neuralnet.*;
 import java.util.logging.Level;
@@ -37,7 +37,7 @@ public class FFNeuralNetBuilder {
             throw new ZeroNeuronException();
 
         try {
-            layerConfig.activationFunction = (IFunction) activationFunction.newInstance();
+            layerConfig.activationFunction = (Function) activationFunction.newInstance();
         }
         catch (InstantiationException | IllegalAccessException | ClassCastException e) {
             throw new NotAFunctionException();

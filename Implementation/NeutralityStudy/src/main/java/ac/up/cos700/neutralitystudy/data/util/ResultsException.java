@@ -13,9 +13,4 @@ public class ResultsException extends Exception {
     public ResultsException(String msg) {
         super(msg);
     }
-    
-    @Override
-    public String getMessage(){
-        return "Something went wrong while attempting to prepare the results.";
-    }
 }

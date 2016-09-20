@@ -2,7 +2,8 @@ package ac.up.cos700.neutralitystudy.data;
 
 import ac.up.cos700.neutralitystudy.data.util.GraphException;
 import ac.up.cos700.neutralitystudy.data.util.ResultsException;
-import ac.up.cos700.neutralitystudy.function.IFunction;
+import ac.up.cos700.neutralitystudy.function.Function;
+import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
 import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -14,17 +15,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Wraps the GNUPlot process and serves as an adapter to route graphing
+ * requests. This class only exposes GNUPlot functionality that will be needed
+ * during the course of the project.
+ * 
  * @author Abrie van Aardt
  */
 public class Graph {
 
+    /**
+     * Inner class used to represent a single plot on the graph.
+     */
     public class Plot {
 
         public String title;
         public String dataset;
     }
 
+    /**
+     * Initialises a graph with the properties given as parameters. Other
+     * properties are either fixed or derived from the parameters given.
+     * 
+     * @param _path the relative directory path the graph should be placed
+     * @param _title the title of the graph
+     * @param xLabel x-axis label
+     * @param yLabel y-axis label
+     * @param zLabel z-axis label
+     * @param _dimensions the number of dimensions the graph will be plotted in
+     * @throws GraphException 
+     */
     public Graph(String _path, String _title, String xLabel, String yLabel, String zLabel, int _dimensions) throws GraphException {
         try {
             gnuPlotProcess = Runtime.getRuntime().exec("gnuplot --persist");
@@ -45,10 +64,13 @@ public class Graph {
         dimensions = _dimensions;
 
         //set some graph properties
+        
         //Terminal
-        properties.add("set terminal postscript eps enhanced color font 'Helvetica,10'");
+        properties.add("set terminal pngcairo enhanced color font 'Helvetica,10'");
+        
         //Output
-        properties.add("set output '" + ".\\" + path + "\\" + title + "\\" + title + ".eps'");
+        properties.add("set output '" + ".\\" + path + "\\" + title + "\\" + title + ".png'");
+        
         //Title
         properties.add("set title '" + title + "'");
 
@@ -56,21 +78,20 @@ public class Graph {
         properties.add("set xlabel '" + xLabel + "'");
 
         //YLabel
-        properties.add("set ylabel '" + yLabel + "'");
-
-        //Move key outside graph
-        //properties.add("set key outside");
+        properties.add("set ylabel '" + yLabel + "'");        
+        
         switch (dimensions) {
             case 2:
                 break;
             case 3:
                 //ZLabel
                 properties.add("set zlabel '" + zLabel + "'");
-                properties.add("set pm3d");
+                
+//                properties.add("set pm3d");
                 properties.add("set hidden3d");
                 properties.add("unset colorbox");
-                properties.add("set palette grey");
-                properties.add("unset surface");
+//                properties.add("set palette grey");
+//                properties.add("unset surface");
                 break;
             default:
                 throw new GraphException("Can only plot in 2 or 3 dimensions");
@@ -78,12 +99,30 @@ public class Graph {
 
     }
 
-    public void addPlot(String _title, IFunction function)
+    /**
+     * Adds a plot of the function to the graph, using the functions defined
+     * bounds to confine the plot.
+     * 
+     * @param _title the title of the plot which will be used as key
+     * @param function the function to plot
+     * @throws GraphException 
+     */
+    public void addPlot(String _title, RealProblem problem)
             throws GraphException {
-        addPlot(_title, function, function.getLowerBound(), function.getUpperBound());
+        addPlot(_title, problem, problem.getLowerBound(), problem.getUpperBound());
     }
 
-    public void addPlot(String _title, IFunction function, double lowerbound, double upperbound)
+    /**
+     * Adds a plot of the function to the graph using the upper and lower
+     * bounds that are provided as parameters.
+     * 
+     * @param _title the title of the plot which will be used as key
+     * @param function the function to plot
+     * @param lowerbound the lower bound for all but the last axes
+     * @param upperbound the upper bound for all but the last axes
+     * @throws GraphException 
+     */
+    public void addPlot(String _title, Function function, double lowerbound, double upperbound)
             throws GraphException {
 
         if (lowerbound == Double.NEGATIVE_INFINITY
@@ -94,7 +133,7 @@ public class Graph {
         plot.title = _title;
         plot.dataset = "'.\\" + path + "\\" + title + "\\" + _title + ".dat'";
 
-        final int detail = 1000;
+        final int detail = 80;
 
         try {
             BufferedWriter writer = new BufferedWriter(
@@ -133,6 +172,14 @@ public class Graph {
 
     }
 
+    /**
+     * Adds a 2D plot of the data points given as parameters.
+     * 
+     * @param _title the title of the plot
+     * @param xData array containing x coordinates
+     * @param yData array containing y coordinates
+     * @throws GraphException 
+     */
     public void addPlot(String _title, double[] xData, double[] yData)
             throws GraphException {
 
@@ -162,6 +209,12 @@ public class Graph {
         }
     }
 
+    /**
+     * Tells GNUPlot to draw all the plots that have been added to the graph
+     * with the properties specified.
+     * 
+     * @throws GraphException 
+     */
     public void plot() throws GraphException {
 
         if (dimensions == 2) {
@@ -191,9 +244,18 @@ public class Graph {
 
         plotCommand = "";
     }
+    
+    /**
+     * Adds the property to the graph. This can also be used to add a property
+     * that effectively unsets a previous property.
+     * 
+     * @param property 
+     */
+    public void addProperty(String property){
+        properties.add(property);
+    }
 
-    public List<String> properties;
-
+    private List<String> properties;
     private int dimensions;
     private String path;
     private String title;
