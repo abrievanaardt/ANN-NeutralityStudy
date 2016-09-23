@@ -4,11 +4,18 @@ import java.io.*;
 
 import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
 import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
-import java.util.*;   
+import java.util.*;
 import java.util.Collections;
 import ac.up.malan.phd.sampling.util.SampleException;
 
-// This class models a random sample of a problem
+/**
+ * This class models a random sample of a problem
+ *
+ * @author Dr Katherine Malan
+ * @author Abrie van Aardt - Made minor adjustments to the code during
+ * integration.
+ * 
+ */
 public class Sample {
 
     // Constants for the different ways of sampling the initial population
@@ -65,8 +72,7 @@ public class Sample {
             case SAMPLETYPE_WALK:   // do nothing
                 break;
             default:
-                System.out.println("Invalid sample type in Sample.java");
-                System.exit(0);
+                throw new SampleException("Invalid sample type in Sample.java");                
         }
     }
 
@@ -109,8 +115,7 @@ public class Sample {
         // Check that the dimension of all Samples is the same:
         for (int i = 1; i < numSamples; i++) {
             if (dimension != sample[i].dimension) {
-                System.out.println("ERROR: Dimensions of array of samples not equal in method Sample::Sample(Sample[])");
-                System.exit(0);
+                throw new SampleException("Dimensions of array of samples not equal in method Sample::Sample(Sample[])");              
             }
         }
         int index = 0;
@@ -275,11 +280,11 @@ public class Sample {
                     throw new SampleException(e.getMessage());
                 }
                 distanceTotal += distance;
-                //	System.out.println("Comparing " + i + " with " + j + " distance = " + distance);
+        
             }
         }
         double averagePairwiseDistance = distanceTotal / numDistances;
-        //  System.out.println("num distances: " + numDistances);      
+        
         return averagePairwiseDistance;
     }
 
@@ -441,20 +446,43 @@ public class Sample {
         return stdDev;
     }
 
-    public static void main(String[] args) throws IOException {
-        //for (int d=1; d<30; d++) {
+    public double[][] getPoints() {
+        double[][] tempPoints = new double[points.length][points[0].getDimension()];
 
-        // RealProblem prob = new Step(-10, 10, 1);
-//	Sample s[] = new Sample[3];	    
-//        s[0] = new Sample(prob, Sample.SAMPLETYPE_RANDOM, 2);
-//	s[1] = new Sample(prob, Sample.SAMPLETYPE_RANDOM, 5);
-//	s[2] = new Sample(prob, Sample.SAMPLETYPE_RANDOM, 3);
-//	Sample sAll = new Sample(s);
-//	sAll.printSample();
-        //double cov = s.getCoverage(2);
-        //System.out.println("Coverage" + cov);
-        //s.printSampleToFile("stepSample.txt");
-//	}
+        for (int i = 0; i < tempPoints.length; i++) {
+
+            for (int j = 0; j < tempPoints[i].length; j++) {
+                tempPoints[i][j] = points[i].getReal(j);
+            }
+        }
+
+        return tempPoints;
+    }
+
+    public double[] getPointsFitness() {
+        return Arrays.copyOf(fitness, fitness.length);
+    }
+
+    /**
+     * This method assembles the points into overlapping
+     * 3-point objects that will be used to calculate neutrality. 
+     * A 3-point object consists of a point, together
+     * with its 2 neighbouring points.
+     * 
+     * @return 3-point objects 
+     */
+    public double[][] getPointFitnessObjects() {
+        double[] pointsFitness = getPointsFitness();
+        double[][] objects = new double[pointsFitness.length][3];
+
+        //from second to second last points - since 2 neighbours are included
+        for (int i = 1; i < objects.length - 1; i++) {
+            objects[i][0] = pointsFitness[i-1];
+            objects[i][1] = pointsFitness[i];
+            objects[i][2] = pointsFitness[i+1];            
+        }
+        
+        return objects;        
     }
 
 }

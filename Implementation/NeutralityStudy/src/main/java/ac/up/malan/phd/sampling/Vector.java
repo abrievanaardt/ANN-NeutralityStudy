@@ -4,7 +4,11 @@ import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import java.util.Arrays;
 import java.util.Random;
 
-/* Position vector */
+/**
+ * This class models a position vector
+ * 
+ * @author Dr Katherine Malan
+ */
 public class Vector implements Cloneable{
     
         private int dimension = 1; // dimension of vector respresenting the position

@@ -97,4 +97,8 @@ public class Test {
         logger.getHandlers()[2].setLevel(Level.ALL);//detailed log file
     }
 
+    Test() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

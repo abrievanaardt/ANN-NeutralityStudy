@@ -2,6 +2,8 @@ package ac.up.cos700.neutralitystudy.function.problem;
 
 import ac.up.cos700.neutralitystudy.function.Function;
 import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This function discretises the output of any {@link Function}. This can be
@@ -22,12 +24,19 @@ public class Quantiser extends RealProblem {
      * @param _q the quantum size defining the amount of neutrality
      */
     public Quantiser(Function _function, double _q, double lowerBound, double upperBound) {
-        
+
         super(lowerBound, upperBound, _function.getDimensionality());
-        
+
         function = _function;
-        q = _q;             
-    }   
+        q = _q;
+
+        Logger
+                .getLogger(getClass().getName())
+                .log(Level.FINER, "Quantising: {0}, quantum: {1}", new Object[]{
+            _function.getClass().getSimpleName(),
+            _q
+        });
+    }
 
     @Override
     public double evaluate(double... x) throws UnequalArgsDimensionException {
@@ -38,7 +47,12 @@ public class Quantiser extends RealProblem {
 
         return rawOutput - (rawOutput % q);
     }
-    
+
+    @Override
+    public String toString() {
+        return "Quantised " + function.getClass().getSimpleName();
+    }
+
     private final Function function;
-    private final double q; 
+    private final double q;
 }

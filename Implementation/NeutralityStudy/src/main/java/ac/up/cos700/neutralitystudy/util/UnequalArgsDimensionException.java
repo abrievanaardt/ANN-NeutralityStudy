@@ -11,12 +11,6 @@ public class UnequalArgsDimensionException extends Exception{
     
     public UnequalArgsDimensionException(){
         super();
-    }
-    
-    @Override
-    public String getMessage(){
-        return "Number of input arguments must match the dimensionality of the function";
-    }
-    
+    }    
     
 }

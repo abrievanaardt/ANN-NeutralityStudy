@@ -24,7 +24,7 @@ public class Results {
      * @param experimentName
      * @param resultType
      * @param values
-     * @throws IOException
+     * @throws ResultsException
      */
     public synchronized static void writeToFile(String experimentName, String resultType, double... values) throws ResultsException {
         BufferedWriter writer = null;
@@ -39,6 +39,47 @@ public class Results {
             }
 
             writer.newLine();
+            writer.flush();
+        }
+        catch (IOException e) {
+            throw new ResultsException(e.getMessage());
+        }
+        finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                }
+                catch (IOException e) {
+                }
+            }
+        }
+    }
+    
+    /**
+     * Appends the value(s) to a file with the relative path:
+     * experimentName/resultType
+     *
+     * @param experimentName
+     * @param resultType
+     * @param values
+     * @throws ResultsException
+     */
+    public synchronized static void writeToFile(String experimentName, String resultType, double[] values1, double[] values2) throws ResultsException {
+        BufferedWriter writer = null;
+        
+        if (values1.length != values2.length)
+            throw new ResultsException("The length of the two arrays do not correspond");
+        
+        try {
+            File directory = new File(experimentName + "/" + resultType + ".csv");
+            directory.getParentFile().mkdirs();
+            writer = new BufferedWriter(new FileWriter(directory, true));
+
+            for (int i = 0; i < values1.length; i++) {
+                writer.write(Double.toString(values1[i]) + ", " + values2[i]);
+                writer.newLine();
+            }
+            
             writer.flush();
         }
         catch (IOException e) {
@@ -86,10 +127,21 @@ public class Results {
         }
     }
     
-    public synchronized static void addPlot(String title, double[] xData, double[] yData)
+    public synchronized static void addPlot(String title, double[] xData, double[] yData, String type)
             throws ResultsException {
         try {
-            currentGraph.addPlot(title, xData, yData);
+            currentGraph.addPlot(title, xData, yData, type);
+        }
+        catch (GraphException e) {
+            throw new ResultsException(e.getMessage());
+        }
+    }
+    
+    public synchronized static void addPlot(String title, double[][] xData, double[] yData, String type)
+            throws ResultsException {
+        
+        try {
+            currentGraph.addPlot(title, xData, yData, type);
         }
         catch (GraphException e) {
             throw new ResultsException(e.getMessage());

@@ -21,7 +21,7 @@ public class Ackley extends RealProblem {
     public double evaluate(double... x) throws UnequalArgsDimensionException {
         if (x.length != getDimensionality())
             throw new UnequalArgsDimensionException();
-        
+
         double sumsq = 0.0;
         double sumcos = 0.0;
         for (int i = 0; i < getDimensionality(); ++i) {

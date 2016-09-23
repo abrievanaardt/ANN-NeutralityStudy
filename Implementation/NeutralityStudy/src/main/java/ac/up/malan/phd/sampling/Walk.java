@@ -5,6 +5,13 @@ import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import java.util.*;
 import ac.up.malan.phd.sampling.util.SampleException;
 
+/**
+ * A particular sample that captures information of neighbouring points. A 
+ * neighbourhood is defined as the point cloud within a hypercube of some
+ * size around the point in question.
+ * 
+ * @author Dr Katherine Malan
+ */
 public class Walk extends Sample {
 
     public static int WALKTYPE_RANDOM = 1;
