@@ -473,13 +473,13 @@ public class Sample {
      */
     public double[][] getPointFitnessObjects() {
         double[] pointsFitness = getPointsFitness();
-        double[][] objects = new double[pointsFitness.length][3];
+        double[][] objects = new double[pointsFitness.length-2][3];
 
         //from second to second last points - since 2 neighbours are included
-        for (int i = 1; i < objects.length - 1; i++) {
-            objects[i][0] = pointsFitness[i-1];
-            objects[i][1] = pointsFitness[i];
-            objects[i][2] = pointsFitness[i+1];            
+        for (int i = 1; i < pointsFitness.length - 1; i++) {
+            objects[i-1][0] = pointsFitness[i-1];
+            objects[i-1][1] = pointsFitness[i];
+            objects[i-1][2] = pointsFitness[i+1];            
         }
         
         return objects;        

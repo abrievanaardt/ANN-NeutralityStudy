@@ -19,64 +19,22 @@ public class Results {
 
     /**
      * Appends the value(s) to a file with the relative path:
-     * experimentName/resultType
+     * experimentPath/resultName
      *
-     * @param experimentName
-     * @param resultType
+     * @param experimentPath
+     * @param resultName
      * @param values
      * @throws ResultsException
      */
-    public synchronized static void writeToFile(String experimentName, String resultType, double... values) throws ResultsException {
+    public synchronized static void writeToFile(String experimentPath, String resultName, double... values) throws ResultsException {
         BufferedWriter writer = null;
         try {
-            File directory = new File(experimentName + "/" + resultType + ".csv");
+            File directory = new File(experimentPath + "/" + resultName + ".csv");
             directory.getParentFile().mkdirs();
-            writer = new BufferedWriter(new FileWriter(directory, true));
+            writer = new BufferedWriter(new FileWriter(directory));
 
-            writer.write(Double.toString(values[0]));
-            for (int i = 1; i < values.length; i++) {
-                writer.write(", " + Double.toString(values[i]));
-            }
-
-            writer.newLine();
-            writer.flush();
-        }
-        catch (IOException e) {
-            throw new ResultsException(e.getMessage());
-        }
-        finally {
-            if (writer != null) {
-                try {
-                    writer.close();
-                }
-                catch (IOException e) {
-                }
-            }
-        }
-    }
-    
-    /**
-     * Appends the value(s) to a file with the relative path:
-     * experimentName/resultType
-     *
-     * @param experimentName
-     * @param resultType
-     * @param values
-     * @throws ResultsException
-     */
-    public synchronized static void writeToFile(String experimentName, String resultType, double[] values1, double[] values2) throws ResultsException {
-        BufferedWriter writer = null;
-        
-        if (values1.length != values2.length)
-            throw new ResultsException("The length of the two arrays do not correspond");
-        
-        try {
-            File directory = new File(experimentName + "/" + resultType + ".csv");
-            directory.getParentFile().mkdirs();
-            writer = new BufferedWriter(new FileWriter(directory, true));
-
-            for (int i = 0; i < values1.length; i++) {
-                writer.write(Double.toString(values1[i]) + ", " + values2[i]);
+            for (int i = 0; i < values.length; i++) {
+                writer.write(Double.toString(values[i]));
                 writer.newLine();
             }
             
@@ -96,10 +54,60 @@ public class Results {
         }
     }
 
+    /**
+     * Appends the value(s) to a file with the relative path:
+     * experimentPath/resultName
+     *
+     * @param experimentPath
+     * @param resultName
+     * @param values1
+     * @param values2
+     * @throws ResultsException
+     */
+    public synchronized static void writeToFile(String experimentPath, String resultName, double[] values1, double[]... values2) throws ResultsException {
+        BufferedWriter writer = null;
+
+        for (int i = 0; i < values2.length; i++) {
+            if (values1.length != values2[i].length)
+                throw new ResultsException("The length of the arrays do not correspond");
+        }
+
+        try {
+            File directory = new File(experimentPath + "/" + resultName + ".csv");
+            directory.getParentFile().mkdirs();
+            writer = new BufferedWriter(new FileWriter(directory));
+
+            for (int i = 0; i < values1.length; i++) {
+                String line = Double.toString(values1[i]);
+
+                for (int j = 0; j < values2.length; j++) {
+                    line += ", " + values2[j][i];
+                }
+
+                writer.write(line);
+                writer.newLine();
+            }
+
+            writer.flush();
+        }
+        catch (IOException e) {
+            throw new ResultsException(e.getMessage());
+        }
+        finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                }
+                catch (IOException e) {
+                }
+            }
+        }
+    }
+
     public synchronized static void newGraph(String path, String title, String xLabel, String yLabel, String zLabel, int dimensions)
             throws ResultsException {
         try {
-            Graph graph = new Graph(path, title, xLabel, yLabel, zLabel, dimensions);               
+            Graph graph = new Graph(path + "\\Graphs", title, xLabel, yLabel, zLabel, dimensions);
             currentGraph = graph;
         }
         catch (GraphException e) {
@@ -116,7 +124,7 @@ public class Results {
             throw new ResultsException(e.getMessage());
         }
     }
-    
+
     public synchronized static void addPlot(String title, Function function, int lowerbound, int upperbound)
             throws ResultsException {
         try {
@@ -126,7 +134,7 @@ public class Results {
             throw new ResultsException(e.getMessage());
         }
     }
-    
+
     public synchronized static void addPlot(String title, double[] xData, double[] yData, String type)
             throws ResultsException {
         try {
@@ -136,10 +144,10 @@ public class Results {
             throw new ResultsException(e.getMessage());
         }
     }
-    
+
     public synchronized static void addPlot(String title, double[][] xData, double[] yData, String type)
             throws ResultsException {
-        
+
         try {
             currentGraph.addPlot(title, xData, yData, type);
         }
@@ -147,7 +155,7 @@ public class Results {
             throw new ResultsException(e.getMessage());
         }
     }
-    
+
     public synchronized static void plot()
             throws ResultsException {
         try {

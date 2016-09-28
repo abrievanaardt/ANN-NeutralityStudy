@@ -16,7 +16,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ac.up.cos700.neutralitystudy.experiment.StudyRunner</mainClass>
+                            <mainClass>ac.up.cos700.neutralitystudy.study.StudyRunner</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -1,11 +1,12 @@
-package ac.up.cos700.neutralitystudy.experiment;
+package ac.up.cos700.neutralitystudy.study;
 
+import ac.up.cos700.neutralitystudy.study.util.StudyConfig;
 import ac.up.cos700.neutralitystudy.data.Dataset;
 import ac.up.cos700.neutralitystudy.data.Results;
 import ac.up.cos700.neutralitystudy.data.util.IncorrectFileFormatException;
 import ac.up.cos700.neutralitystudy.data.util.ResultsException;
 import ac.up.cos700.neutralitystudy.data.util.StudyLogFormatter;
-import ac.up.cos700.neutralitystudy.experiment.util.StudyConfigException;
+import ac.up.cos700.neutralitystudy.study.util.StudyConfigException;
 import ac.up.cos700.neutralitystudy.function.Identity;
 import ac.up.cos700.neutralitystudy.function.problem.*;
 import ac.up.cos700.neutralitystudy.function.Sigmoid;
@@ -32,6 +33,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.rosuda.JRI.Rengine;
 
 /**
  * This is where my experiment is configured.
@@ -48,34 +50,16 @@ public class StudyRunner {
 
         try {
             setupLogging();
+            
+             //Run Studies/Experiments
+            new Study_Measure1_1D_Simple().run();
         }
-        catch (IOException e) {
+        catch (IOException | StudyConfigException e) {
             Logger.getLogger(StudyRunner.class.getName()).log(Level.SEVERE, "", e);
-        }
-
-        //Run Studies/Experiments
-        study1();
+        }       
 
     }
-
-    private static void study1() {
-        String studyName = "Simple2DFunctions";
-
-        Logger
-                .getLogger(StudyRunner.class.getName())
-                .log(Level.INFO, "Configuring study: {0}", studyName);
-
-        exp1(studyName);
-    }
-
-    private static void study2() {
-        String studyName = "Tuneable2DFunctions";
-    }
-
-    private static void study3() {
-        String studyName = "nDFunctions";
-    }
-
+    
     private static void exp1(String studyName) {
         String expName = "Quantised";
         String expPath = studyName + "\\" + expName;
@@ -91,9 +75,9 @@ public class StudyRunner {
 
             Logger
                     .getLogger(StudyRunner.class.getName())
-                    .log(Level.INFO, "Doing {0} simulation(s)", config.simulations);
+                    .log(Level.INFO, "Doing {0} simulation(s)", config.simulationCount);
 
-            for (int i = 1; i <= config.simulations; i++) {
+            for (int i = 1; i <= config.simulationCount; i++) {
 
                 Logger
                         .getLogger(StudyRunner.class.getName())
@@ -128,7 +112,8 @@ public class StudyRunner {
         }
     }
 
-    private static void test(String studyName) {
+    //todo: move this to an experiment class
+    private static void NN_Test(String studyName) {
 
         String expName = "NNTest";
         String expPath = studyName + "\\" + expName;
@@ -138,16 +123,16 @@ public class StudyRunner {
         try {
             config = StudyConfig.fromFile(expName);
 
-            double[] trainingErrorHistory = new double[config.maxEpoch];
-            double[] validationErrorHistory = new double[config.maxEpoch];
-            double[] trainingAccHistory = new double[config.maxEpoch];
-            double[] validationAccHistory = new double[config.maxEpoch];
+            double[] trainingErrorHistory = new double[config.entries.get("maxEpoch").intValue()];
+            double[] validationErrorHistory = new double[config.entries.get("maxEpoch").intValue()];
+            double[] trainingAccHistory = new double[config.entries.get("maxEpoch").intValue()];
+            double[] validationAccHistory = new double[config.entries.get("maxEpoch").intValue()];
 
             Logger
                     .getLogger(StudyRunner.class.getName())
-                    .log(Level.INFO, "Doing {0} simulation(s)", config.simulations);
+                    .log(Level.INFO, "Doing {0} simulation(s)", config.simulationCount);
 
-            for (int i = 1; i <= config.simulations; i++) {
+            for (int i = 1; i <= config.simulationCount; i++) {
 
                 Logger
                         .getLogger(StudyRunner.class.getName())
@@ -169,11 +154,11 @@ public class StudyRunner {
                         .build();
 
                 backPropagation = new BackPropagation(
-                        config.acceptableTrainingError,
-                        config.learningRate,
-                        config.binSize,
-                        config.classificationRigor,
-                        config.maxEpoch);
+                        config.entries.get("acceptableTrainingError"),
+                        config.entries.get("learningRate"),
+                        config.entries.get("binSize").intValue(),
+                        config.entries.get("classificationRigor"),
+                        config.entries.get("maxEpoch)").intValue());
 
                 backPropagation.train(network, trainingset, validationset);
 
@@ -186,7 +171,7 @@ public class StudyRunner {
                 double[] tempValidationAccHistory = backPropagation.getValidationAccHistory();
 
                 double generalisationError = new DefaultNetworkError().measure(network, generalisationset);
-                double classificationAccuracy = new ClassificationAccuracy(config.classificationRigor).measure(network, generalisationset);
+                double classificationAccuracy = new ClassificationAccuracy(config.entries.get("classificationRigor")).measure(network, generalisationset);
 
                 //send results to disk
                 Results.writeToFile(expPath, "E_t", trainingError);
@@ -207,12 +192,12 @@ public class StudyRunner {
                         "NN classification accuracy is {0}%", classificationAccuracy);
             }
 
-            //get average errors for all simulations
+            //get average errors for all simulationCount
             for (int j = 0; j < trainingErrorHistory.length; j++) {
-                trainingErrorHistory[j] /= config.simulations;
-                validationErrorHistory[j] /= config.simulations;
-                trainingAccHistory[j] /= config.simulations;
-                validationAccHistory[j] /= config.simulations;
+                trainingErrorHistory[j] /= config.simulationCount;
+                validationErrorHistory[j] /= config.simulationCount;
+                trainingAccHistory[j] /= config.simulationCount;
+                validationAccHistory[j] /= config.simulationCount;
             }
 
             Results.writeToFile(expPath, "E_vs_Epoch", trainingErrorHistory);

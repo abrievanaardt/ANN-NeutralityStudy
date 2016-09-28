@@ -1,6 +1,8 @@
 package ac.up.cos700.neutralitystudy.neutralitymeasure;
 
 import ac.up.malan.phd.sampling.Walk;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This serves as an interface to which all neutrality measures must conform.
@@ -11,6 +13,11 @@ public abstract class NeutralityMeasure {
     
     public NeutralityMeasure(double _epsilon){
         epsilon = _epsilon;
+        
+        Logger
+                .getLogger(getClass().getName())
+                .log(Level.FINER, "Using neutrality measure: {0}", getClass().getSimpleName());
+        
     }
     
     /**

@@ -66,9 +66,9 @@ public class Graph {
 
         //set some graph properties
         //Terminal
-//        properties.add("set terminal postscript eps enhanced color font 'Helvetica,10'");
+        properties.add("set terminal postscript eps enhanced color font 'Helvetica,10'");
         //Output
-//        properties.add("set output '" + ".\\" + path + "\\" + title + "\\" + title + ".eps'");
+        properties.add("set output '" + ".\\" + path + "\\" + title + "\\" + title + ".eps'");
         //Title
         properties.add("set title '" + title + "'");
 
@@ -87,6 +87,10 @@ public class Graph {
         //Use Colour Palette
 //        properties.add("load 'gnuplot-color-palettes\\paired.pal'");
 
+        //Settings for bar charts
+        properties.add("set boxwidth 0.5");        
+        properties.add("set style fill solid");
+
         switch (dimensions) {
             case 2:
                 break;
@@ -103,7 +107,7 @@ public class Graph {
     }
 
     /**
-     * Adds a plot of the function to the graph, using the functions defined
+     * Adds a plot of the problem to the graph, using the problem's defined
      * bounds to confine the plot.
      *
      * @param _title the title of the plot which will be used as key
@@ -116,8 +120,8 @@ public class Graph {
     }
 
     /**
-     * Adds a plot of the function to the graph using the upper and lower bounds
-     * that are provided as parameters.
+     * Adds a plot of the function to the graph using the upper and lower 
+     * bounds that are provided as parameters.
      *
      * @param _title the title of the plot which will be used as key
      * @param function the function to plot
@@ -133,8 +137,18 @@ public class Graph {
             throw new GraphException("Cannot plot between infinite bounds.");
 
         Plot plot = new Plot();
-        plot.title = _title;
-        plot.type = dimensions == 2 ? "lines" : "pm3d";
+       
+         //if no plot title, assume only single plot and name it the same 
+        //as the graph
+        if (_title == null || _title == ""){
+            _title = title;
+            plot.title = "";
+        } else{
+            plot.title = _title;
+        }  
+        
+        plot.type = dimensions == 2 ? "lines" : "pm3d";       
+        
         plot.dataset = "'.\\" + path + "\\" + title + "\\" + _title + ".dat'";
 
         final int detail = 250;
@@ -187,14 +201,19 @@ public class Graph {
     public void addPlot(String _title, double[] xData, double[] yData, String type)
             throws GraphException {
 
+           
         Plot plot = new Plot();
-        plot.title = _title;
-        plot.type = type;
-
-        //if no plot title, assume only single plot and name it the same 
+       
+         //if no plot title, assume only single plot and name it the same 
         //as the graph
-        if (_title == null || _title == "")
+        if (_title == null || _title == ""){
             _title = title;
+            plot.title = "";
+        } else{
+            plot.title = _title;
+        }    
+        
+        plot.type = type;        
 
         plot.dataset = "'.\\" + path + "\\" + title + "\\" + _title + ".dat'";
 

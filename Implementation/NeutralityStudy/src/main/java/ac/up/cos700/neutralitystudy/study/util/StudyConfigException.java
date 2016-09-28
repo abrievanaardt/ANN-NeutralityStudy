@@ -1,4 +1,4 @@
-package ac.up.cos700.neutralitystudy.experiment.util;
+package ac.up.cos700.neutralitystudy.study.util;
 
 /**
  *
@@ -11,10 +11,6 @@ public class StudyConfigException extends Exception {
     
     public StudyConfigException(String msg){
         super(msg);        
-    }
+    }   
     
-    @Override
-    public String getMessage(){
-        return "Study.config file is not appropriately configured.";
-    }
 }
