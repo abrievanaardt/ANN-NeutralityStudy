@@ -11,12 +11,14 @@ import ac.up.malan.phd.sampling.Walk;
  *
  * @author Abrie van Aardt
  */
-public class Experiment_1D_Simple extends Experiment {
+public class Experiment_2D_Simple extends Experiment {
 
-    public Experiment_1D_Simple(StudyConfig _config, NeutralityMeasure _neutralityMeasure, RealProblem _problem) {
+    public Experiment_2D_Simple(StudyConfig _config, NeutralityMeasure _neutralityMeasure, RealProblem _problem) {
         super(_config, _neutralityMeasure, _problem);
+        
         path += "_"+ _problem.getClass().getSimpleName();
-        neutrality = new double[config.simulationCount];        
+        neutrality = new double[config.simulationCount];
+        problem = _problem;
         sampler = new ProgressiveRandomWalkSampler(problem, stepCount, stepRatio);
     }
 
@@ -34,7 +36,7 @@ public class Experiment_1D_Simple extends Experiment {
         Results.plot();
                 
         //plot a representive sample
-        Walk[] walks = new ProgressiveRandomWalkSampler(problem, 25, 0.1).sample();        
+        Walk[] walks = sampler.sample();        
         Results.newGraph(path, problem.getClass().getSimpleName() + " Sampled", "x", "f(x)", null, 2);
         Results.addPlot(problem.getClass().getSimpleName(), problem);
         for (int i = 0; i < walks.length; i++) {

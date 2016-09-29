@@ -12,11 +12,7 @@ import java.util.logging.Logger;
 public abstract class NeutralityMeasure {
     
     public NeutralityMeasure(double _epsilon){
-        epsilon = _epsilon;
-        
-        Logger
-                .getLogger(getClass().getName())
-                .log(Level.FINER, "Using neutrality measure: {0}", getClass().getSimpleName());
+        epsilon = _epsilon;              
         
     }
     

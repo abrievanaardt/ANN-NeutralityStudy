@@ -11,3 +11,4 @@ buildNumber.properties
 /Implementation/NeutralityStudy/*.log
 /Implementation/NeutralityStudy/*.lck
 /Implementation/NeutralityStudy/*.log.lck
+/Implementation/NeutralityStudy/Studies/*

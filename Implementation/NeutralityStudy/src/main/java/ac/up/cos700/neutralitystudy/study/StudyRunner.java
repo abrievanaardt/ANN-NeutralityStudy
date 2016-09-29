@@ -53,6 +53,7 @@ public class StudyRunner {
             
              //Run Studies/Experiments
             new Study_Measure1_1D_Simple().run();
+            new Study_Measure1_1D_Tunable_Quantised().run();
         }
         catch (IOException | StudyConfigException e) {
             Logger.getLogger(StudyRunner.class.getName()).log(Level.SEVERE, "", e);

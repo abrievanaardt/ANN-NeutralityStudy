@@ -29,13 +29,7 @@ public class Quantiser extends RealProblem {
 
         function = _function;
         q = _q;
-
-        Logger
-                .getLogger(getClass().getName())
-                .log(Level.FINER, "Quantising: {0}, quantum: {1}", new Object[]{
-            _function.getClass().getSimpleName(),
-            _q
-        });
+        
     }
 
     @Override
@@ -51,6 +45,11 @@ public class Quantiser extends RealProblem {
     @Override
     public String toString() {
         return "Quantised " + function.getClass().getSimpleName();
+    }
+    
+    @Override
+    public String getUnderlyingFunctionName(){
+        return function.getClass().getSimpleName();
     }
 
     private final Function function;

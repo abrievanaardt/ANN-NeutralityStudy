@@ -17,6 +17,10 @@ import ac.up.malan.phd.sampling.Vector;
  * @author Dr Katherine Malan
  */
 public abstract class RealProblem extends Function {
+    
+    //huge todo: refactor such that problem names are obtained from a function
+    //instread of a reflective getClass().getSimpleName() call, as this is very
+    //limited.
 
     public RealProblem(double xmin, double xmax, int dim) {
         this(xmin, xmax, dim, 0);
@@ -26,17 +30,7 @@ public abstract class RealProblem extends Function {
         lowerBound = xmin;
         upperBound = xmax;
         dimensionality = dim;
-        optimumFitness = fmin;
-
-        Logger
-                .getLogger(getClass().getName())
-                .log(Level.FINER, "Problem: {0}, dim: {1}, xMin: {2}, xMax: {3}, minFitness: {4}", new Object[]{
-            getClass().getSimpleName(),
-            dimensionality,
-            lowerBound,
-            upperBound,
-            optimumFitness
-        });
+        optimumFitness = fmin;        
     }
 
     public double evaluate(Vector x) throws UnequalArgsDimensionException {
@@ -105,6 +99,10 @@ public abstract class RealProblem extends Function {
     @Override
     public String toString() {
         return getClass().getSimpleName();
+    }
+    
+    public String getUnderlyingFunctionName(){
+        return "";
     }
 
     protected double lowerBound = -10; // lowerBound & upperBound refer to the domain of the problem
