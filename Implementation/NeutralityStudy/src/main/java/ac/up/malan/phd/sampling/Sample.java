@@ -469,7 +469,7 @@ public class Sample {
      * A 3-point object consists of a point, together
      * with its 2 neighbouring points.
      * 
-     * @return 3-point objects 
+     * @return 3-point objects in the sample
      */
     public double[][] getPointFitnessObjects() {
         double[] pointsFitness = getPointsFitness();

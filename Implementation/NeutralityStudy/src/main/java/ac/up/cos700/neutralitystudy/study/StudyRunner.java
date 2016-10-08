@@ -33,7 +33,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.rosuda.JRI.Rengine;
 
 /**
  * This is where my experiment is configured.
@@ -51,9 +50,31 @@ public class StudyRunner {
         try {
             setupLogging();
             
-             //Run Studies/Experiments
-            new Study_Measure1_1D_Simple().run();
-            new Study_Measure1_1D_Tunable_Quantised().run();
+            //Run Studies/Experiments
+            //Measure1 - proportion of neutral objects
+            new Study_M1_1D_Simple().run();
+            new Study_M1_1D_Tunable_Q().run();            
+            
+            new Study_M1_2D_Simple().run();
+            new Study_M1_2D_Tunable_Q().run();
+            
+            //n-dimensional
+            
+            //Measure2 - proportion of longest neutral sequence
+            new Study_M2_1D_Simple().run();
+            new Study_M2_1D_Tunable_Q().run();            
+            
+            new Study_M2_2D_Simple().run();
+            new Study_M2_2D_Tunable_Q().run();
+            
+            //n-dimensional
+            
+            //Measure3 - proportion of longest neutral sequence in 
+            //euclidean space
+            //todo
+            
+            
+            //also study measures on NNs
         }
         catch (IOException | StudyConfigException e) {
             Logger.getLogger(StudyRunner.class.getName()).log(Level.SEVERE, "", e);
@@ -76,9 +97,9 @@ public class StudyRunner {
 
             Logger
                     .getLogger(StudyRunner.class.getName())
-                    .log(Level.INFO, "Doing {0} simulation(s)", config.simulationCount);
+                    .log(Level.INFO, "Doing {0} simulation(s)", config.entries.get("simulations"));
 
-            for (int i = 1; i <= config.simulationCount; i++) {
+            for (int i = 1; i <= config.entries.get("simulations"); i++) {
 
                 Logger
                         .getLogger(StudyRunner.class.getName())
@@ -131,9 +152,9 @@ public class StudyRunner {
 
             Logger
                     .getLogger(StudyRunner.class.getName())
-                    .log(Level.INFO, "Doing {0} simulation(s)", config.simulationCount);
+                    .log(Level.INFO, "Doing {0} simulation(s)", config.entries.get("simulations"));
 
-            for (int i = 1; i <= config.simulationCount; i++) {
+            for (int i = 1; i <= config.entries.get("simulations"); i++) {
 
                 Logger
                         .getLogger(StudyRunner.class.getName())
@@ -195,10 +216,10 @@ public class StudyRunner {
 
             //get average errors for all simulationCount
             for (int j = 0; j < trainingErrorHistory.length; j++) {
-                trainingErrorHistory[j] /= config.simulationCount;
-                validationErrorHistory[j] /= config.simulationCount;
-                trainingAccHistory[j] /= config.simulationCount;
-                validationAccHistory[j] /= config.simulationCount;
+                trainingErrorHistory[j] /= config.entries.get("simulations");
+                validationErrorHistory[j] /= config.entries.get("simulations");
+                trainingAccHistory[j] /= config.entries.get("simulations");
+                validationAccHistory[j] /= config.entries.get("simulations");
             }
 
             Results.writeToFile(expPath, "E_vs_Epoch", trainingErrorHistory);

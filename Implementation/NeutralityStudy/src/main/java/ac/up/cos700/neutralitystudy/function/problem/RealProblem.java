@@ -101,6 +101,7 @@ public abstract class RealProblem extends Function {
         return getClass().getSimpleName();
     }
     
+    //todo: use the toString method above, make necessary changes to Quantiser etc
     public String getUnderlyingFunctionName(){
         return "";
     }

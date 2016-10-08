@@ -23,7 +23,7 @@ public class Vector implements Cloneable{
         
         public Vector(double[] _x) {
             dimension = _x.length;
-            x = Arrays.copyOf(_x, x.length);            
+            x = Arrays.copyOf(_x, _x.length);            
         }
       
         public Object clone() throws CloneNotSupportedException {

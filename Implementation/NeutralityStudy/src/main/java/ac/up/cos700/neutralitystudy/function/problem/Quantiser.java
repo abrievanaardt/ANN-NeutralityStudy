@@ -43,8 +43,8 @@ public class Quantiser extends RealProblem {
     }
 
     @Override
-    public String toString() {
-        return "Quantised " + function.getClass().getSimpleName();
+    public String getName() {
+        return "Quantised " + function.getName();
     }
     
     @Override

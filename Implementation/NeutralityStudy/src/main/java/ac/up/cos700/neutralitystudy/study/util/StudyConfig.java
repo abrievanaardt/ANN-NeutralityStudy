@@ -15,7 +15,6 @@ import java.util.Map;
  */
 public class StudyConfig {
 
-    public int simulationCount;
     public String name;
     public Map<String, Double> entries;
     public String path;
@@ -29,22 +28,21 @@ public class StudyConfig {
         config.name = studyName;
         config.path = "Studies\\" + studyName;
 
-        BufferedReader  reader = new BufferedReader(new FileReader(new File(studyName + ".config")));
-        
-        try{
-        String line;
-        while ((line = reader.readLine()) != null) {
-            
-            if (line.indexOf("=") != -1) {
-                config.entries.put(line.split("=")[0].trim(),
-                        Double.parseDouble(line.split("=")[1]));
+        BufferedReader reader = new BufferedReader(new FileReader(new File(studyName + ".config")));
+
+        try {
+            String line;
+            while ((line = reader.readLine()) != null) {
+
+                if (line.indexOf("=") != -1) {
+                    config.entries.put(line.split("=")[0].trim(),
+                            Double.parseDouble(line.split("=")[1]));
+                }
             }
         }
-        } catch(IOException | NumberFormatException e){
+        catch (IOException | NumberFormatException e) {
             throw new StudyConfigException("Could not read from the config file: " + e.getMessage());
         }
-        
-        config.simulationCount = config.entries.get("simulations").intValue();
 
         return config;
     }

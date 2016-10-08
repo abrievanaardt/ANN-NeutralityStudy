@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author Abrie van Aardt
  */
-public class ProgressiveRandomWalkSampler {
+public class ProgressiveRandomWalkSampler extends Sampler{
 
     public ProgressiveRandomWalkSampler(RealProblem _problem, int _stepCount, double _stepRatio) {
         problem = _problem;
@@ -29,17 +29,8 @@ public class ProgressiveRandomWalkSampler {
         startingZoneDelta = (int) (Math.pow(2, problem.getDimensionality()) / problem.getDimensionality());
     }
 
-    public Walk[] sample() throws SampleException {
-
-        Logger
-                .getLogger(getClass().getName())
-                .log(Level.FINER, "Sampling in {2} walk(s) (every {4} starting zones), max step size {3}", new Object[]{
-            problem.toString(),
-            problem.getDimensionality(),
-            walkCount,
-            stepSize,
-            startingZoneDelta
-        });
+    @Override
+    public Walk[] sample() throws SampleException {     
 
         Walk[] walks = new Walk[walkCount];
         BinaryFlag startingZone;
@@ -56,7 +47,7 @@ public class ProgressiveRandomWalkSampler {
             }
 
             w = new Walk(problem, Walk.WALKTYPE_RANDOM_PROGRESSIVE, stepCount, stepSize, Walk.START_POSITION_SPECIFIED, startingZone);
-
+            
             walks[i] = w;
         }
         return walks;

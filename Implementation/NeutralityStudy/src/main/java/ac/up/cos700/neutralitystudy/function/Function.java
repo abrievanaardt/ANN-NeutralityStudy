@@ -17,6 +17,10 @@ public abstract class Function {
     }
 
     public abstract double evaluate(double... x) throws UnequalArgsDimensionException;
+    
+    public String getName(){
+        return this.getClass().getSimpleName();
+    }
 
     protected int dimensionality;
 }
