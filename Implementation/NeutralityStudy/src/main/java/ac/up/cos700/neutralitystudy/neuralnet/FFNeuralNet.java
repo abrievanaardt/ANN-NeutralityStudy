@@ -111,7 +111,7 @@ public class FFNeuralNet implements IFFNeuralNet, Cloneable {
         Neuron[][] clonedLayers = new Neuron[layers.length][];
 
         for (int i = 0; i < clonedLayers.length; i++) {
-            layers[i] = new Neuron[layers[i].length];
+            clonedLayers[i] = new Neuron[layers[i].length];
             for (int j = 0; j < layers[i].length; j++) {
                 clonedLayers[i][j] = layers[i][j].clone();
             }

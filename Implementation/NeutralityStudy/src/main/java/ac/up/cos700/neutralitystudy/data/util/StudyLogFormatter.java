@@ -13,7 +13,7 @@ import java.util.logging.LogRecord;
  */
 public class StudyLogFormatter extends Formatter {
 
-    private final String formatString = "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %2$-7s %3$-40s %4$s %5$s%n";
+    private final String formatString = "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS Thread %6$d %2$-7s %3$-40s %4$s %5$s%n";
 
     @Override
     public synchronized String format(LogRecord record) {
@@ -44,7 +44,8 @@ public class StudyLogFormatter extends Formatter {
                 logLevel,
                 sourceClassName + "." + sourceMethodName,
                 message,
-                thrown);
+                thrown,
+                record.getThreadID());
 
         return formattedLogEntry;
     }

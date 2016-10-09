@@ -20,9 +20,9 @@ import ac.up.cos700.neutralitystudy.neuralnet.training.BackPropagation;
 import ac.up.cos700.neutralitystudy.neuralnet.util.FFNeuralNetBuilder;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ThresholdOutOfBoundsException;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ZeroNeuronException;
-import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure;
 import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure1;
-import ac.up.malan.phd.problem.*;
+import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure2;
+import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure3;
 import ac.up.cos700.neutralitystudy.sampling.ProgressiveRandomWalkSampler;
 import ac.up.malan.phd.sampling.Walk;
 import ac.up.malan.phd.sampling.util.SampleException;
@@ -49,89 +49,56 @@ public class StudyRunner {
 
         try {
             setupLogging();
+
             
-            //Run Studies/Experiments
-            //Measure1 - proportion of neutral objects
-            new Study_M1_1D_Simple().run();
-            new Study_M1_1D_Tunable_Q().run();            
+            //======================== Measure 1 =============================
+            new Study_1D_Simple().setup(new NeutralityMeasure1()).start();
+            new Study_1D_Tunable_Q().setup(new NeutralityMeasure1()).start();    
+            new Study_1D_Tunable_S().setup(new NeutralityMeasure1()).start();    
             
-            new Study_M1_2D_Simple().run();
-            new Study_M1_2D_Tunable_Q().run();
+            new Study_2D_Simple().setup(new NeutralityMeasure1()).start();
+            new Study_2D_Tunable_Q().setup(new NeutralityMeasure1()).start();            
+            new Study_2D_Tunable_S().setup(new NeutralityMeasure1()).start();            
             
-            //n-dimensional
+            new Study_ND_Tunable_D().setup(new NeutralityMeasure1()).start();
+
+            new Study_NN_Error_Simple().setup(new NeutralityMeasure1()).start();
+
             
-            //Measure2 - proportion of longest neutral sequence
-            new Study_M2_1D_Simple().run();
-            new Study_M2_1D_Tunable_Q().run();            
+
+            //======================== Measure 2 =============================
+            new Study_1D_Simple().setup(new NeutralityMeasure2()).start();
+            new Study_1D_Tunable_Q().setup(new NeutralityMeasure2()).start();    
+            new Study_1D_Tunable_S().setup(new NeutralityMeasure2()).start();    
             
-            new Study_M2_2D_Simple().run();
-            new Study_M2_2D_Tunable_Q().run();
+            new Study_2D_Simple().setup(new NeutralityMeasure2()).start();
+            new Study_2D_Tunable_Q().setup(new NeutralityMeasure2()).start();            
+            new Study_2D_Tunable_S().setup(new NeutralityMeasure2()).start();            
             
-            //n-dimensional
-            
-            //Measure3 - proportion of longest neutral sequence in 
-            //euclidean space
-            //todo
+            new Study_ND_Tunable_D().setup(new NeutralityMeasure2()).start();
+
+            new Study_NN_Error_Simple().setup(new NeutralityMeasure2()).start();
             
             
-            //also study measures on NNs
+
+            //======================== Measure 3 =============================            
+            new Study_1D_Simple().setup(new NeutralityMeasure3()).start();
+            new Study_1D_Tunable_Q().setup(new NeutralityMeasure3()).start();    
+            new Study_1D_Tunable_S().setup(new NeutralityMeasure3()).start();    
+            
+            new Study_2D_Simple().setup(new NeutralityMeasure3()).start();
+            new Study_2D_Tunable_Q().setup(new NeutralityMeasure3()).start();            
+            new Study_2D_Tunable_S().setup(new NeutralityMeasure3()).start();            
+            
+            new Study_ND_Tunable_D().setup(new NeutralityMeasure3()).start();
+
+            new Study_NN_Error_Simple().setup(new NeutralityMeasure3()).start();
+        
         }
         catch (IOException | StudyConfigException e) {
             Logger.getLogger(StudyRunner.class.getName()).log(Level.SEVERE, "", e);
-        }       
-
-    }
-    
-    private static void exp1(String studyName) {
-        String expName = "Quantised";
-        String expPath = studyName + "\\" + expName;
-        StudyConfig config;
-
-        try {
-            config = StudyConfig.fromFile(expName);
-
-            double parameter;
-            int parameterCount = 200;
-            double[] neutralityMeasures = new double[parameterCount];
-            double[] qValues = new double[parameterCount];
-
-            Logger
-                    .getLogger(StudyRunner.class.getName())
-                    .log(Level.INFO, "Doing {0} simulation(s)", config.entries.get("simulations"));
-
-            for (int i = 1; i <= config.entries.get("simulations"); i++) {
-
-                Logger
-                        .getLogger(StudyRunner.class.getName())
-                        .log(Level.INFO, "Starting simulation {0}.", i);
-
-                parameter = 0.1;
-
-                for (int j = 0; j < parameterCount; j++) {
-                    RealProblem problem = new PlateStacker(parameter, -5, 5, 4);
-                    ProgressiveRandomWalkSampler sampler = new ProgressiveRandomWalkSampler(problem, 1000, 0.1);
-                    Walk[] walks = sampler.sample();
-                    NeutralityMeasure neutrality = new NeutralityMeasure1(0.02);
-                    neutralityMeasures[j] = calculateNewAverage(neutralityMeasures[j], neutrality.measure(walks), i);
-                    qValues[j] = parameter;
-                    parameter += 0.1;
-                }
-            }
-
-            Results.newGraph(expPath, "Neutrality vs Quantum", "Q", "Neutrality", "", 2);
-            Results.addPlot("", qValues, neutralityMeasures, "lines");
-            Results.addPlot("Flat", new Flat());
-//
-//                for (int j = 0; j < walks.length; j++) {
-//                    Results.addPlot("Walk " + (j + 1), walks[j].getPoints(), walks[j].getPointsFitness(), "linespoints");
-//                }
-//
-                Results.plot();
-
         }
-        catch (UnequalArgsDimensionException | SampleException | ResultsException | FileNotFoundException | StudyConfigException e) {
-            Logger.getLogger(StudyRunner.class.getName()).log(Level.SEVERE, "", e);
-        }
+
     }
 
     //todo: move this to an experiment class
@@ -232,22 +199,18 @@ public class StudyRunner {
             ProgressiveRandomWalkSampler sampler = new ProgressiveRandomWalkSampler(problem, 1000, 0.1);
             Walk[] walks = sampler.sample();
 
-            Results.newGraph(expPath, "Jagged", "x", "y", "z", problem.getDimensionality() + 1);
-            Results.addPlot("Test", problem);
-
-            for (int i = 0; i < walks.length; i++) {
-                Results.addPlot("Walk " + (i + 1), walks[i].getPoints(), walks[i].getPointsFitness(), "linespoints");
-            }
-
-            Results.plot();
+//            Results.newGraph(expPath, "Jagged", "x", "y", "z", problem.getDimensionality() + 1);
+//            Results.addPlot("Test", problem);
+//
+//            for (int i = 0; i < walks.length; i++) {
+//                Results.addPlot("Walk " + (i + 1), walks[i].getPoints(), walks[i].getPointsFitness(), "linespoints");
+//            }
+//
+//            Results.plot();
         }
         catch (SampleException | ResultsException | FileNotFoundException | StudyConfigException | IncorrectFileFormatException | NotAFunctionException | ZeroNeuronException | UnequalArgsDimensionException | ThresholdOutOfBoundsException e) {
             Logger.getLogger(StudyRunner.class.getName()).log(Level.SEVERE, "", e);
         }
-    }
-
-    private static double calculateNewAverage(double oldAvg, double newValue, int currentTotal) {
-        return (oldAvg * (currentTotal - 1) + newValue) / currentTotal;
     }
 
     //todo: this should ideally be done with a config file or by specifying a class

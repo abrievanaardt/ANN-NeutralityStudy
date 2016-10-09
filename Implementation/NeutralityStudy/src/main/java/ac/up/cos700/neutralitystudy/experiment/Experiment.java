@@ -1,5 +1,6 @@
 package ac.up.cos700.neutralitystudy.experiment;
 
+import ac.up.cos700.neutralitystudy.data.Graph;
 import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
 import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure;
 import ac.up.cos700.neutralitystudy.sampling.ProgressiveRandomWalkSampler;
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author Abrie van Aardt
  */
-public abstract class Experiment {
+public abstract class Experiment{
 
     //huge todo: inject the sampler to be used, or have a builder create the
     //desired one. Right now, progressiveWalk is hard-coded. Would have to 
@@ -90,13 +91,12 @@ public abstract class Experiment {
         return name;
     }
 
+    public Graph graph;
     protected StudyConfig config;
     protected String name;
     protected String path;
     protected NeutralityMeasure neutralityMeasure;
     protected RealProblem problem;
     protected ProgressiveRandomWalkSampler sampler;
-    protected Walk[] previousWalks;
     protected double[] simulations;
-
 }

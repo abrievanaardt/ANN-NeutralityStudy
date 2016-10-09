@@ -1,6 +1,8 @@
 package ac.up.cos700.neutralitystudy.study;
 
+import ac.up.cos700.neutralitystudy.experiment.Exp_2D_Tunable_Q;
 import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
+import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure;
 import ac.up.cos700.neutralitystudy.study.util.StudyConfigException;
 import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.malan.phd.problem.AbsoluteValue;
@@ -92,6 +94,15 @@ public class Study_2D_Tunable_Q extends Study {
 
     }
 
-    protected RealProblem[] problems;
+    @Override
+    public Study setup(NeutralityMeasure nm) {
+        super.setup(nm);
+
+        for (RealProblem problem : problems) {
+            experiments.add(new Exp_2D_Tunable_Q(config, neutralityMeasure, problem));
+        }
+
+        return this;
+    }
 
 }

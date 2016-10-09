@@ -18,10 +18,6 @@ import ac.up.malan.phd.sampling.Vector;
  */
 public abstract class RealProblem extends Function {
     
-    //huge todo: refactor such that problem names are obtained from a function
-    //instread of a reflective getClass().getSimpleName() call, as this is very
-    //limited.
-
     public RealProblem(double xmin, double xmax, int dim) {
         this(xmin, xmax, dim, 0);
     }
@@ -94,16 +90,6 @@ public abstract class RealProblem extends Function {
         eucDistance = min.getEuclideanDistance(max);
 
         return eucDistance;
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
-    }
-    
-    //todo: use the toString method above, make necessary changes to Quantiser etc
-    public String getUnderlyingFunctionName(){
-        return "";
     }
 
     protected double lowerBound = -10; // lowerBound & upperBound refer to the domain of the problem

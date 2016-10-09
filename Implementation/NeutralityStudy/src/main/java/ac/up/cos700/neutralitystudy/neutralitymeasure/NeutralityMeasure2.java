@@ -20,12 +20,12 @@ import java.util.logging.Logger;
  */
 public class NeutralityMeasure2 extends NeutralityMeasure {
 
-    public NeutralityMeasure2(double epsilon) {
-        super(epsilon);
+    public NeutralityMeasure2() {
+        name = "M2";
     }
 
     @Override
-    public double measure(Walk[] samples) {
+    public double measure(Walk[] samples, double epsilon) {
 
         double totalForSamples = 0;
 
@@ -34,7 +34,7 @@ public class NeutralityMeasure2 extends NeutralityMeasure {
 
             double[][] objects = samples[i].getPointFitnessObjects();//now contains 3-point structures
 
-            ratioNeutralLongest = calculateRatioNeutralLongest(objects);
+            ratioNeutralLongest = calculateRatioNeutralLongest(objects, epsilon);
             totalForSamples += ratioNeutralLongest;
         }
 
@@ -47,23 +47,23 @@ public class NeutralityMeasure2 extends NeutralityMeasure {
 
         return average;
     }
-    
+
     /**
      * Implements the measure alluded to.
      *
      * @param objects sequence of 3-point objects
      * @return ratio of longest neutral chain
      */
-    private double calculateRatioNeutralLongest(double[][] objects) {
+    private double calculateRatioNeutralLongest(double[][] objects, double epsilon) {
 
         int maxStreak = 0;
         int streak = 0;
 
         for (int i = 0; i < objects.length; i++) {
-            if (isNeutral(objects[i])) {
+            if (isNeutral(objects[i], epsilon)) {
                 ++streak;
             }
-            else if (streak >= maxStreak) {
+            else if (streak > 0) {
                 //todo: have optimised this, check for correctness
                 maxStreak = streak > maxStreak ? streak : maxStreak;
                 streak = 0;
@@ -72,14 +72,14 @@ public class NeutralityMeasure2 extends NeutralityMeasure {
 
         //record the last streak not covered by the loop
         if (streak >= maxStreak)
-           maxStreak = streak;
-       
+            maxStreak = streak;
+
         return maxStreak / (double) objects.length;
     }
 
     /**
-     * Implements the measure alluded to. Weighting the result according
-     * the number of 'longest' neutral regions found
+     * Implements the measure alluded to. Weighting the result according the
+     * number of 'longest' neutral regions found
      * <br>
      * This method currently calculates the max length in a roundabout way, but
      * this provides a platform for future measures.
@@ -87,7 +87,7 @@ public class NeutralityMeasure2 extends NeutralityMeasure {
      * @param objects sequence of 3-point objects
      * @return ratio of longest neutral chain
      */
-    private double calculateRatioNeutralLongestWeighted(double[][] objects) {
+    private double calculateRatioNeutralLongestWeighted(double[][] objects, double epsilon) {
 
         HashMap<Integer, Integer> map = new HashMap<>();
 
@@ -95,10 +95,10 @@ public class NeutralityMeasure2 extends NeutralityMeasure {
         int streak = 0;
 
         for (int i = 0; i < objects.length; i++) {
-            if (isNeutral(objects[i])) {
+            if (isNeutral(objects[i], epsilon)) {
                 ++streak;
             }
-            else if (streak >= maxStreak) {
+            else if (streak >= 0) {
                 map.put(streak, streak + map.getOrDefault(streak, 0));
                 maxStreak = streak > maxStreak ? streak : maxStreak;
                 streak = 0;
@@ -175,18 +175,4 @@ public class NeutralityMeasure2 extends NeutralityMeasure {
 
         return avg;
     }
-
-    /**
-     * Method assumes that points only contains 3 points. All 3 points have to
-     * be equal in fitness, with an acceptable error of 'epsilon'
-     *
-     * @param points
-     * @return whether the 3 points are neutral or not
-     */
-    private boolean isNeutral(double[] points) {
-        return (Math.abs(points[0] - points[1]) < epsilon
-                && Math.abs(points[1] - points[2]) < epsilon
-                && Math.abs(points[0] - points[2]) < epsilon);
-    }
-
 }

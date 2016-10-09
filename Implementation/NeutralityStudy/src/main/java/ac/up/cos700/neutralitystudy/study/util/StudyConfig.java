@@ -24,9 +24,7 @@ public class StudyConfig {
     }
 
     public static StudyConfig fromFile(String studyName) throws FileNotFoundException, StudyConfigException {
-        StudyConfig config = new StudyConfig();
-        config.name = studyName;
-        config.path = "Studies\\" + studyName;
+        StudyConfig config = new StudyConfig();               
 
         BufferedReader reader = new BufferedReader(new FileReader(new File(studyName + ".config")));
 

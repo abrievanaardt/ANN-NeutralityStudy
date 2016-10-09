@@ -1,9 +1,9 @@
-package ac.up.cos700.neutralitystudy.function;
+package ac.up.cos700.neutralitystudy.function.problem;
 
 import ac.up.cos700.neutralitystudy.data.Dataset;
+import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
 import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.cos700.neutralitystudy.neuralnet.IFFNeuralNet;
-import ac.up.cos700.neutralitystudy.neuralnet.metric.DefaultNetworkError;
 import ac.up.cos700.neutralitystudy.neuralnet.metric.INetworkError;
 
 /**
@@ -13,20 +13,21 @@ import ac.up.cos700.neutralitystudy.neuralnet.metric.INetworkError;
  *
  * @author Abrie van Aardt
  */
-public class NetworkError extends Function {
+public class NetworkError extends RealProblem {
 
-    public NetworkError(IFFNeuralNet _network, Dataset _dataset, INetworkError _networkError) {
+    public NetworkError(IFFNeuralNet _network, Dataset _dataset, INetworkError _networkError, double xmin, double xmax) {        
+        super(xmin, xmax, _network.getDimensionality());
+        //todo: check if this actually works
         network = _network.clone();//deep copy
         dataset = _dataset;
-        networkError = _networkError;
-        dimensionality = network.getDimensionality();
-    }    
+        networkError = _networkError;        
+    }
 
     /**
-     * Evaluates the classification error of the network given all the weights
+     * Evaluates the error of the network (loss function) given all the weights
      * that should be used in the network, together with the dataset.
      *
-     * @param x
+     * @param x the weight vector
      * @return network error
      * @throws UnequalArgsDimensionException
      */
@@ -37,6 +38,11 @@ public class NetworkError extends Function {
 
         network.setWeightVector(x);
         return networkError.measure(network, dataset);
+    }
+    
+    @Override
+    public String getName(){
+        return super.getName() + "_" + dataset.getDatasetName();
     }
 
     private final IFFNeuralNet network;

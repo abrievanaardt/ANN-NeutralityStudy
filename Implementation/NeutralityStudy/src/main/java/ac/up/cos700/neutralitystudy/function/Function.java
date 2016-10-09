@@ -12,14 +12,18 @@ import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
  */
 public abstract class Function {
 
-    public int getDimensionality() {
-        return dimensionality;
+    public abstract double evaluate(double... x) throws UnequalArgsDimensionException;
+
+    public String getName() {
+        return this.getClass().getSimpleName();
     }
 
-    public abstract double evaluate(double... x) throws UnequalArgsDimensionException;
-    
-    public String getName(){
-        return this.getClass().getSimpleName();
+    public void setDimensionality(int dim) {
+        dimensionality = dim;
+    }
+
+    public int getDimensionality() {
+        return dimensionality;
     }
 
     protected int dimensionality;

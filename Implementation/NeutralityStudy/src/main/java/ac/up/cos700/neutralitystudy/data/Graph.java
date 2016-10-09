@@ -297,8 +297,9 @@ public class Graph {
             plotCommand = "splot";
         }
 
+        //use with palettes: " ls " + (i + 1) + 
         for (int i = 0; i < plots.size(); i++) {
-            plotCommand += " " + plots.get(i).dataset + " title '" + plots.get(i).title + "' with " + plots.get(i).type + " ls " + (i + 1) + ",";
+            plotCommand += " " + plots.get(i).dataset + " title '" + plots.get(i).title + "' with " + plots.get(i).type + ",";
         }
 
         try {
@@ -309,9 +310,12 @@ public class Graph {
 
             gnuPlotTerminal.write(plotCommand);
             gnuPlotTerminal.newLine();
-            gnuPlotTerminal.flush();
+            gnuPlotTerminal.flush();            
+            gnuPlotTerminal.close();            
+            
+            gnuPlotProcess.waitFor();
         }
-        catch (IOException e) {
+        catch (IOException | InterruptedException e) {
             throw new GraphException("There was an error communicating with GNUPlot: " + e.getMessage());
         }
 

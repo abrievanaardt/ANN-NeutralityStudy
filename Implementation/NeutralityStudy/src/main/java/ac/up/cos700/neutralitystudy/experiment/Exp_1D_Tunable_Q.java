@@ -57,7 +57,7 @@ public class Exp_1D_Tunable_Q extends Experiment {
             sampler = new ProgressiveRandomWalkSampler(quantisedProblem, stepCount, stepRatio);
             Walk[] walks = sampler.sample();
 
-            neutrality[currentSimulation][i] = neutralityMeasure.measure(walks);
+            neutrality[currentSimulation][i] = neutralityMeasure.measure(walks, config.entries.get("epsilon"));
             avgNeutrality[i] = calculateNewAverage(avgNeutrality[i], neutrality[currentSimulation][i], currentSimulation);
 
             currentQ += stepQ;
@@ -79,27 +79,29 @@ public class Exp_1D_Tunable_Q extends Experiment {
             RealProblem quantisedProblem = new Quantiser(problem, currentQ, problem.getLowerBound(), problem.getUpperBound());
 
             //todo: inversion of control (hand over to builder)
+            //todo: remove state
             sampler = new ProgressiveRandomWalkSampler(quantisedProblem, stepCount, stepRatio);
             Walk[] walks = sampler.sample();
 
-            //graph of quantised problem
-            Results.newGraph(path, quantisedProblem.getName() + " " + "q" + " = " + decFormat.format(currentQ), "x", "f(x)", null, 2);
-            Results.addPlot(null, quantisedProblem);
-            Results.plot();
+//            //graph of quantised problem
+//            Results.newGraph(this, path, quantisedProblem.getName() + " " + "q" + " = " + decFormat.format(currentQ), "x", "f(x)", null, 2);
+//            Results.addPlot(this, null, quantisedProblem);
+//            Results.plot(this);
 
             //graph of quantised problem - showing sample
-            Results.newGraph(path, quantisedProblem.getName() + " " + "q" + " = " + decFormat.format(currentQ) + " Sampled", "x", "f(x)", null, 2);
-            Results.addPlot(null, quantisedProblem);
+            Results.newGraph(this, path, quantisedProblem.getName() + " " + "q" + " = " + decFormat.format(currentQ) + " Sampled", "x", "f(x)", null, 2);
+            Results.addPlot(this, null, quantisedProblem);
             for (int j = 0; j < walks.length; j++) {
-                Results.addPlot("Walk " + (j + 1), walks[j].getPoints(), walks[j].getPointsFitness(), "linespoints");
+                Results.addPlot(this, "Walk " + (j + 1), walks[j].getPoints(), walks[j].getPointsFitness(), "linespoints");
             }
-            Results.plot();
+            Results.plot(this);
         }
 
         //graph of neutrality parameter vs neutrality measured
-        Results.newGraph(path, "Quantised " + problem.getName() + " Neutrality vs Quantum", "q", "Neutrality", "", 2);
-        Results.addPlot("", qValues, avgNeutrality, "lines");
-        Results.plot();
+        Results.newGraph(this, path, "Quantised " + problem.getName() + " Neutrality vs Quantum", "q", "Neutrality", "", 2);
+        Results.addPlot(this, "", qValues, avgNeutrality, "lines smooth sbezier");
+        Results.addPlot(this, "", qValues, avgNeutrality, "points pointtype 7 pointsize 0.4");
+        Results.plot(this);
 
     }
 

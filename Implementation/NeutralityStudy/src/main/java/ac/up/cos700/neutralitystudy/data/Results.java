@@ -2,16 +2,20 @@ package ac.up.cos700.neutralitystudy.data;
 
 import ac.up.cos700.neutralitystudy.data.util.GraphException;
 import ac.up.cos700.neutralitystudy.data.util.ResultsException;
+import ac.up.cos700.neutralitystudy.experiment.Experiment;
 import ac.up.cos700.neutralitystudy.function.Function;
 import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Allows for experiment data to be written to file and/or directly transformed
- * into plots using JavaPlot/GNUPlot.
+ * into plots using GNUPlot. To support multi-threaded experiments and still
+ * maintain separation of concerns, this class handles communication with 
+ * {@linkGraph} behalf of the {@link Experiment} class.
  *
  * @author Abrie van Aardt
  */
@@ -29,7 +33,7 @@ public class Results {
     public static void writeToFile(String experimentPath, String resultName, double... values) throws ResultsException {
         BufferedWriter writer = null;
         try {
-            File directory = new File(experimentPath + "/" + resultName + ".csv");
+            File directory = new File(experimentPath + "/" + resultName + fileID.getAndIncrement() + ".csv");
             directory.getParentFile().mkdirs();
             writer = new BufferedWriter(new FileWriter(directory));
 
@@ -37,8 +41,9 @@ public class Results {
                 writer.write(Double.toString(values[i]));
                 writer.newLine();
             }
+//TODO ADD PARAMETER
+            writer.flush();           
             
-            writer.flush();
         }
         catch (IOException e) {
             throw new ResultsException(e.getMessage());
@@ -68,17 +73,17 @@ public class Results {
         BufferedWriter writer = null;
 
         for (int i = 1; i < values.length; i++) {
-            if (values[i-1].length != values[i].length)
+            if (values[i - 1].length != values[i].length)
                 throw new ResultsException("The length of the arrays do not correspond");
         }
-
+        
         try {
-            File directory = new File(experimentPath + "/" + resultName + ".csv");
+            File directory = new File(experimentPath + "/" + resultName + fileID.getAndIncrement() + ".csv");
             directory.getParentFile().mkdirs();
             writer = new BufferedWriter(new FileWriter(directory));
 
             for (int i = 0; i < values.length; i++) {
-                
+
                 String line = Double.toString(values[i][0]);
                 for (int j = 1; j < values[i].length; j++) {
                     line += ", " + values[i][j];
@@ -103,67 +108,66 @@ public class Results {
         }
     }
 
-    public synchronized static void newGraph(String path, String title, String xLabel, String yLabel, String zLabel, int dimensions)
+    public static void newGraph(Experiment experiment, String path, String title, String xLabel, String yLabel, String zLabel, int dimensions)
             throws ResultsException {
         try {
-            Graph graph = new Graph(path, title, xLabel, yLabel, zLabel, dimensions);
-            currentGraph = graph;
+            experiment.graph = new Graph(path, title, xLabel, yLabel, zLabel, dimensions);
         }
         catch (GraphException e) {
             throw new ResultsException(e.getMessage());
         }
     }
 
-    public synchronized static void addPlot(String title, RealProblem problem)
+    public static void addPlot(Experiment experiment, String title, RealProblem problem)
             throws ResultsException {
         try {
-            currentGraph.addPlot(title, problem);
+            experiment.graph.addPlot(title, problem);
         }
         catch (GraphException e) {
             throw new ResultsException(e.getMessage());
         }
     }
 
-    public synchronized static void addPlot(String title, Function function, int lowerbound, int upperbound)
+    public static void addPlot(Experiment experiment, String title, Function function, int lowerbound, int upperbound)
             throws ResultsException {
         try {
-            currentGraph.addPlot(title, function, lowerbound, upperbound);
+            experiment.graph.addPlot(title, function, lowerbound, upperbound);
         }
         catch (GraphException e) {
             throw new ResultsException(e.getMessage());
         }
     }
 
-    public synchronized static void addPlot(String title, double[] xData, double[] yData, String type)
+    public static void addPlot(Experiment experiment, String title, double[] xData, double[] yData, String type)
             throws ResultsException {
         try {
-            currentGraph.addPlot(title, xData, yData, type);
+            experiment.graph.addPlot(title, xData, yData, type);
         }
         catch (GraphException e) {
             throw new ResultsException(e.getMessage());
         }
     }
 
-    public synchronized static void addPlot(String title, double[][] xData, double[] yData, String type)
+    public static void addPlot(Experiment experiment, String title, double[][] xData, double[] yData, String type)
             throws ResultsException {
 
         try {
-            currentGraph.addPlot(title, xData, yData, type);
+            experiment.graph.addPlot(title, xData, yData, type);
         }
         catch (GraphException e) {
             throw new ResultsException(e.getMessage());
         }
     }
 
-    public synchronized static void plot()
+    public static void plot(Experiment experiment)
             throws ResultsException {
         try {
-            currentGraph.plot();
+            experiment.graph.plot();
         }
         catch (GraphException e) {
             throw new ResultsException(e.getMessage());
         }
     }
-
-    private static Graph currentGraph;
+    
+    private static AtomicInteger fileID = new AtomicInteger(0);
 }

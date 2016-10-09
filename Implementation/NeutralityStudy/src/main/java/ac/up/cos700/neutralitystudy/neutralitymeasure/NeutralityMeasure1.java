@@ -15,12 +15,12 @@ import java.util.logging.Logger;
  */
 public class NeutralityMeasure1 extends NeutralityMeasure {
 
-    public NeutralityMeasure1(double epsilon) {
-        super(epsilon);
+    public NeutralityMeasure1(){
+        name = "M1";
     }
-
+    
     @Override
-    public double measure(Walk[] samples) {
+    public double measure(Walk[] samples, double epsilon) {
 
         double totalForSamples = 0;
 
@@ -29,7 +29,7 @@ public class NeutralityMeasure1 extends NeutralityMeasure {
 
             double[][] objects = samples[i].getPointFitnessObjects();//now contains 3-point structures
 
-            ratioNeutralObjects = calculateRatioNeutralObjects(objects);            
+            ratioNeutralObjects = calculateRatioNeutralObjects(objects, epsilon);            
             totalForSamples += ratioNeutralObjects;
         }
 
@@ -49,28 +49,15 @@ public class NeutralityMeasure1 extends NeutralityMeasure {
      * @param objects sequence of 3-point objects
      * @return ratio of neutral objects
      */
-    private double calculateRatioNeutralObjects(double[][] objects) {
+    private double calculateRatioNeutralObjects(double[][] objects, double epsilon) {
         int neutralCount = 0;
 
         for (int i = 0; i < objects.length; i++) {
-            if (isNeutral(objects[i]))
+            if (isNeutral(objects[i], epsilon))
                 ++neutralCount;
         }
 
         return ((double) neutralCount) / ((double) objects.length);
     }    
-
-    /**
-     * Method assumes that points only contains 3 points. All 3 points have to
-     * be equal in fitness, with an acceptable error of 'epsilon'
-     *
-     * @param points
-     * @return whether the 3 points are neutral or not
-     */
-    private boolean isNeutral(double[] points) {
-        return (Math.abs(points[0] - points[1]) < epsilon
-                && Math.abs(points[1] - points[2]) < epsilon
-                && Math.abs(points[0] - points[2]) < epsilon);
-    }
 
 }

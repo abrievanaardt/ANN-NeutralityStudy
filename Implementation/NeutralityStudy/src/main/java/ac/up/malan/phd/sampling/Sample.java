@@ -14,7 +14,7 @@ import ac.up.malan.phd.sampling.util.SampleException;
  * @author Dr Katherine Malan
  * @author Abrie van Aardt - Made minor adjustments to the code during
  * integration.
- * 
+ *
  */
 public class Sample {
 
@@ -72,7 +72,7 @@ public class Sample {
             case SAMPLETYPE_WALK:   // do nothing
                 break;
             default:
-                throw new SampleException("Invalid sample type in Sample.java");                
+                throw new SampleException("Invalid sample type in Sample.java");
         }
     }
 
@@ -115,7 +115,7 @@ public class Sample {
         // Check that the dimension of all Samples is the same:
         for (int i = 1; i < numSamples; i++) {
             if (dimension != sample[i].dimension) {
-                throw new SampleException("Dimensions of array of samples not equal in method Sample::Sample(Sample[])");              
+                throw new SampleException("Dimensions of array of samples not equal in method Sample::Sample(Sample[])");
             }
         }
         int index = 0;
@@ -280,11 +280,11 @@ public class Sample {
                     throw new SampleException(e.getMessage());
                 }
                 distanceTotal += distance;
-        
+
             }
         }
         double averagePairwiseDistance = distanceTotal / numDistances;
-        
+
         return averagePairwiseDistance;
     }
 
@@ -464,25 +464,45 @@ public class Sample {
     }
 
     /**
-     * This method assembles the points into overlapping
-     * 3-point objects that will be used to calculate neutrality. 
-     * A 3-point object consists of a point, together
-     * with its 2 neighbouring points.
-     * 
-     * @return 3-point objects in the sample
+     * This method assembles the points into overlapping 3-point objects that
+     * will be used to calculate neutrality. A 3-point object consists of a
+     * point, together with its 2 neighbouring points.
+     *
+     * @return fitness of 3-point objects in the sample
      */
     public double[][] getPointFitnessObjects() {
         double[] pointsFitness = getPointsFitness();
-        double[][] objects = new double[pointsFitness.length-2][3];
+        double[][] objects = new double[pointsFitness.length - 2][3];
 
         //from second to second last points - since 2 neighbours are included
         for (int i = 1; i < pointsFitness.length - 1; i++) {
-            objects[i-1][0] = pointsFitness[i-1];
-            objects[i-1][1] = pointsFitness[i];
-            objects[i-1][2] = pointsFitness[i+1];            
+            objects[i - 1][0] = pointsFitness[i - 1];
+            objects[i - 1][1] = pointsFitness[i];
+            objects[i - 1][2] = pointsFitness[i + 1];
         }
-        
-        return objects;        
+
+        return objects;
+    }
+
+    /**
+     * This method assembles the points into overlapping 3-point objects that
+     * will be used to calculate neutrality. A 3-point object consists of a
+     * point, together with its 2 neighbouring points.
+     *
+     * @return 3-point objects in the sample
+     */
+    public double[][][] getPointObjects() {
+        double[][] tempPoints = getPoints();
+        double[][][] objects = new double[tempPoints.length - 2][3][problem.getDimensionality()];
+
+        //from second to second last tempPoints - since 2 neighbours are included
+        for (int i = 1; i < tempPoints.length - 1; i++) {
+            objects[i - 1][0] = Arrays.copyOf(tempPoints[i - 1], tempPoints[i-1].length);
+            objects[i - 1][1] = Arrays.copyOf(tempPoints[i], tempPoints[i].length);
+            objects[i - 1][2] = Arrays.copyOf(tempPoints[i + 1], tempPoints[i + 1].length);
+        }
+
+        return objects;
     }
 
 }

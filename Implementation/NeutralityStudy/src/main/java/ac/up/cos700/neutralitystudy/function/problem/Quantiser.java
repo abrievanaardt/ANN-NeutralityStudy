@@ -45,12 +45,7 @@ public class Quantiser extends RealProblem {
     @Override
     public String getName() {
         return "Quantised " + function.getName();
-    }
-    
-    @Override
-    public String getUnderlyingFunctionName(){
-        return function.getClass().getSimpleName();
-    }
+    }    
 
     private final Function function;
     private final double q;

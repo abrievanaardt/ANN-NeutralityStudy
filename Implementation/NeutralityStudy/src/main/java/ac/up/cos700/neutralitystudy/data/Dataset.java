@@ -194,7 +194,16 @@ public class Dataset implements Iterable {
     public int getHiddenCount() {
         return hiddenCount;
     }
+    
+    public String getDatasetName(){
+        return name;        
+    }   
+    
+    public void setDatasetName(String _name){
+        name = _name;
+    }    
 
+    private String name;
     private List<Pattern> data = new ArrayList<>();
     private int inputCount;
     private int hiddenCount;

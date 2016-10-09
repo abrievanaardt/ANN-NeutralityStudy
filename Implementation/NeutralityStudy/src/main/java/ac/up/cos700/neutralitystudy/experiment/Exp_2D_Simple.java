@@ -20,20 +20,22 @@ public class Exp_2D_Simple extends Exp_1D_Simple {
 
     @Override
     protected void finalise() throws Exception {
-        Results.writeToFile(path, "_Neutrality", simulations, neutrality);
-        Results.newGraph(path, problem.getName(), "x1", "x2", "f(x)", 3);
-        Results.addPlot(null, problem);
-        Results.plot();
+        Results.writeToFile(path, "_Neutrality", neutrality);
+        
+        //graph of problem
+//        Results.newGraph(this, path, problem.getName(), "x1", "x2", "f(x)", 3);
+//        Results.addPlot(this, null, problem);
+//        Results.plot(this);
                 
-        //plot a representive sample
+        //graph of problem - showing sample
         Walk[] walks = sampler.sample();        
-        Results.newGraph(path, problem.getName() + " Sampled", "x1", "x2", "f(x)", 3);
-        Results.addPlot(problem.getName(), problem);
+        Results.newGraph(this, path, problem.getName() + " Sampled", "x1", "x2", "f(x)", 3);
+        Results.addPlot(this, problem.getName(), problem);
         for (int i = 0; i < walks.length; i++) {
-            Results.addPlot("Walk " + (i + 1), walks[i].getPoints(), walks[i].getPointsFitness(), "linespoints");
+            Results.addPlot(this, "Walk " + (i + 1), walks[i].getPoints(), walks[i].getPointsFitness(), "linespoints");
         }     
         
-        Results.plot();        
+        Results.plot(this);        
         
     }
 }

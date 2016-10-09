@@ -16,7 +16,6 @@ public interface IFFNeuralNet extends Cloneable{
      *
      * @param inputPattern
      * @return array of class probabilities
-     * @throws UnequalInputWeightException
      * @throws UnequalArgsDimensionException
      */
     public double[] classify(double... inputPattern)

@@ -1,6 +1,6 @@
 package ac.up.cos700.neutralitystudy.study;
 
-import ac.up.cos700.neutralitystudy.experiment.Exp_1D_Tunable_Q;
+import ac.up.cos700.neutralitystudy.experiment.Exp_1D_Tunable_S;
 import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
 import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure;
 import ac.up.cos700.neutralitystudy.study.util.StudyConfigException;
@@ -35,11 +35,11 @@ import java.util.logging.Logger;
  *
  * @author Abrie van Aardt
  */
-public class Study_1D_Tunable_Q extends Study {
+public class Study_1D_Tunable_S extends Study {
 
-    public Study_1D_Tunable_Q() throws StudyConfigException {
+    public Study_1D_Tunable_S() throws StudyConfigException {
         super();
-        //todo: refactor into common class _Tunable
+
         try {
             int dim = 1;
 
@@ -70,7 +70,7 @@ public class Study_1D_Tunable_Q extends Study {
             };
         }
         catch (UnequalArgsDimensionException ex) {
-            Logger.getLogger(Study_1D_Tunable_Q.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Study_1D_Tunable_S.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -80,7 +80,7 @@ public class Study_1D_Tunable_Q extends Study {
         super.setup(nm);
 
         for (RealProblem problem : problems) {
-            experiments.add(new Exp_1D_Tunable_Q(config, neutralityMeasure, problem));
+            experiments.add(new Exp_1D_Tunable_S(config, neutralityMeasure, problem));
         }
 
         return this;
