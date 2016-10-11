@@ -29,7 +29,12 @@ public class Exp_1D_Tunable_Q extends Experiment {
         numQs = config.entries.get("numQ").intValue();
 
         //one additional row for the q-values
-        neutrality = new double[config.entries.get("simulations").intValue() + 1][numQs];
+        //another additional row for averages
+        //another row for standard deviations
+        neutrality = new double[config.entries.get("simulations").intValue() + 3][numQs];
+
+        avgNeutralityIndex = config.entries.get("simulations").intValue() + 1;
+        stdDevNeutralityIndex = avgNeutralityIndex + 1;
 
         avgNeutrality = new double[numQs];
         qValues = new double[numQs];
@@ -67,14 +72,28 @@ public class Exp_1D_Tunable_Q extends Experiment {
 
     @Override
     protected void finalise() throws Exception {
+
+        //fill average and std dev of neutralities into the grid
+        for (int i = 0; i < numQs; i++) {//for each column
+            neutrality[avgNeutralityIndex][i] = avgNeutrality[i];
+
+            //extracting a column of neutrality values - ignore headers and summaries
+            double[] neutralityForColumn = new double[neutrality.length - 3];
+            for (int j = 1; j <= neutralityForColumn.length; j++) {
+                neutralityForColumn[j - 1] = neutrality[j][i];
+            }
+
+            neutrality[stdDevNeutralityIndex][i] = calculateSampleStdDev(neutralityForColumn, avgNeutrality[i]);
+        }
+
         Results.writeToFile(path, name + "_Neutrality", neutrality);
 
         NumberFormat decFormat = new DecimalFormat("#0.000");
 
         //plot 3 examples
-        for (int i = 0; i <= numQs; i += (int)(numQs/2)) {
-            
-            double currentQ = minQ + (i == 0 ? 0 : i -1) * stepQ;
+        for (int i = 0; i <= numQs; i += (int) (numQs / 2)) {
+
+            double currentQ = minQ + (i == 0 ? 0 : i - 1) * stepQ;
 
             RealProblem quantisedProblem = new Quantiser(problem, currentQ, problem.getLowerBound(), problem.getUpperBound());
 
@@ -84,12 +103,11 @@ public class Exp_1D_Tunable_Q extends Experiment {
             Walk[] walks = sampler.sample();
 
 //            //graph of quantised problem
-//            Results.newGraph(this, path, quantisedProblem.getName() + " " + "q" + " = " + decFormat.format(currentQ), "x", "f(x)", null, 2);
+//            Results.newGraph(this, path, quantisedProblem.getExpName() + " " + "quantum" + " = " + decFormat.format(currentQ), "x", "f(x)", null, 2);
 //            Results.addPlot(this, null, quantisedProblem);
 //            Results.plot(this);
-
             //graph of quantised problem - showing sample
-            Results.newGraph(this, path, quantisedProblem.getName() + " " + "q" + " = " + decFormat.format(currentQ) + " Sampled", "x", "f(x)", null, 2);
+            Results.newGraph(this, path, quantisedProblem.getName() + " " + "quantum" + " = " + decFormat.format(currentQ) + " Sampled", "x", "f(x)", null, 2);
             Results.addPlot(this, null, quantisedProblem);
             for (int j = 0; j < walks.length; j++) {
                 Results.addPlot(this, "Walk " + (j + 1), walks[j].getPoints(), walks[j].getPointsFitness(), "linespoints");
@@ -98,7 +116,7 @@ public class Exp_1D_Tunable_Q extends Experiment {
         }
 
         //graph of neutrality parameter vs neutrality measured
-        Results.newGraph(this, path, "Quantised " + problem.getName() + " Neutrality vs Quantum", "q", "Neutrality", "", 2);
+        Results.newGraph(this, path, "Quantised " + problem.getName() + " Neutrality vs Quantum", "Quantum", "Neutrality", "", 2);
         Results.addPlot(this, "", qValues, avgNeutrality, "lines smooth sbezier");
         Results.addPlot(this, "", qValues, avgNeutrality, "points pointtype 7 pointsize 0.4");
         Results.plot(this);

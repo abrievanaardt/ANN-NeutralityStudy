@@ -5,6 +5,7 @@ import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
 import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure;
 import ac.up.cos700.neutralitystudy.study.util.StudyConfig;
 import ac.up.malan.phd.sampling.Walk;
+import java.util.Arrays;
 
 /**
  *
@@ -20,10 +21,13 @@ public class Exp_2D_Simple extends Exp_1D_Simple {
 
     @Override
     protected void finalise() throws Exception {
-        Results.writeToFile(path, "_Neutrality", neutrality);
+        //obtain std dev of neutrality
+        neutrality[stdDevNeutralityIndex] = calculateSampleStdDev(Arrays.copyOfRange(neutrality, 0, neutrality.length - 2), neutrality[avgNeutralityIndex]);
+        
+        Results.writeToFile(path, name + "_Neutrality", neutrality);
         
         //graph of problem
-//        Results.newGraph(this, path, problem.getName(), "x1", "x2", "f(x)", 3);
+//        Results.newGraph(this, path, problem.getExpName(), "x1", "x2", "f(x)", 3);
 //        Results.addPlot(this, null, problem);
 //        Results.plot(this);
                 

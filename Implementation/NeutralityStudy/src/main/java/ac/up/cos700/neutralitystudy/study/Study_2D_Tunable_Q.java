@@ -79,7 +79,6 @@ public class Study_2D_Tunable_Q extends Study {
                 new Salomon(dim),
                 new Schwefel2_22(dim),
                 new Schwefel2_26(dim),
-                new SchwefelProblem2_22(dim),
                 new ShekelsFoxholes(),
                 new SixHumpCamelBack(),
                 new Spherical(dim),
@@ -95,7 +94,7 @@ public class Study_2D_Tunable_Q extends Study {
     }
 
     @Override
-    public Study setup(NeutralityMeasure nm) {
+    public Study setup(NeutralityMeasure nm, double... otherParameters) {
         super.setup(nm);
 
         for (RealProblem problem : problems) {

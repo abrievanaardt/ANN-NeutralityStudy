@@ -16,19 +16,32 @@ import java.text.NumberFormat;
 public class Exp_2D_Tunable_S extends Exp_1D_Tunable_S {
 
     public Exp_2D_Tunable_S(StudyConfig _config, NeutralityMeasure _neutralityMeasure, RealProblem _problem) {
-        super(_config, _neutralityMeasure, _problem);       
+        super(_config, _neutralityMeasure, _problem);
     }
 
     @Override
     protected void finalise() throws Exception {
+        //fill average and std dev of neutralities into the grid
+        for (int i = 0; i < numSs; i++) {//for each column
+            neutrality[avgNeutralityIndex][i] = avgNeutrality[i];
+
+            //extracting a column of neutrality values - ignore headers and summaries
+            double[] neutralityForColumn = new double[neutrality.length - 3];
+            for (int j = 1; j <= neutralityForColumn.length; j++) {
+                neutralityForColumn[j - 1] = neutrality[j][i];
+            }
+
+            neutrality[stdDevNeutralityIndex][i] = calculateSampleStdDev(neutralityForColumn, avgNeutrality[i]);
+        }
+
         Results.writeToFile(path, name + "_Neutrality", neutrality);
 
         NumberFormat decFormat = new DecimalFormat("#0.000");
 
         //plot 3 examples
-        for (int i = 0; i <= numSs; i += (int)(numSs/2)) {
-            
-            double currentS = minS + (i == 0 ? 0 : i -1) * stepS;
+        for (int i = 0; i <= numSs; i += (int) (numSs / 2)) {
+
+            double currentS = minS + (i == 0 ? 0 : i - 1) * stepS;
 
             stepCount = (int) ((1 / currentS) * 2 * avgNumTraversals);//allows for n-time traversal on average
             stepRatio = currentS;
@@ -39,10 +52,9 @@ public class Exp_2D_Tunable_S extends Exp_1D_Tunable_S {
             Walk[] walks = sampler.sample();
 
 //            //graph of problem
-//            Results.newGraph(this, path, quantisedProblem.getName() + " " + "maxStepSize" + " = " + decFormat.format(currentQ), "x1", "x2", "f(x)", 3);
+//            Results.newGraph(this, path, quantisedProblem.getExpName() + " " + "maxStepSize" + " = " + decFormat.format(currentQ), "x1", "x2", "f(x)", 3);
 //            Results.addPlot(this, null, quantisedProblem);
 //            Results.plot(this);
-
             //graph of problem - showing sample
             Results.newGraph(this, path, problem.getName() + " " + "maxStepSize" + " = " + decFormat.format(currentS) + " Sampled", "x1", "x2", "f(x)", 3);
             Results.addPlot(this, null, problem);

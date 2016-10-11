@@ -11,22 +11,23 @@ import java.util.logging.Logger;
  * This class makes use of a progressive random walk to sample the landscape of
  * a given n-dimensional problem. A number of steps are performed with random
  * step sizes within a defined subset of the domain. The total number of walks
- * are equal to the problem dimension and starting zones are selected according
+ * are equal to twice the problem dimension and starting zones are selected according
  * to the formula:
  * <pre>
  * (2^n)/n
  * </pre>
+ * where is the number of walks performed.
  *
  * @author Abrie van Aardt
  */
-public class ProgressiveRandomWalkSampler extends Sampler{
+public class ProgressiveRandomWalkSampler implements Sampler{
 
     public ProgressiveRandomWalkSampler(RealProblem _problem, int _stepCount, double _stepRatio) {
         problem = _problem;
-        walkCount = problem.getDimensionality();
+        walkCount = 2*problem.getDimensionality();
         stepSize = (problem.getUpperBound() - problem.getLowerBound()) * _stepRatio;
         stepCount = _stepCount;
-        startingZoneDelta = (int) (Math.pow(2, problem.getDimensionality()) / problem.getDimensionality());
+        startingZoneDelta = (int) (Math.pow(2, walkCount) / walkCount);
     }
 
     @Override

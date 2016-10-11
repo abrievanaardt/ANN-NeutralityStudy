@@ -28,11 +28,11 @@ public class Study_NN_Error extends Study {
         try {
 
             String[] datasetNames = new String[]{
-                "Cancer",
-                "Diabetes",
-                "Glass",
-                "Heart",
-                "Iris"
+                "cancer",
+                "diabetes",
+                "glass",
+                "heart",
+                "iris"
             };
 
             problems = new RealProblem[datasetNames.length];

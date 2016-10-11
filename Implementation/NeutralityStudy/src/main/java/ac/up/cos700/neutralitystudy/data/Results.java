@@ -9,7 +9,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Allows for experiment data to be written to file and/or directly transformed
@@ -33,7 +32,7 @@ public class Results {
     public static void writeToFile(String experimentPath, String resultName, double... values) throws ResultsException {
         BufferedWriter writer = null;
         try {
-            File directory = new File(experimentPath + "/" + resultName + fileID.getAndIncrement() + ".csv");
+            File directory = new File(experimentPath + "/" + resultName + ".csv");
             directory.getParentFile().mkdirs();
             writer = new BufferedWriter(new FileWriter(directory));
 
@@ -78,7 +77,7 @@ public class Results {
         }
         
         try {
-            File directory = new File(experimentPath + "/" + resultName + fileID.getAndIncrement() + ".csv");
+            File directory = new File(experimentPath + "/" + resultName + ".csv");
             directory.getParentFile().mkdirs();
             writer = new BufferedWriter(new FileWriter(directory));
 
@@ -167,7 +166,6 @@ public class Results {
         catch (GraphException e) {
             throw new ResultsException(e.getMessage());
         }
-    }
+    }   
     
-    private static AtomicInteger fileID = new AtomicInteger(0);
 }

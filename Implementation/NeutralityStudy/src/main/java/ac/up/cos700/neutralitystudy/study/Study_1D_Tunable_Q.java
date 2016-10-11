@@ -76,7 +76,7 @@ public class Study_1D_Tunable_Q extends Study {
     }
 
     @Override
-    public Study setup(NeutralityMeasure nm) {
+    public Study setup(NeutralityMeasure nm, double... otherParameters) {
         super.setup(nm);
 
         for (RealProblem problem : problems) {

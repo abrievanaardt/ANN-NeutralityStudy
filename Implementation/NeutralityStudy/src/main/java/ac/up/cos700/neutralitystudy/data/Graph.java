@@ -85,7 +85,7 @@ public class Graph {
         properties.add("set offsets graph 0.03, graph 0.03, graph 0.03, graph 0.03");
 
         //Use Colour Palette
-//        properties.add("load 'gnuplot-color-palettes\\paired.pal'");
+//        properties.add("load 'config\\gnuplot-color-palettes\\paired.pal'");
 
         //Settings for bar charts
         properties.add("set boxwidth 0.5");        

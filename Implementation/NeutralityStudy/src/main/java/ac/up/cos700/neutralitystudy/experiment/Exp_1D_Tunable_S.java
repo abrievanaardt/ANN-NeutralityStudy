@@ -19,18 +19,23 @@ public class Exp_1D_Tunable_S extends Experiment {
         super(_config, _neutralityMeasure, _problem);
 
         problem = _problem;
-        
+
         avgNumTraversals = config.entries.get("avgNumTraversals").intValue();
 
         minS = config.entries.get("minS");
         stepS = config.entries.get("stepS");
         numSs = config.entries.get("numS").intValue();
-        
-        stepCount = (int)((1/minS)*2*avgNumTraversals);//allows for n-time traversal on average
-        stepRatio = minS;        
+
+        stepCount = (int) ((1 / minS) * 2 * avgNumTraversals);//allows for n-time traversal on average
+        stepRatio = minS;
 
         //one additional row for the step size values
-        neutrality = new double[config.entries.get("simulations").intValue() + 1][numSs];
+        //another additional row for the averages
+        //another row for standard deviations
+        neutrality = new double[config.entries.get("simulations").intValue() + 3][numSs];
+
+        avgNeutralityIndex = config.entries.get("simulations").intValue() + 1;
+        stdDevNeutralityIndex = avgNeutralityIndex + 1;
 
         avgNeutrality = new double[numSs];
         sValues = new double[numSs];
@@ -52,12 +57,9 @@ public class Exp_1D_Tunable_S extends Experiment {
         for (int i = 0; i < numSs; i++) {
             sValues[i] = minS + i * stepS;
 
-            
-            
-            stepCount = (int)((1 / currentS) * 2 * avgNumTraversals);//allows for n-time traversal on average
-            stepRatio = currentS;   
-            
-            
+            stepCount = (int) ((1 / currentS) * 2 * avgNumTraversals);//allows for n-time traversal on average
+            stepRatio = currentS;
+
             //todo: inversion of control (hand over to builder)
             sampler = new ProgressiveRandomWalkSampler(problem, stepCount, stepRatio);
             Walk[] walks = sampler.sample();
@@ -72,14 +74,27 @@ public class Exp_1D_Tunable_S extends Experiment {
 
     @Override
     protected void finalise() throws Exception {
+        //fill average and std dev of neutralities into the grid
+        for (int i = 0; i < numSs; i++) {//for each column
+            neutrality[avgNeutralityIndex][i] = avgNeutrality[i];
+
+            //extracting a column of neutrality values - ignore headers and summaries
+            double[] neutralityForColumn = new double[neutrality.length - 3];
+            for (int j = 1; j <= neutralityForColumn.length; j++) {
+                neutralityForColumn[j - 1] = neutrality[j][i];
+            }
+
+            neutrality[stdDevNeutralityIndex][i] = calculateSampleStdDev(neutralityForColumn, avgNeutrality[i]);
+        }
+
         Results.writeToFile(path, name + "_Neutrality", neutrality);
 
         NumberFormat decFormat = new DecimalFormat("#0.000");
 
         //plot 3 examples
-        for (int i = 0; i <= numSs; i += (int)(numSs/2)) {
-            
-            double currentS = minS + (i == 0 ? 0 : i -1) * stepS;
+        for (int i = 0; i <= numSs; i += (int) (numSs / 2)) {
+
+            double currentS = minS + (i == 0 ? 0 : i - 1) * stepS;
 
             stepCount = (int) ((1 / currentS) * 2 * avgNumTraversals);//allows for n-time traversal on average
             stepRatio = currentS;
@@ -90,10 +105,9 @@ public class Exp_1D_Tunable_S extends Experiment {
             Walk[] walks = sampler.sample();
 
 //            //graph of problem
-//            Results.newGraph(this, path, problem.getName() + " " + "maxStepSize" + " = " + decFormat.format(currentS), "x", "f(x)", null, 2);
+//            Results.newGraph(this, path, problem.getExpName() + " " + "maxStepSize" + " = " + decFormat.format(currentS), "x", "f(x)", null, 2);
 //            Results.addPlot(this, null, problem);
 //            Results.plot(this);
-
             //graph of problem - showing sample
             Results.newGraph(this, path, problem.getName() + " " + "maxStepSize" + " = " + decFormat.format(currentS) + " Sampled", "x", "f(x)", null, 2);
             Results.addPlot(this, null, problem);

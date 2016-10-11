@@ -23,10 +23,10 @@ public class StudyConfig {
         entries = new HashMap<>(20);
     }
 
-    public static StudyConfig fromFile(String studyName) throws FileNotFoundException, StudyConfigException {
+    public static StudyConfig fromFile(String configName) throws FileNotFoundException, StudyConfigException {
         StudyConfig config = new StudyConfig();               
 
-        BufferedReader reader = new BufferedReader(new FileReader(new File(studyName + ".config")));
+        BufferedReader reader = new BufferedReader(new FileReader(new File("config\\" + configName + ".config")));
 
         try {
             String line;
