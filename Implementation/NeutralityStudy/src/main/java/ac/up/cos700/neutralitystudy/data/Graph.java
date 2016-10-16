@@ -66,7 +66,7 @@ public class Graph {
 
         //set some graph properties
         //Terminal
-        properties.add("set terminal postscript eps enhanced color font 'Helvetica,10'");
+        properties.add("set terminal postscript eps enhanced color font 'Helvetica,16'");
         //Output
         properties.add("set output '" + ".\\" + path + "\\" + title + "\\" + title + ".eps'");
         //Title
@@ -86,6 +86,9 @@ public class Graph {
 
         //Use Colour Palette
 //        properties.add("load 'config\\gnuplot-color-palettes\\paired.pal'");
+
+        //set colours to classic
+        properties.add("set colors classic");
 
         //Settings for bar charts
         properties.add("set boxwidth 0.5");        
@@ -240,7 +243,7 @@ public class Graph {
     }
 
     /**
-     * Adds an 1/2D plot of the data points given as parameters.
+     * Adds a 1/2D plot of the data points given as parameters.
      *
      * @param _title the title of the plot
      * @param xData 2D array containing x coordinates (1D/2D)

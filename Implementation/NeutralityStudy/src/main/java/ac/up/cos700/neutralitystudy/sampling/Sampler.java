@@ -12,7 +12,7 @@ public interface Sampler {
 
     public Walk[] sample() throws SampleException;
 
-    static public Sampler makeSampler(Type typeOfSampler, RealProblem _problem, int stepCount, double stepRatio) {
+    public static Sampler makeSampler(Type typeOfSampler, RealProblem _problem, int stepCount, double stepRatio) {
         switch (typeOfSampler) {
             case PROGRESSIVE_RANDOM_WALK:
                 return new ProgressiveRandomWalkSampler(_problem, stepCount, stepRatio);

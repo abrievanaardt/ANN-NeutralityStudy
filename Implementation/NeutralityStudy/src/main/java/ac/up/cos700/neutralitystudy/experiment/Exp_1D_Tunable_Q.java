@@ -102,10 +102,11 @@ public class Exp_1D_Tunable_Q extends Experiment {
             sampler = new ProgressiveRandomWalkSampler(quantisedProblem, stepCount, stepRatio);
             Walk[] walks = sampler.sample();
 
-//            //graph of quantised problem
-//            Results.newGraph(this, path, quantisedProblem.getExpName() + " " + "quantum" + " = " + decFormat.format(currentQ), "x", "f(x)", null, 2);
-//            Results.addPlot(this, null, quantisedProblem);
-//            Results.plot(this);
+            //graph of quantised problem
+            Results.newGraph(this, path, quantisedProblem.getName() + " " + "quantum" + " = " + decFormat.format(currentQ), "x", "f(x)", null, 2);
+            Results.addPlot(this, null, quantisedProblem);
+            Results.plot(this);
+            
             //graph of quantised problem - showing sample
             Results.newGraph(this, path, quantisedProblem.getName() + " " + "quantum" + " = " + decFormat.format(currentQ) + " Sampled", "x", "f(x)", null, 2);
             Results.addPlot(this, null, quantisedProblem);
@@ -117,8 +118,12 @@ public class Exp_1D_Tunable_Q extends Experiment {
 
         //graph of neutrality parameter vs neutrality measured
         Results.newGraph(this, path, "Quantised " + problem.getName() + " Neutrality vs Quantum", "Quantum", "Neutrality", "", 2);
-        Results.addPlot(this, "", qValues, avgNeutrality, "lines smooth sbezier");
-        Results.addPlot(this, "", qValues, avgNeutrality, "points pointtype 7 pointsize 0.4");
+        Results.addPlot(this, "", qValues, avgNeutrality, "linespoints");
+        
+        //for scatter plot + regression use the following
+        //Results.addPlot(this, "", qValues, avgNeutrality, "lines smooth sbezier");
+        //Results.addPlot(this, "", qValues, avgNeutrality, "points pointtype 7 pointsize 0.4");
+        
         Results.plot(this);
 
     }

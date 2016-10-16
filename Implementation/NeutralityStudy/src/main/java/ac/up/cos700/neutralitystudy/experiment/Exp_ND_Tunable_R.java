@@ -1,45 +1,48 @@
 package ac.up.cos700.neutralitystudy.experiment;
 
 import ac.up.cos700.neutralitystudy.data.Results;
-import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
+import ac.up.cos700.neutralitystudy.function.problem.PlateStacker;
 import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure;
 import ac.up.cos700.neutralitystudy.sampling.ProgressiveRandomWalkSampler;
 import ac.up.cos700.neutralitystudy.study.util.StudyConfig;
+import ac.up.cos700.neutralitystudy.util.UnequalArgsDimensionException;
 import ac.up.malan.phd.sampling.Walk;
 
 /**
  *
  * @author Abrie van Aardt
  */
-public class Exp_ND_Tunable_D extends Experiment {
+public class Exp_ND_Tunable_R extends Experiment {
 
-    public Exp_ND_Tunable_D(StudyConfig _config, NeutralityMeasure _neutralityMeasure, RealProblem _problem) {
-        super(_config, _neutralityMeasure, _problem);
-
-        problem = _problem;
+    public Exp_ND_Tunable_R(StudyConfig _config, NeutralityMeasure _neutralityMeasure) 
+            throws UnequalArgsDimensionException{
+        
+        //PlateStacker dimensionality is twice the number of circles used (placement in 2D)
+        super(_config, _neutralityMeasure, new PlateStacker(_config.entries.get("numPlates").intValue()*2));
 
         stepCount = config.entries.get("stepCount").intValue();
         stepRatio = config.entries.get("stepRatio");
 
-        sampler = new ProgressiveRandomWalkSampler(problem, stepCount, stepRatio);
+        minR = config.entries.get("minR");
+        stepR = config.entries.get("stepR");
+        numRs = config.entries.get("numR").intValue();
 
-        minDim = config.entries.get("minDim").intValue();
-        stepDim = config.entries.get("stepDim").intValue();
-        numDims = config.entries.get("numDim").intValue();
+        //one additional row for the q-values
+        //another additional row for averages
+        //another row for standard deviations
+        neutrality = new double[config.entries.get("simulations").intValue() + 3][numRs];
 
-        //one additional row for the dimension header
-        //another additional row for the averages
-        //one more row for the standard deviations
-        neutrality = new double[config.entries.get("simulations").intValue() + 3][numDims];
+        avgNeutralityIndex = config.entries.get("simulations").intValue() + 1;
+        stdDevNeutralityIndex = avgNeutralityIndex + 1;
 
-        avgNeutrality = new double[numDims];
-        dimValues = new double[numDims];
+        avgNeutrality = new double[numRs];
+        rValues = new double[numRs];
 
         //add a row of values to serve as headings: indicating the value of 
         //the parameter at that column. Remember to ignore this row when e.g.
         //plotting.
-        for (int i = 0; i < numDims; i++) {
-            neutrality[0][i] = minDim + i * stepDim;
+        for (int i = 0; i < numRs; i++) {
+            neutrality[0][i] = minR + i * stepR;
         }
 
     }
@@ -47,27 +50,30 @@ public class Exp_ND_Tunable_D extends Experiment {
     @Override
     protected void runSimulation(int currentSimulation) throws Exception {
 
-        int currentDim = minDim;
+        double currentR = minR;
 
-        for (int i = 0; i < numDims; i++) {
-            dimValues[i] = minDim + i * stepDim;
+        for (int i = 0; i < numRs; i++) {
+            rValues[i] = minR + i * stepR;
 
-            problem.setDimensionality(currentDim);
+            ((PlateStacker)problem).setPlateRadius(currentR);
 
+            //todo: inversion of control (hand over to builder)
+            sampler = new ProgressiveRandomWalkSampler(problem, stepCount, stepRatio);
             Walk[] walks = sampler.sample();
 
             neutrality[currentSimulation][i] = neutralityMeasure.measure(walks, config.entries.get("epsilon"));
             avgNeutrality[i] = calculateNewAverage(avgNeutrality[i], neutrality[currentSimulation][i], currentSimulation);
 
-            currentDim += stepDim;
+            currentR += stepR;
         }
 
     }
 
     @Override
     protected void finalise() throws Exception {
+
         //fill average and std dev of neutralities into the grid
-        for (int i = 0; i < numDims; i++) {//for each column
+        for (int i = 0; i < numRs; i++) {//for each column
             neutrality[avgNeutralityIndex][i] = avgNeutrality[i];
 
             //extracting a column of neutrality values - ignore headers and summaries
@@ -82,8 +88,8 @@ public class Exp_ND_Tunable_D extends Experiment {
         Results.writeToFile(path, name + "_Neutrality", neutrality);
 
         //graph of neutrality parameter vs neutrality measured
-        Results.newGraph(this, path, problem.getName() + " Neutrality vs Dimension", "Dimensions", "Neutrality", "", 2);
-        Results.addPlot(this, "", dimValues, avgNeutrality, "linespoints");
+        Results.newGraph(this, path, problem.getName() + " Neutrality vs Plate Radius", "Radius", "Neutrality", "", 2);
+        Results.addPlot(this, "", rValues, avgNeutrality, "linespoints");
         Results.plot(this);
 
     }
@@ -92,9 +98,9 @@ public class Exp_ND_Tunable_D extends Experiment {
     protected final int stepCount;
     protected final double stepRatio;
 
-    protected final int minDim;
-    protected final int stepDim;
-    protected final int numDims;
+    protected final double minR;
+    protected final double stepR;
+    protected final int numRs;
     protected final double[] avgNeutrality;
-    protected final double[] dimValues;
+    protected final double[] rValues;
 }

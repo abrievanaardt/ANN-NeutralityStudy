@@ -1,6 +1,6 @@
 package ac.up.cos700.neutralitystudy.study;
 
-import ac.up.cos700.neutralitystudy.experiment.Exp_ND_Tunable_D;
+import ac.up.cos700.neutralitystudy.experiment.Exp_ND_Tunable_Dim;
 import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
 import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure;
 import ac.up.cos700.neutralitystudy.study.util.StudyConfigException;
@@ -27,9 +27,9 @@ import ac.up.malan.phd.problem.Table;
  *
  * @author Abrie van Aardt
  */
-public class Study_ND_Tunable_D extends Study {
+public class Study_ND_Tunable_Dim extends Study {
 
-    public Study_ND_Tunable_D() throws StudyConfigException {
+    public Study_ND_Tunable_Dim() throws StudyConfigException {
         super();
 
         int dim = 1;
@@ -67,7 +67,7 @@ public class Study_ND_Tunable_D extends Study {
         super.setup(nm);
 
         for (RealProblem problem : problems) {
-            experiments.add(new Exp_ND_Tunable_D(config, neutralityMeasure, problem));
+            experiments.add(new Exp_ND_Tunable_Dim(config, neutralityMeasure, problem));
         }
 
         return this;

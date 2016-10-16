@@ -50,9 +50,10 @@ public class Exp_2D_Tunable_Q extends Exp_1D_Tunable_Q {
             Walk[] walks = sampler.sample();
 
             //graph of quantised problem
-//            Results.newGraph(this, path, quantisedProblem.getExpName() + " " + "quantum" + " = " + decFormat.format(currentQ), "x1", "x2", "f(x)", 3);
-//            Results.addPlot(this, null, quantisedProblem);
-//            Results.plot(this);
+            Results.newGraph(this, path, quantisedProblem.getName()+ " " + "quantum" + " = " + decFormat.format(currentQ), "x1", "x2", "f(x)", 3);
+            Results.addPlot(this, null, quantisedProblem);
+            Results.plot(this);
+            
             //graph of quantised problem - showing sample
             Results.newGraph(this, path, quantisedProblem.getName() + " " + "quantum" + " = " + decFormat.format(currentQ) + " Sampled", "x1", "x2", "f(x)", 3);
             Results.addPlot(this, null, quantisedProblem);
@@ -64,8 +65,7 @@ public class Exp_2D_Tunable_Q extends Exp_1D_Tunable_Q {
 
         //graph of neutrality parameter vs neutrality measured
         Results.newGraph(this, path, "Quantised " + problem.getName() + " Neutrality vs Quantum", "Quantum", "Neutrality", "", 2);
-        Results.addPlot(this, "", qValues, avgNeutrality, "lines smooth sbezier");
-        Results.addPlot(this, "", qValues, avgNeutrality, "points pointtype 7 pointsize 0.4");
+        Results.addPlot(this, "", qValues, avgNeutrality, "linespoints");        
         Results.plot(this);
     }
 

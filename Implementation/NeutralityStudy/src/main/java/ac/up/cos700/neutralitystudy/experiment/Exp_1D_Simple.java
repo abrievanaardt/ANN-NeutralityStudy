@@ -42,9 +42,10 @@ public class Exp_1D_Simple extends Experiment {
         Results.writeToFile(path, name + "_Neutrality", neutrality);
 
         //graph of problem
-//        Results.newGraph(this, path, problem.getExpName(), "x", "f(x)", null, 2);
-//        Results.addPlot(this, null, problem);
-//        Results.plot(this);
+        Results.newGraph(this, path, problem.getName(), "x", "f(x)", null, 2);
+        Results.addPlot(this, null, problem);
+        Results.plot(this);
+        
         //graph of problem - showing sample           
         Results.newGraph(this, path, problem.getName() + " Sampled", "x", "f(x)", null, 2);
         Results.addPlot(this, problem.getName(), problem);

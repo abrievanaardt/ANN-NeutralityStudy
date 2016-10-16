@@ -42,7 +42,9 @@ public class NetworkError extends RealProblem {
     
     @Override
     public String getName(){
-        return super.getName() + "_" + dataset.getDatasetName();
+        String datasetName = dataset.getDatasetName().toLowerCase();
+        datasetName = datasetName.substring(0, 1).toUpperCase() + datasetName.substring(1, datasetName.length());
+        return super.getName() + " " + datasetName;
     }
 
     private final IFFNeuralNet network;

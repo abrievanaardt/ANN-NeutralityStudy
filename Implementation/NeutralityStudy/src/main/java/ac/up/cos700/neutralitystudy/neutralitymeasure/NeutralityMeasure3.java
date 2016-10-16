@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 /**
  * This is the third, basic neutrality measure considered for this study. The
  * measure makes use of a progressive random walk sample and analyses 3-point
- * objectsFitness within a number of walks.
+ * objects within a number of walks.
  * <br><br>
  * This measure calculates the ratio of the longest neutral sequence to the
  * diagonal of the unit hypercube, in Euclidean space.

@@ -4,6 +4,7 @@ import ac.up.cos700.neutralitystudy.data.Dataset;
 import ac.up.cos700.neutralitystudy.data.util.IncorrectFileFormatException;
 import ac.up.cos700.neutralitystudy.function.Identity;
 import ac.up.cos700.neutralitystudy.function.Sigmoid;
+import ac.up.cos700.neutralitystudy.function.Tanh;
 import ac.up.cos700.neutralitystudy.function.problem.NetworkError;
 import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
 import ac.up.cos700.neutralitystudy.function.util.NotAFunctionException;
@@ -39,15 +40,19 @@ public class Study_NN_Error extends Study {
 
             for (int i = 0; i < problems.length; i++) {
                 Dataset dataset = Dataset
-                        .fromFile("ac/up/cos700/neutralitystudy/data/" + datasetNames[i] + ".nsds");
+                        .fromFile(PATH_PREFIX
+                                + Sigmoid.class.getSimpleName().toLowerCase()
+                                + "/" + datasetNames[i]                                
+                                + EXT);
+
                 dataset.setDatasetName(datasetNames[i]);
-                
+
                 IFFNeuralNet network = new FFNeuralNetBuilder()
                         .addLayer(dataset.getInputCount(), Identity.class)
                         .addLayer(dataset.getHiddenCount(), Sigmoid.class)
                         .addLayer(dataset.getTargetCount(), Sigmoid.class)
                         .build();
-                
+
                 problems[i] = new NetworkError(network, dataset, new DefaultNetworkError(), -absoluteDomain, absoluteDomain);
             }
         }
@@ -55,5 +60,8 @@ public class Study_NN_Error extends Study {
             throw new StudyConfigException(e.getMessage());
         }
     }
+
+    private static final String PATH_PREFIX = "ac/up/cos700/neutralitystudy/data/";
+    private static final String EXT = ".nsds";
 
 }

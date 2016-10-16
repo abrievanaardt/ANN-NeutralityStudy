@@ -27,9 +27,9 @@ public class Exp_2D_Simple extends Exp_1D_Simple {
         Results.writeToFile(path, name + "_Neutrality", neutrality);
         
         //graph of problem
-//        Results.newGraph(this, path, problem.getExpName(), "x1", "x2", "f(x)", 3);
-//        Results.addPlot(this, null, problem);
-//        Results.plot(this);
+        Results.newGraph(this, path, problem.getName(), "x1", "x2", "f(x)", 3);
+        Results.addPlot(this, null, problem);
+        Results.plot(this);
                 
         //graph of problem - showing sample
         Walk[] walks = sampler.sample();        

@@ -40,6 +40,14 @@ public abstract class RealProblem extends Function {
     public double getUpperBound() {
         return upperBound;
     }
+    
+    public void setLowerBound(double _lowerBound){
+        lowerBound = _lowerBound;
+    }
+    
+    public void setUpperBound(double _upperBound){
+        upperBound = _upperBound;
+    }
 
     public double getOptimumFitness() {
         return optimumFitness;

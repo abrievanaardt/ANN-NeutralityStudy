@@ -82,7 +82,8 @@ public abstract class Study{
     }
     
     public static void awaitStudies() throws InterruptedException{
-        EXPERIMENT_EXECUTOR.awaitTermination(5, TimeUnit.DAYS);
+        EXPERIMENT_EXECUTOR.shutdown();
+        EXPERIMENT_EXECUTOR.awaitTermination(1, TimeUnit.HOURS);
     }
 
     public StudyConfig config;

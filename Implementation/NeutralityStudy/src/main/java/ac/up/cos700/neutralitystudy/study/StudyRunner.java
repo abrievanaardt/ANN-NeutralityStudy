@@ -34,7 +34,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Application;
 
 /**
  * This is where my experiments are configured.
@@ -54,52 +53,58 @@ public class StudyRunner {
            
             
             //======================== Measure 1 =============================
-//            new Study_1D_Simple().setup(new NeutralityMeasure1()).run();
-//            new Study_1D_Tunable_Q().setup(new NeutralityMeasure1()).run();    
-//            new Study_1D_Tunable_S().setup(new NeutralityMeasure1()).run();    
-//            
-//            new Study_2D_Simple().setup(new NeutralityMeasure1()).run();
-//            new Study_2D_Tunable_Q().setup(new NeutralityMeasure1()).run();            
-//            new Study_2D_Tunable_S().setup(new NeutralityMeasure1()).run();            
-//            
-//            new Study_ND_Tunable_D().setup(new NeutralityMeasure1()).run();
+            new Study_1D_Simple().setup(new NeutralityMeasure1()).run();
+            new Study_1D_Tunable_Q().setup(new NeutralityMeasure1()).run();    
+            new Study_1D_Tunable_S().setup(new NeutralityMeasure1()).run();    
+            
+            new Study_2D_Simple().setup(new NeutralityMeasure1()).run();
+            new Study_2D_Tunable_Q().setup(new NeutralityMeasure1()).run();            
+            new Study_2D_Tunable_S().setup(new NeutralityMeasure1()).run();            
+            
+            new Study_ND_Tunable_Dim().setup(new NeutralityMeasure1()).run();
+            new Study_ND_Tunable_R().setup(new NeutralityMeasure1()).run();
 
-            new Study_NN_Error_Simple().setup(new NeutralityMeasure1()).run();
+//            new Study_NN_Error_Simple().setup(new NeutralityMeasure1()).run();
+            new Study_NN_Error_Tunable_Dom().setup(new NeutralityMeasure1()).run();
 
             
 
             //======================== Measure 2 =============================
-//            new Study_1D_Simple().setup(new NeutralityMeasure2()).run();
-//            new Study_1D_Tunable_Q().setup(new NeutralityMeasure2()).run();    
-//            new Study_1D_Tunable_S().setup(new NeutralityMeasure2()).run();    
-//            
-//            new Study_2D_Simple().setup(new NeutralityMeasure2()).run();
-//            new Study_2D_Tunable_Q().setup(new NeutralityMeasure2()).run();            
-//            new Study_2D_Tunable_S().setup(new NeutralityMeasure2()).run();            
-//            
-//            new Study_ND_Tunable_D().setup(new NeutralityMeasure2()).run();
+            new Study_1D_Simple().setup(new NeutralityMeasure2()).run();
+            new Study_1D_Tunable_Q().setup(new NeutralityMeasure2()).run();    
+            new Study_1D_Tunable_S().setup(new NeutralityMeasure2()).run();    
+            
+            new Study_2D_Simple().setup(new NeutralityMeasure2()).run();
+            new Study_2D_Tunable_Q().setup(new NeutralityMeasure2()).run();            
+            new Study_2D_Tunable_S().setup(new NeutralityMeasure2()).run();            
+            
+            new Study_ND_Tunable_Dim().setup(new NeutralityMeasure2()).run();
+            new Study_ND_Tunable_R().setup(new NeutralityMeasure2()).run();
 
-            new Study_NN_Error_Simple().setup(new NeutralityMeasure2()).run();
+//            new Study_NN_Error_Simple().setup(new NeutralityMeasure2()).run();
+            new Study_NN_Error_Tunable_Dom().setup(new NeutralityMeasure2()).run();
             
             
 
             //======================== Measure 3 =============================            
-//            new Study_1D_Simple().setup(new NeutralityMeasure3()).run();
-//            new Study_1D_Tunable_Q().setup(new NeutralityMeasure3()).run();    
-//            new Study_1D_Tunable_S().setup(new NeutralityMeasure3()).run();    
-//            
-//            new Study_2D_Simple().setup(new NeutralityMeasure3()).run();
-//            new Study_2D_Tunable_Q().setup(new NeutralityMeasure3()).run();            
-//            new Study_2D_Tunable_S().setup(new NeutralityMeasure3()).run();            
-//            
-//            new Study_ND_Tunable_D().setup(new NeutralityMeasure3()).run();
-
-            new Study_NN_Error_Simple().setup(new NeutralityMeasure3()).run();
+            new Study_1D_Simple().setup(new NeutralityMeasure3()).run();
+            new Study_1D_Tunable_Q().setup(new NeutralityMeasure3()).run();    
+            new Study_1D_Tunable_S().setup(new NeutralityMeasure3()).run();    
             
-            Study.awaitStudies();
+            new Study_2D_Simple().setup(new NeutralityMeasure3()).run();
+            new Study_2D_Tunable_Q().setup(new NeutralityMeasure3()).run();            
+            new Study_2D_Tunable_S().setup(new NeutralityMeasure3()).run();            
+            
+            new Study_ND_Tunable_Dim().setup(new NeutralityMeasure3()).run();
+            new Study_ND_Tunable_R().setup(new NeutralityMeasure3()).run();
+
+//            new Study_NN_Error_Simple().setup(new NeutralityMeasure3()).run();
+            new Study_NN_Error_Tunable_Dom().setup(new NeutralityMeasure3()).run();
+            
+//            Study.awaitStudies();
         
         }
-        catch (IOException | StudyConfigException | InterruptedException e) {
+        catch (IOException | StudyConfigException  e) {
             Logger.getLogger(StudyRunner.class.getName()).log(Level.SEVERE, "", e);
         }
 

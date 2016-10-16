@@ -34,18 +34,39 @@ public class PlateStacker extends RealProblem {
     public PlateStacker(double _plateRadius, double lowerBound, double upperBound, int _dimensionality)
             throws UnequalArgsDimensionException {
 
-        super(lowerBound, upperBound, _dimensionality, Double.NaN);//unknown optima
+        super(lowerBound, upperBound, _dimensionality, 0);
 
         if (_dimensionality % 2 != 0 || _dimensionality < 4)
             throw new UnequalArgsDimensionException("Sequence represents circle placement in 2D - Dimension has to be a multiple of 2 and at least 4");
 
         plateRadius = _plateRadius;
 
-        optimumX = null;//unkown optima     
+        optimumX = null;//many optima, not important  
 
-        Logger
-                .getLogger(getClass().getName())
-                .log(Level.FINER, "Using plate radius: {0}", _plateRadius);
+//        Logger
+//                .getLogger(getClass().getName())
+//                .log(Level.FINER, "Using plate radius: {0}", _plateRadius);
+    }
+    
+    /**
+     * Initialises the PlateStacker bounded by the unit square.
+     * 
+     * @param _plateRadius
+     * @param _dimensionality
+     * @throws UnequalArgsDimensionException 
+     */
+    public PlateStacker(double _plateRadius, int _dimensionality) 
+            throws UnequalArgsDimensionException{
+        this(_plateRadius, 0, 1, _dimensionality);
+    }
+    
+    public PlateStacker(int _dimensionality) 
+            throws UnequalArgsDimensionException{
+        this(0, 0, 1, _dimensionality);//define radius with call
+    }
+    
+    public void setPlateRadius(double _plateRadius){
+        plateRadius = _plateRadius;
     }
 
     @Override
@@ -81,6 +102,6 @@ public class PlateStacker extends RealProblem {
         return score;
     }
 
-    private final double plateRadius;
+    private double plateRadius;
 
 }

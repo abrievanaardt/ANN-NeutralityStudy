@@ -51,10 +51,11 @@ public class Exp_2D_Tunable_S extends Exp_1D_Tunable_S {
             sampler = new ProgressiveRandomWalkSampler(problem, stepCount, stepRatio);
             Walk[] walks = sampler.sample();
 
-//            //graph of problem
-//            Results.newGraph(this, path, quantisedProblem.getExpName() + " " + "maxStepSize" + " = " + decFormat.format(currentQ), "x1", "x2", "f(x)", 3);
-//            Results.addPlot(this, null, quantisedProblem);
-//            Results.plot(this);
+            //graph of problem
+            Results.newGraph(this, path, problem.getName() + " " + "maxStepSize" + " = " + decFormat.format(currentS), "x1", "x2", "f(x)", 3);
+            Results.addPlot(this, null, problem);
+            Results.plot(this);
+            
             //graph of problem - showing sample
             Results.newGraph(this, path, problem.getName() + " " + "maxStepSize" + " = " + decFormat.format(currentS) + " Sampled", "x1", "x2", "f(x)", 3);
             Results.addPlot(this, null, problem);
