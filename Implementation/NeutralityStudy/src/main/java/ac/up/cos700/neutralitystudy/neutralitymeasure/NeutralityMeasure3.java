@@ -24,6 +24,16 @@ public class NeutralityMeasure3 extends NeutralityMeasure {
     public double measure(Walk[] samples, double epsilon) {
 
         double totalForSamples = 0;
+        
+        double minFitness = Double.MAX_VALUE;
+        double maxFitness  = Double.MIN_VALUE;
+        
+        for (int i = 0; i < samples.length; i++) {
+            double temp = samples[i].getMinFitness();
+            minFitness = temp < minFitness ? temp : minFitness;
+            temp = samples[i].getMaxFitness();
+            maxFitness = temp > maxFitness ? temp : maxFitness;            
+        }
 
         for (int i = 0; i < samples.length; i++) {
             double ratioNeutralLongest;
@@ -34,7 +44,8 @@ public class NeutralityMeasure3 extends NeutralityMeasure {
             double[][] objectsFitness = samples[i].getPointFitnessObjects();//now contains fitness of 3-point structures
             double[][][] objects = samples[i].getPointObjects();//now contains 3-point structures
 
-            ratioNeutralLongest = calculateEuclRatioNeutralLongest(objectsFitness, objects, epsilon);
+            //Epsilon is adjusted to be proportional to problem range (as calculated from the sample)
+            ratioNeutralLongest = calculateEuclRatioNeutralLongest(objectsFitness, objects, epsilon * (maxFitness - minFitness));
 
             totalForSamples += ratioNeutralLongest;
         }

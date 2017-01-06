@@ -154,7 +154,7 @@ public class Graph {
         
         plot.dataset = "'.\\" + path + "\\" + title + "\\" + _title + ".dat'";
 
-        final int detail = 250;
+        final int detail = 110;
 
         try {
             BufferedWriter writer = new BufferedWriter(

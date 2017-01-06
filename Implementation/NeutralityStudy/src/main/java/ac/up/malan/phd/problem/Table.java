@@ -25,10 +25,10 @@ public class Table extends RealProblem {
         if (x.length != getDimensionality())
             throw new UnequalArgsDimensionException();
         
-        double tmp = 1;
+        double tmp = 0;
         for (int i = 0; i < getDimensionality(); i++) {
             if ((x[i] > 2.5) || (x[i] < -2.5))
-                return 0;
+                return 1;
         }
         return tmp;
     }

@@ -29,11 +29,13 @@ public class Study_NN_Error extends Study {
         try {
 
             String[] datasetNames = new String[]{
-                "cancer",
-                "diabetes",
-                "glass",
-                "heart",
-                "iris"
+//                "cancer",
+                "logical_xor",
+                "logical_and",
+//                "diabetes",
+//                "glass",
+//                "heart",
+//                "iris"
             };
 
             problems = new RealProblem[datasetNames.length];
@@ -49,8 +51,8 @@ public class Study_NN_Error extends Study {
 
                 IFFNeuralNet network = new FFNeuralNetBuilder()
                         .addLayer(dataset.getInputCount(), Identity.class)
-                        .addLayer(dataset.getHiddenCount(), Sigmoid.class)
-                        .addLayer(dataset.getTargetCount(), Sigmoid.class)
+                        .addLayer(dataset.getHiddenCount(), Tanh.class)
+                        .addLayer(dataset.getTargetCount(), Tanh.class)
                         .build();
 
                 problems[i] = new NetworkError(network, dataset, new DefaultNetworkError(), -absoluteDomain, absoluteDomain);

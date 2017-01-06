@@ -4,8 +4,6 @@ import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
 import ac.up.malan.phd.sampling.BinaryFlag;
 import ac.up.malan.phd.sampling.Walk;
 import ac.up.malan.phd.sampling.util.SampleException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class makes use of a progressive random walk to sample the landscape of
@@ -16,7 +14,7 @@ import java.util.logging.Logger;
  * <pre>
  * (2^n)/n
  * </pre>
- * where is the number of walks performed.
+ * where n is the dimension of the problem.
  *
  * @author Abrie van Aardt
  */
@@ -27,7 +25,7 @@ public class ProgressiveRandomWalkSampler implements Sampler{
         walkCount = 2*problem.getDimensionality();
         stepSize = (problem.getUpperBound() - problem.getLowerBound()) * _stepRatio;
         stepCount = _stepCount;
-        startingZoneDelta = (int) (Math.pow(2, walkCount) / walkCount);
+        startingZoneDelta = (int) (Math.pow(2, problem.getDimensionality()) / problem.getDimensionality());
     }
 
     @Override

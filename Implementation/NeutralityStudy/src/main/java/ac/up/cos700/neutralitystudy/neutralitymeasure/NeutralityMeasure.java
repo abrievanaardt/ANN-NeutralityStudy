@@ -32,9 +32,9 @@ public abstract class NeutralityMeasure {
      * @return whether the 3 points are neutral or not
      */
     protected boolean isNeutral(double[] points, double epsilon) {
-        return (Math.abs(points[0] - points[1]) < epsilon
-                && Math.abs(points[1] - points[2]) < epsilon
-                && Math.abs(points[0] - points[2]) < epsilon);
+        return (Math.abs(points[0] - points[1]) <= epsilon
+                && Math.abs(points[1] - points[2]) <= epsilon
+                && Math.abs(points[0] - points[2]) <= epsilon);
     }
     
     public String getMeasureName(){

@@ -2,7 +2,9 @@ package ac.up.cos700.neutralitystudy.study;
 
 import ac.up.cos700.neutralitystudy.study.util.StudyConfig;
 import ac.up.cos700.neutralitystudy.data.Dataset;
+import ac.up.cos700.neutralitystudy.data.Graph;
 import ac.up.cos700.neutralitystudy.data.Results;
+import ac.up.cos700.neutralitystudy.data.util.GraphException;
 import ac.up.cos700.neutralitystudy.data.util.IncorrectFileFormatException;
 import ac.up.cos700.neutralitystudy.data.util.ResultsException;
 import ac.up.cos700.neutralitystudy.data.util.StudyLogFormatter;
@@ -24,6 +26,7 @@ import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure1;
 import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure2;
 import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure3;
 import ac.up.cos700.neutralitystudy.sampling.ProgressiveRandomWalkSampler;
+import ac.up.malan.phd.problem.Table;
 import ac.up.malan.phd.sampling.Walk;
 import ac.up.malan.phd.sampling.util.SampleException;
 import java.io.FileNotFoundException;
@@ -51,60 +54,66 @@ public class StudyRunner {
         try {
             setupLogging();          
            
+            Graph graph = new Graph("C:\\Users\\Abrie\\Desktop\\Research\\Quick Plots", "crossLegTable", "x_1", "x_2", "f(x_1,x_2", 3);
+            graph.addPlot("", new CrossLegTable());
+            graph.plot();
             
             //======================== Measure 1 =============================
-            new Study_1D_Simple().setup(new NeutralityMeasure1()).run();
-            new Study_1D_Tunable_Q().setup(new NeutralityMeasure1()).run();    
-            new Study_1D_Tunable_S().setup(new NeutralityMeasure1()).run();    
+//            Ignore 1D for now
+//            new Study_1D_Simple().setup(new NeutralityMeasure1()).run();
+//            new Study_1D_Tunable_Q().setup(new NeutralityMeasure1()).run();    
+//            new Study_1D_Tunable_S().setup(new NeutralityMeasure1()).run();    
             
-            new Study_2D_Simple().setup(new NeutralityMeasure1()).run();
-            new Study_2D_Tunable_Q().setup(new NeutralityMeasure1()).run();            
-            new Study_2D_Tunable_S().setup(new NeutralityMeasure1()).run();            
+//            new Study_2D_Simple().setup(new NeutralityMeasure1()).run();
+//            new Study_2D_Tunable_Q().setup(new NeutralityMeasure1()).run();            
+//            new Study_2D_Tunable_S().setup(new NeutralityMeasure1()).run();            
             
-            new Study_ND_Tunable_Dim().setup(new NeutralityMeasure1()).run();
-            new Study_ND_Tunable_R().setup(new NeutralityMeasure1()).run();
+//            new Study_ND_Tunable_Dim().setup(new NeutralityMeasure1()).run();
+//            new Study_ND_Tunable_R().setup(new NeutralityMeasure1()).run();
 
 //            new Study_NN_Error_Simple().setup(new NeutralityMeasure1()).run();
-            new Study_NN_Error_Tunable_Dom().setup(new NeutralityMeasure1()).run();
+//            new Study_NN_Error_Tunable_Dom().setup(new NeutralityMeasure1()).run();
 
             
 
             //======================== Measure 2 =============================
-            new Study_1D_Simple().setup(new NeutralityMeasure2()).run();
-            new Study_1D_Tunable_Q().setup(new NeutralityMeasure2()).run();    
-            new Study_1D_Tunable_S().setup(new NeutralityMeasure2()).run();    
             
-            new Study_2D_Simple().setup(new NeutralityMeasure2()).run();
-            new Study_2D_Tunable_Q().setup(new NeutralityMeasure2()).run();            
-            new Study_2D_Tunable_S().setup(new NeutralityMeasure2()).run();            
-            
-            new Study_ND_Tunable_Dim().setup(new NeutralityMeasure2()).run();
-            new Study_ND_Tunable_R().setup(new NeutralityMeasure2()).run();
-
+//            new Study_1D_Simple().setup(new NeutralityMeasure2()).run();
+//            new Study_1D_Tunable_Q().setup(new NeutralityMeasure2()).run();    
+//            new Study_1D_Tunable_S().setup(new NeutralityMeasure2()).run();    
+//            
+//            new Study_2D_Simple().setup(new NeutralityMeasure2()).run();
+//            new Study_2D_Tunable_Q().setup(new NeutralityMeasure2()).run();            
+//            new Study_2D_Tunable_S().setup(new NeutralityMeasure2()).run();            
+//            
+//            new Study_ND_Tunable_Dim().setup(new NeutralityMeasure2()).run();
+//            new Study_ND_Tunable_R().setup(new NeutralityMeasure2()).run();
+//
 //            new Study_NN_Error_Simple().setup(new NeutralityMeasure2()).run();
-            new Study_NN_Error_Tunable_Dom().setup(new NeutralityMeasure2()).run();
+//            new Study_NN_Error_Tunable_Dom().setup(new NeutralityMeasure2()).run();
             
             
-
+//NOT WORKING WITH MEASURE 3 ANYMORE
             //======================== Measure 3 =============================            
-            new Study_1D_Simple().setup(new NeutralityMeasure3()).run();
-            new Study_1D_Tunable_Q().setup(new NeutralityMeasure3()).run();    
-            new Study_1D_Tunable_S().setup(new NeutralityMeasure3()).run();    
-            
-            new Study_2D_Simple().setup(new NeutralityMeasure3()).run();
-            new Study_2D_Tunable_Q().setup(new NeutralityMeasure3()).run();            
-            new Study_2D_Tunable_S().setup(new NeutralityMeasure3()).run();            
-            
-            new Study_ND_Tunable_Dim().setup(new NeutralityMeasure3()).run();
-            new Study_ND_Tunable_R().setup(new NeutralityMeasure3()).run();
-
+//            new Study_1D_Simple().setup(new NeutralityMeasure3()).run();
+//            new Study_1D_Tunable_Q().setup(new NeutralityMeasure3()).run();    
+//            new Study_1D_Tunable_S().setup(new NeutralityMeasure3()).run();    
+//            
+//            new Study_2D_Simple().setup(new NeutralityMeasure3()).run();
+//            new Study_2D_Tunable_Q().setup(new NeutralityMeasure3()).run();            
+//            new Study_2D_Tunable_S().setup(new NeutralityMeasure3()).run();            
+//            
+//            new Study_ND_Tunable_Dim().setup(new NeutralityMeasure3()).run();
+//            new Study_ND_Tunable_R().setup(new NeutralityMeasure3()).run();
+//
 //            new Study_NN_Error_Simple().setup(new NeutralityMeasure3()).run();
-            new Study_NN_Error_Tunable_Dom().setup(new NeutralityMeasure3()).run();
+//            new Study_NN_Error_Tunable_Dom().setup(new NeutralityMeasure3()).run();
             
 //            Study.awaitStudies();
         
         }
-        catch (IOException | StudyConfigException  e) {
+        catch (GraphException | IOException  e) {
+            //| IOException | StudyConfigException
             Logger.getLogger(StudyRunner.class.getName()).log(Level.SEVERE, "", e);
         }
 

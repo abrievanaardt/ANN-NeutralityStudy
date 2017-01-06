@@ -25,10 +25,10 @@ public class AlmostFlat extends RealProblem {
     public double evaluate(double... x) throws UnequalArgsDimensionException {
         if (x.length != getDimensionality())
             throw new UnequalArgsDimensionException();
-        double tmp = 1;
+        double tmp = 0;
         for (int i = 0; i < getDimensionality(); i++) {
             if ((x[i] > 0.5) || (x[i] < -0.5))
-                return 0;
+                return 1;
         }
         return tmp;
     }

@@ -40,7 +40,7 @@ public class Results {
                 writer.write(Double.toString(values[i]));
                 writer.newLine();
             }
-//TODO ADD PARAMETER
+            //TODO ADD PARAMETER
             writer.flush();           
             
         }
