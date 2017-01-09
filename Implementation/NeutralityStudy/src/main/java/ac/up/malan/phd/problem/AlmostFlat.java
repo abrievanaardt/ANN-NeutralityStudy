@@ -30,6 +30,7 @@ public class AlmostFlat extends RealProblem {
             if ((x[i] > 0.5) || (x[i] < -0.5))
                 return 1;
         }
+        
         return tmp;
     }
 }

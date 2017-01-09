@@ -22,10 +22,11 @@ public class ProgressiveRandomWalkSampler implements Sampler{
 
     public ProgressiveRandomWalkSampler(RealProblem _problem, int _stepCount, double _stepRatio) {
         problem = _problem;
-        walkCount = 2*problem.getDimensionality();
+        //todo: extract magic number to config file
+        walkCount = 10*problem.getDimensionality();
         stepSize = (problem.getUpperBound() - problem.getLowerBound()) * _stepRatio;
         stepCount = _stepCount;
-        startingZoneDelta = (int) (Math.pow(2, problem.getDimensionality()) / problem.getDimensionality());
+        startingZoneDelta = (int) Math.ceil(Math.pow(2, problem.getDimensionality()) / (double) walkCount);
     }
 
     @Override
@@ -37,9 +38,14 @@ public class ProgressiveRandomWalkSampler implements Sampler{
         Walk w;
 
         for (int i = 0; i < walkCount; i++) {
-            startingBitMask = Integer.toBinaryString(i * startingZoneDelta);
+            startingBitMask = Integer.toBinaryString((i * startingZoneDelta) % (int) Math.pow(2, problem.getDimensionality()));
             startingZone = new BinaryFlag(problem.getDimensionality());
 
+            //ensure that startingBitMask is the same length as startingZone, for correct indexing
+            while (startingBitMask.length() != problem.getDimensionality()){
+                startingBitMask = "0" + startingBitMask;
+            }
+            
             for (int j = 0; j < startingBitMask.length(); j++) {
                 if (startingBitMask.charAt(j) == '1')
                     startingZone.flipBit(j);

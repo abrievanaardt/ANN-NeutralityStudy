@@ -1,7 +1,12 @@
 package ac.up.cos700.neutralitystudy.study;
 
 import ac.up.cos700.neutralitystudy.experiment.Exp_2D_Simple;
+import ac.up.cos700.neutralitystudy.function.problem.CrossLegTable;
+import ac.up.cos700.neutralitystudy.function.problem.Cube;
+import ac.up.cos700.neutralitystudy.function.problem.Easom;
 import ac.up.cos700.neutralitystudy.function.problem.RealProblem;
+import ac.up.cos700.neutralitystudy.function.problem.Schwefel21;
+import ac.up.cos700.neutralitystudy.function.problem.Step2;
 import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure;
 import ac.up.cos700.neutralitystudy.study.util.StudyConfigException;
 import ac.up.malan.phd.problem.AbsoluteValue;
@@ -56,8 +61,11 @@ public class Study_2D_Simple extends Study {
             //new ShekelsFoxholes(),
             //new SixHumpCamelBack(),
             //new Spherical(dim),
+            new Schwefel21(dim),
+            new Easom(),
             new Step(dim),
-            new Table(dim)
+            new Step2(dim),
+            new Table(dim),            
         };
 
     }

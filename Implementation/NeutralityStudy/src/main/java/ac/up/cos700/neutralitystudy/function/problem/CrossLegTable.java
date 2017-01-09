@@ -28,7 +28,7 @@ public class CrossLegTable extends RealProblem {
      * @param _function the function to quantise
      * @param _q the quantum size defining the amount of neutrality
      */
-    public CrossLegTable(Function _function, double _q, double lowerBound, double upperBound) {
+    public CrossLegTable(Function _function, double lowerBound, double upperBound) {
         super(lowerBound, upperBound, _function.getDimensionality());
     }
 

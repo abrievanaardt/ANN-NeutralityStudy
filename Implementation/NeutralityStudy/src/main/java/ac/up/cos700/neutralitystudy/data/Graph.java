@@ -101,7 +101,7 @@ public class Graph {
                 //ZLabel
                 properties.add("set zlabel '" + zLabel + "'");
                 properties.add("unset colorbox");
-                properties.add("set palette grey");
+                properties.add("set palette negative grey");
                 break;
             default:
                 throw new GraphException("Can only plot in 2 or 3 dimensions");

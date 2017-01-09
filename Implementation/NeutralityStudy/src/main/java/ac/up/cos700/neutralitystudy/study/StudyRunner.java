@@ -2,9 +2,7 @@ package ac.up.cos700.neutralitystudy.study;
 
 import ac.up.cos700.neutralitystudy.study.util.StudyConfig;
 import ac.up.cos700.neutralitystudy.data.Dataset;
-import ac.up.cos700.neutralitystudy.data.Graph;
 import ac.up.cos700.neutralitystudy.data.Results;
-import ac.up.cos700.neutralitystudy.data.util.GraphException;
 import ac.up.cos700.neutralitystudy.data.util.IncorrectFileFormatException;
 import ac.up.cos700.neutralitystudy.data.util.ResultsException;
 import ac.up.cos700.neutralitystudy.data.util.StudyLogFormatter;
@@ -23,10 +21,7 @@ import ac.up.cos700.neutralitystudy.neuralnet.util.FFNeuralNetBuilder;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ThresholdOutOfBoundsException;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ZeroNeuronException;
 import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure1;
-import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure2;
-import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure3;
 import ac.up.cos700.neutralitystudy.sampling.ProgressiveRandomWalkSampler;
-import ac.up.malan.phd.problem.Table;
 import ac.up.malan.phd.sampling.Walk;
 import ac.up.malan.phd.sampling.util.SampleException;
 import java.io.FileNotFoundException;
@@ -52,11 +47,8 @@ public class StudyRunner {
     public static void main(String[] args) {
 
         try {
-            setupLogging();          
-           
-            Graph graph = new Graph("C:\\Users\\Abrie\\Desktop\\Research\\Quick Plots", "crossLegTable", "x_1", "x_2", "f(x_1,x_2", 3);
-            graph.addPlot("", new CrossLegTable());
-            graph.plot();
+            setupLogging();                    
+          
             
             //======================== Measure 1 =============================
 //            Ignore 1D for now
@@ -64,7 +56,7 @@ public class StudyRunner {
 //            new Study_1D_Tunable_Q().setup(new NeutralityMeasure1()).run();    
 //            new Study_1D_Tunable_S().setup(new NeutralityMeasure1()).run();    
             
-//            new Study_2D_Simple().setup(new NeutralityMeasure1()).run();
+            new Study_2D_Simple().setup(new NeutralityMeasure1()).run();
 //            new Study_2D_Tunable_Q().setup(new NeutralityMeasure1()).run();            
 //            new Study_2D_Tunable_S().setup(new NeutralityMeasure1()).run();            
             
@@ -112,8 +104,7 @@ public class StudyRunner {
 //            Study.awaitStudies();
         
         }
-        catch (GraphException | IOException  e) {
-            //| IOException | StudyConfigException
+        catch (IOException | StudyConfigException e){
             Logger.getLogger(StudyRunner.class.getName()).log(Level.SEVERE, "", e);
         }
 
