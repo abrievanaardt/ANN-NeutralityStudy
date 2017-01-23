@@ -98,7 +98,7 @@ University of Pretoria\\
 Pretoria, South Africa\\
 Email: u13178840@tuks.co.za}
 \and
-\IEEEauthorblockN{Anna Rakitianskaia}
+\IEEEauthorblockN{Anna Sergeevna Bosman}
 \IEEEauthorblockA{Department of Computer Science\\
 University of Pretoria\\
 Pretoria, South Africa\\
@@ -147,15 +147,13 @@ To the best of the authors' knowledge, there is currently no offline method for 
 
 Section \ref{backgroundNeutralityFL} discusses neutrality in more detail. The current picture of the NN error landscape is sketched in section \ref{backgroundNNEL}. Section \ref{backgroundDiscreteNeutrality} gives some background on neutrality measures that have been used in discrete spaces. Measures proposed in this paper are discussed in section \ref{continuousNeutrality} and finally analysed in sections \ref{visualAnalysis} and \ref{nnELApplication}.
 
-\hfill January 9, 2017
-
 \section{Neutrality in Fitness Landscapes}
 \label{backgroundNeutralityFL}
-Neutrality is revealed in various structures such as ridges and plateaus that often connect or eliminate local optima \cite{owen2007adapting}. In discrete spaces, these structures are neutral where the fitness of neighbouring solutions are pair-wise equal \cite{reidys2001neutrality}. It follows that regions with longer chains of neighbouring solutions bearing equal fitness, have a larger degree of neutrality. For continuous landscapes, however, it becomes necessary to regard two points as neutral when the difference in their fitness values are adequately small, since the landscape's hypersurface could form a continuum \cite{izquierdo2004evolving}.
+Neutrality is revealed in various structures such as ridges and plateaus that often connect or eliminate local optima \cite{owen2007adapting}. In discrete spaces, these structures are neutral where the fitness of neighbouring solutions are pair-wise equal \cite{reidys2001neutrality}. It follows that regions with longer chains of neighbouring solutions bearing equal fitness, have a larger degree of neutrality. For continuous landscapes, however, it becomes necessary to regard two points as neutral when the difference in their fitness values are adequately small, since the landscape's hypersurface forms a continuum \cite{izquierdo2004evolving}.
 
-The concept of neutrality as a feature of a fitness landscape arose in the field of molecular biology when \citet{kimura1984neutral} stated his well known \textit{neutral theory of molecular evolution}. The theory holds that genetic mutations frequently occur that have no effect on the phenotype (macro traits of an individual). These mutations are referred to as \textit{neutral}. It is this great amount of redundancy between genotype-phenotype mappings that provides robustness against mutations \cite{wilke2001evolution,wagner2005robustness} and evolvability \cite{wagner2005robustness} in natural (and by extension, artificial) evolution \cite{huynen1996smoothness}. 
+The concept of neutrality as a feature of a fitness landscape arose in the field of molecular biology when \citet{kimura1984neutral} proposed his \textit{neutral theory of molecular evolution}. The theory holds that genetic mutations frequently occur that have no effect on the phenotype (macro traits of an individual). These mutations are referred to as \textit{neutral}. It is this great amount of redundancy between genotype-phenotype mappings that provides robustness against mutations \cite{wilke2001evolution,wagner2005robustness} and evolvability \cite{wagner2005robustness} in natural (and by extension, artificial) evolution \cite{huynen1996smoothness}. 
 
-Neutral regions in a landscape form \textit{neutral networks} in hyperspace that can be traversed by stochastic \textit{neutral drift}\cite{katada2003measuring}. When such networks are highly interconnected, local neutral regions may provide a pathway to areas of higher fitness \cite{katada2003measuring}, provided that the search heuristic is appropriately adapted to take advantage of the situation. It is not yet well understood what the effects of neutrality are on the performance of other algorithm classes, and indeed research on neutrality with regard to EAs are also inconclusive \cite{galvan2011neutrality}. \citet{galvan2011neutrality} attribute the inconsistent results to conclusions that were based on how fast an algorithm solves a problem with and without neutrality, instead of a closer analysis of problem difficulty.
+Neutral regions in a discrete landscape form \textit{neutral networks} in hyperspace that can be traversed by stochastic \textit{neutral drift} \cite{katada2003measuring}. When such networks are highly interconnected, local neutral regions may provide a pathway to areas of higher fitness \cite{katada2003measuring}, provided that the search heuristic is appropriately adapted to take advantage of the situation. It is not yet well understood what the effects of neutrality are on the performance of algorithms other than EAs, and indeed research on neutrality with regard to EAs is also inconclusive \cite{galvan2011neutrality}. \citet{galvan2011neutrality} attribute the inconsistent results to conclusions that were based on how fast an algorithm solves a problem with and without neutrality, instead of a closer analysis of problem difficulty.
 
 \section{Error Landscapes of Neural Networks}
 \label{backgroundNNEL}
@@ -200,7 +198,7 @@ In the algorithm, neighbouring solutions are defined as those that are one Hammi
 	\text{ANR} = \frac{\sum_{\vec{x} \in \mathcal{S}}^{} \frac{\lvert \mathcal{N}(\vec{x}) \rvert}{\lvert \mathcal{V}(\vec{x}) \rvert}}{\lvert \mathcal{S} \rvert}
 \end{equation} 
 
-where $\mathcal{N}(\vec{x})$ are the neighbouring solutions of $\vec{x}$ which bear equal fitness to the latter and $\mathcal{V}(\vec{x})$ is the set of all neighbours of $\vec{x}$. The ratio of the cardinality of the two sets produces the neutrality ratio of  $\vec{x}$. This quantity is averaged over all solutions in the sample to obtain the ANR.
+where $\mathcal{N}(\vec{x})$ are the neighbouring solutions of $\vec{x}$ which bear equal fitness to the latter, $\mathcal{V}(\vec{x})$ is the set of all neighbours of $\vec{x}$, and $\mathcal{S}$ is the sample. The ratio of the cardinality of the two sets produces the neutrality ratio of  $\vec{x}$. This quantity is averaged over all solutions in the sample to obtain the ANR.
 
 A number of characteristics pertaining to EAs have also been used to estimate neutrality. \citet{huynen1996smoothness} use the number of nucleotide substitutions (mutations) that reach fixation per generation and call this the \textit{rate of evolution}. \citet{katada2003measuring} base their measure on Kimura's neutral theory \cite{kimura1984neutral} and Nei's standard genetic distance \cite{nei1972genetic}. Kimura states that the number of gene substitutions is directly proportional to the neutrality of the fitness landscape. This theory allows the researchers to use a measure of genetic distance between two populations as a neutrality index. In particular, they use the genetic distance per generation (\textit{rate of gene substitution}). Unfortunately, this quantity is also affected by ruggedness in the landscape \cite{katada2003measuring}. Consequently, their metric does not exclusively measure neutrality. Smith, Husbands, and O'Shea's \textit{fitness evolvability portraits} \cite{smith2002fitness} use an online sample of the fitness landscape to calculate the probability of obtaining offspring with equal or higher fitness than the genotypes in the sample. The higher this probability, the less likely it is that solutions in a given fitness range form local optima. To characterise the landscape, this metric is calculated across samples, each containing solutions within a sufficiently small range of fitness values.
 
@@ -226,44 +224,11 @@ In order to characterise neutrality it is necessary to provide a definition for 
 	f(\vec{x}_{i^{\text{max}}}) - f(\vec{x}_{i^{\text{min}}}) \le \epsilon			 
 \end{equation}
 
-where $i^{\text{max}} = \text{argmax}_i\{f(\vec{x}_i)\}$, $i^{\text{min}} = \text{argmin}_i\{f(\vec{x}_i)\}$ and $i \in [j-1,j+1]$. $f(\cdot)$ refers to the quality (fitness) of the solution. 
-
-The generic algorithm for applying measure ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$ is summarised in algorithm \ref{algNeutralityMeasure}.
-
-\begin{algorithm}[!t]
-	\caption{Generic Neutrality Measure}
-	\label{algNeutralityMeasure}
-	\begin{algorithmic}
-		\STATE Initialise $n_w$ to the number of walks to perform;
-		\STATE Initialise $n_s$, the number of neutral structures to 0;
-		\STATE Initialise $\mathcal{M}$ to the measure to be used;
-		\STATE Initialise the neutrality, \textit{m} to 0;
-		\STATE Initialise \textit{walk}, the sample, to $\emptyset$;
-		\STATE Calculate \textit{startingZoneDelta}, which determines where each walk will begin, using:
-		\begin{equation}
-			\label{eqStartingZoneDelta}
-			\delta = \biggr\lceil \frac{2^n}{n_w} \biggr\rceil
-		\end{equation}
-		\STATE Initialise \textit{numSteps}, \textit{stepSize} and \textit{startingZone} used by algorithm \ref{algProgRandomWalk};
-		\FOR{$\forall i \in [1,n_w] \cap \mathbb{Z}$}
-			\STATE \textit{walk} $\gets$ sample the input problem using algorithm \ref{algProgRandomWalk};
-			\STATE Normalise the sample range in \textit{walk} to $[0,1]$;
-			\IF{$\mathcal{M}$ is ${\mathcal{M}_1}$}
-				\STATE $n_s \gets$ determine the number of neutral structures in \textit{walk} using equation \ref{eqNeutralityDef};
-			\ELSE
-				\STATE $n_s \gets$ determine the length of the longest neutral subsequence in \textit{walk} using equation \ref{eqNeutralityDef};		
-			\ENDIF
-			\STATE \textit{m} $\gets$ \textit{m} + $n_s/\lvert\textit{walk}\rvert$;	
-			\STATE Update \textit{startingZone} using \textit{startingZoneDelta};
-		\ENDFOR
-		\STATE return $\textit{m}/n_w$
-	\end{algorithmic}
-\end{algorithm}
+where $i^{\text{max}} = \text{argmax}_i\{f(\vec{x}_i)\}$, $i^{\text{min}} = \text{argmin}_i\{f(\vec{x}_i)\}$ and $i \in [j-1,j+1]$. $f(\cdot)$ refers to the quality (fitness) of the solution. The next section describes the sampling algorithm used to capture the neighbourhood information of the landscape.
 
 \subsection{Sampling Method}
 \label{sampling}
-
-It is desirable to sample the landscape in a way that preserves neighbourhood information. A uniform sample provides very good coverage of the landscape at lower dimensions but fails to capture local, geographical information between solutions which is required to ascertain the level of neutrality. Additionally, a large number of sample points are required in higher dimensional spaces owing to the \textit{curse of dimensionality} - distances are exaggerated in higher dimensions. 
+It is desirable to sample the landscape in a way that preserves neighbourhood information. A uniform sample provides very good coverage of the landscape at lower dimensions but fails to capture local, topographical information between solutions which is required to ascertain the level of neutrality. Additionally, a large number of sample points are required in higher dimensional spaces owing to the \textit{curse of dimensionality} - distances are exaggerated in higher dimensions. 
 
 The \textit{progressive random walk} \cite{malan2014progressive} algorithm used in this study, performs sampling in sequence. It defines $2^n$ \textit{startingZone}s, the total number of corners in the hypercube in which the sampling takes place. Points (or solutions) along the faces of the hypercube belong to $\textit{startingZone}^{k}$ if corner $k$ is the closest corner to the solutions. $startingZone$ is simply a bit mask (assigned using the coordinates of the associated corner) that is used both to indicate the zone from which a walk commences, as well for directing the remainder of the walk. After a starting zone is chosen, the walk starts at a random position in that zone (a point on a face of the hypercube which belongs to the chosen starting zone). The walk progresses in a random, yet anisotropic fashion in the general direction of the opposite starting zone, making strides no longer than \textit{stepSize}. If the walk hits a boundary in a certain dimension, $i$, it is simply reflected and continues its course as though it originated from the starting zone represented by $startingZone$ after flipping bit $i$. The progressive random walk is discussed in more detail in algorithm \ref{algProgRandomWalk}.
 
@@ -310,6 +275,37 @@ The \textit{progressive random walk} \cite{malan2014progressive} algorithm used 
 	\end{algorithmic}	
 \end{algorithm} 
 
+The generic algorithm for applying measure ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$ to samples generated using algorithm \ref{algProgRandomWalk} is summarised in algorithm \ref{algNeutralityMeasure}.
+
+\begin{algorithm}[!t]
+	\caption{Generic Neutrality Measure}
+	\label{algNeutralityMeasure}
+	\begin{algorithmic}
+		\STATE Initialise $n_w$ to the number of walks to perform;
+		\STATE Initialise $n_s$, the number of neutral structures to 0;
+		\STATE Initialise $\mathcal{M}$ to the measure to be used;
+		\STATE Initialise the neutrality, \textit{m} to 0;
+		\STATE Initialise \textit{walk}, the sample, to $\emptyset$;
+		\STATE Calculate \textit{startingZoneDelta}, which determines where each walk will begin, using:
+		\begin{equation}
+			\label{eqStartingZoneDelta}
+			\delta = \biggr\lceil \frac{2^n}{n_w} \biggr\rceil
+		\end{equation}
+		\STATE Initialise \textit{numSteps}, \textit{stepSize} and \textit{startingZone} used by algorithm \ref{algProgRandomWalk};
+		\FOR{$\forall i \in [1,n_w] \cap \mathbb{Z}$}
+			\STATE \textit{walk} $\gets$ sample the input problem using algorithm \ref{algProgRandomWalk};
+			\STATE Normalise the sample range in \textit{walk} to $[0,1]$;
+			\IF{$\mathcal{M}$ is ${\mathcal{M}_1}$}
+				\STATE $n_s \gets$ determine the number of neutral structures in \textit{walk} using equation \ref{eqNeutralityDef};
+			\ELSE
+				\STATE $n_s \gets$ determine the length of the longest neutral subsequence in \textit{walk} using equation \ref{eqNeutralityDef};		
+			\ENDIF
+			\STATE \textit{m} $\gets$ \textit{m} + $n_s/\lvert\textit{walk}\rvert$;	
+			\STATE Update \textit{startingZone} using \textit{startingZoneDelta};
+		\ENDFOR
+		\STATE return $\textit{m}/n_w$
+	\end{algorithmic}
+\end{algorithm}
 %explain about the PRW that the sequence walk is not interpreted as the sequence of solutions, but the sequence of 3-point objects
 
 \section{Visual Analysis of Proposed Techniques}
@@ -318,83 +314,58 @@ In this section, measure $\mathcal{M}_1$ and $\mathcal{M}_2$ are analysed by com
 
 \subsection{Benchmark Problems}
 \label{visualBenchmarks}
-Functions \ref{eqEasom} through \ref{eqAbsoluteValue} were selected for the analysis. These benchmarks have varying degrees of neutrality, from the completely neutral landscape of $f_{\text{Fl}}$  to the landscape of $f_{\text{AV}}$, in which no two solutions have equal fitness. For reference, plots of the functions are ranked in figure \ref{figVisBenchmark} from most to least neutral (as identified by the authors). When the two measures are applied to the benchmarks, it should be expected that they rank the functions in the same order. Note that $f_{\text{Ea}}$ is the only problem defined only in two dimensions and will therefore not be used when the measures are tested for scalability. Also note that $f_{\textit{St}_2}$ is the same as $f_{\textit{St}_1}$, except zoomed in on a smaller domain. The small plateaus that occur on multiple levels of the landscape are clear from the plot of $f_{\textit{St}_2}$. From the perspective of fitness landscape analysis, although these problems have the same definitions, the difference in their domain imply they will not be treated the same by either an optimisation algorithm or any fitness landscape analysis technique. $f_{\text{Ea}}$ is less neutral than $f_{\text{IT}}$ due to the soft edges and sharp point of the protruding cone. Although the rest of the surface may look more neutral than the surface of $f_{\text{IT}}$, the impact of the gradients near the cone cannot be appreciated at this scale.
-\\\\
-Easom \cite{van2006study},
-\begin{multline}
-\label{eqEasom}
-	f_{\text{Ea}}(x_1, x_2)= 1 - cos(x_1) \cdot cos(x_2) \cdot e^{-{(x_1 - \pi)}^2-{(x_2-\pi)}^2},\\
-	x_1, x_2 \in [-10,10]		
-\end{multline}
+Seven functions, summarised in Table~\ref{functionBenchmarks}, were selected for the analysis. These benchmarks have varying degrees of neutrality, from the completely neutral landscape of $f_{\text{Fl}}$  to the landscape of $f_{\text{AV}}$, in which no two solutions have equal fitness. For reference, plots of the functions are ranked in figure \ref{figVisBenchmark} from most to least neutral (as identified by the authors). When the two measures are applied to the benchmarks, it should be expected that they rank the functions in the same order. Note that $f_{\text{Ea}}$ is the only problem defined only in two dimensions and will therefore not be used when the measures are tested for scalability. Also note that $f_{\textit{St}_2}$ is the same as $f_{\textit{St}_1}$, except zoomed in on a smaller domain. The small plateaus that occur on multiple levels of the landscape are clear from the plot of $f_{\textit{St}_2}$. From the perspective of fitness landscape analysis, although these problems have the same definitions, the difference in their domain implies they will not be treated the same by either an optimisation algorithm or any fitness landscape analysis technique. $f_{\text{Ea}}$ is less neutral than $f_{\text{IT}}$ due to the soft edges and sharp point of the protruding cone. Although the rest of the surface may look more neutral than the surface of $f_{\text{IT}}$, the impact of the gradients near the cone cannot be appreciated at this scale.
 
-Inverted Table \cite{malan2009quantifying},
-\begin{multline}
-\label{eqInvertedTable}
-	f_{\text{IT}}(\vec{x}) = \begin{cases} 
-							0 & \exists i \in [1,n] \text{ such that } x_i \in [-2.5, 2.5] \\
-							1 & \text{otherwise} \\							
-						  \end{cases},\\
-    x_i \in [-5,5] 
-\end{multline}
-
-Flat,
-\begin{multline}
-\label{eqFlat}
-	f_{\text{Fl}}(\vec{x})= 1,\\
-	x_1, x_2 \in [-5,5]		
-\end{multline}
-
-Inverted Almost-flat \cite{malan2014characterising},
-\begin{multline}
-\label{eqAlmostFlat}
-	f_{\text{IA}}(\vec{x}) = \begin{cases} 
+\begin{table*}[!htb]
+%% increase table row spacing, adjust to taste
+%\renewcommand{\arraystretch}{0.9}
+\renewcommand{\arraystretch}{1.3}
+%\setlength{\tabcolsep}{3pt}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+\caption{Benchmark Problems, sorted according to the decreasing degree of neutrality}
+\label{functionBenchmarks}
+\centering
+%% Some packages, such as MDW tools, offer better commands for making tables
+%% than the plain LaTeX2e tabular which is used here.
+\begin{tabular}{llll}
+\hline
+{\bf Function} & Name, Source & Definition & Range\\
+\hline\noalign{\smallskip}
+$f_{\text{Fl}}$ & Flat & $f_{\text{Fl}}(\vec{x})= 1$ & $x_1, x_2 \in [-5,5]$ \\
+$f_{\text{IA}}$ &Inverted Almost-flat \cite{malan2014characterising}&$f_{\text{IA}}(\vec{x}) = \begin{cases} 
 								0 & \exists i \in [1,n] \text{ such that } x_i \in [-0.5, 0.5] \\
 								1 & \text{otherwise} \\							
-						     \end{cases},\\
-	x_i \in [-5,5] 		
-\end{multline}
-
-Step 1 \cite{malan2009quantifying},
-\begin{multline}
-\label{eqStep1}
-	f_{\textit{St}_1}(\vec{x}) = \sum_{i=1}^{n} (\lfloor x_i + 0.5 \rfloor)^2,\\
-	x_i \in [-100,100]
-\end{multline}
-
-Step 2, 
-\begin{multline}
-\label{eqStep2}
-	f_{\textit{St}_2}(\vec{x}) = \sum_{i=1}^{n} (\lfloor x_i + 0.5 \rfloor)^2,\\
-	x_i \in [-10,10] 	
-\end{multline}
-
-Absolute Value,
-\begin{multline}
-\label{eqAbsoluteValue}
-	f_{\text{AV}}(\vec{x}) = \sum_{i=1}^{n} \left| x_i \right|,\\
-	x_i \in [-100,100] 	
-\end{multline}
+						     \end{cases}$ & $x_i \in [-5,5]$ \\
+$f_{\text{IT}}$ & Inverted Table \cite{malan2009quantifying}& $f_{\text{IT}}(\vec{x}) = \begin{cases} 
+							0 & \exists i \in [1,n] \text{ such that } x_i \in [-2.5, 2.5] \\
+							1 & \text{otherwise} \\							
+						  \end{cases}$ & $x_i \in [-5,5]$ \\
+$f_{\text{Ea}}$ & Easom \cite{van2006study}& $f_{\text{Ea}}(x_1, x_2)= 1 - cos(x_1) \cdot cos(x_2) \cdot e^{-{(x_1 - \pi)}^2-{(x_2-\pi)}^2}$ & $x_1, x_2 \in [-10,10]$\\
+$f_{\textit{St}_2}$&Step 2 \cite{malan2009quantifying}&$f_{\textit{St}_2}(\vec{x}) = \sum_{i=1}^{n} (\lfloor x_i + 0.5 \rfloor)^2$&$x_i \in [-10,10]$\\
+$f_{\textit{St}_1}$&Step 1 \cite{malan2009quantifying}&$f_{\textit{St}_1}(\vec{x}) = \sum_{i=1}^{n} (\lfloor x_i + 0.5 \rfloor)^2$&$x_i \in [-100,100]$\\
+$f_{\text{AV}}$&Absolute Value&$f_{\text{AV}}(\vec{x}) = \sum_{i=1}^{n} \left| x_i \right|$&$x_i \in [-100,100] $\\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{table*}
 
 \begin{figure*}[!t]
 \centering
-
-\subfloat[Flat]{\includegraphics[width=0.33\linewidth]{flat}%
+\subfloat[Flat]{\includegraphics[width=0.25\linewidth]{flat}%
 \label{figFlat}}
-\subfloat[Inverted Almost-flat]{\includegraphics[width=0.33\linewidth]{almostFlat}%
+\subfloat[Inverted Almost-flat]{\includegraphics[width=0.25\linewidth]{almostFlat}%
 \label{figAlmostFlat}}
-\subfloat[Inverted Table]{\includegraphics[width=0.33\linewidth]{table}%
+\subfloat[Inverted Table]{\includegraphics[width=0.25\linewidth]{table}%
 \label{figTable}}
-
-\subfloat[Easom]{\includegraphics[width=0.33\linewidth]{easom}%
+\subfloat[Easom]{\includegraphics[width=0.25\linewidth]{easom}%
 \label{figEasom}}
-\subfloat[Step 2]{\includegraphics[width=0.33\linewidth]{step2}%
-\label{figStep2}}
-\subfloat[Step 1]{\includegraphics[width=0.33\linewidth]{step1}%
-\label{figStep1}}
 
-\subfloat[Absolute Value]{\includegraphics[width=0.33\linewidth]{absoluteValue}%
+\subfloat[Step 2]{\includegraphics[width=0.25\linewidth]{step2}%
+\label{figStep2}}
+\subfloat[Step 1]{\includegraphics[width=0.25\linewidth]{step1}%
+\label{figStep1}}
+\subfloat[Absolute Value]{\includegraphics[width=0.25\linewidth]{absoluteValue}%
 \label{figAbsoluteValue}}
-\hfill\null
 
 \caption{Surface plots of two-dimensional benchmark problems, ranked according to the observed degree of neutrality}
 \label{figVisBenchmark}
@@ -421,7 +392,7 @@ The values for the extreme cases of $f_{\text{Fl}}$ and $f_{\text{AV}}$ confirm 
 
 \begin{table}[!t] 
 	\renewcommand{\arraystretch}{1.3}
-	\caption{Averages and standard deviations of ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$ for dimensions $n = 2$, on problems \ref{eqEasom}-\ref{eqAbsoluteValue}, in decreasing order}
+	\caption{Averages and standard deviations of ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$ for dimensions $n = 2$, on problems summarised in Table~\ref{functionBenchmarks}, in decreasing order}
 	\label{tblStaticProblems2}
 	\centering
 	\begin{tabular}{|l|c|c|}
@@ -443,7 +414,7 @@ Tables \ref{tblStaticProblemsNM1} and \ref{tblStaticProblemsNM2} show the values
 	
 	\centering
 		\renewcommand{\arraystretch}{1.3}
-	\caption{Averages and standard deviations of ${\mathcal{M}_1}$ for increasing dimensions, $n$, on scalable problems \ref{eqInvertedTable}-\ref{eqAbsoluteValue}. Ranking is indicated by shades of grey, with darker shades corresponding to higher values for ${\mathcal{M}_1}$}
+	\caption{Averages and standard deviations of ${\mathcal{M}_1}$ for increasing dimensions, $n$, on scalable problems from Table~\ref{functionBenchmarks}. Ranking is indicated by shades of grey, with darker shades corresponding to higher values for ${\mathcal{M}_1}$}
 	\label{tblStaticProblemsNM1}
 	\begin{tabular}{|l|c|c|c|c|c|}
 		\hline
@@ -462,7 +433,7 @@ Tables \ref{tblStaticProblemsNM1} and \ref{tblStaticProblemsNM2} show the values
 \begin{table*}[]
 	\centering
 	\renewcommand{\arraystretch}{1.3}
-	\caption{Averages and standard deviations of ${\mathcal{M}_2}$ for increasing dimensions, $n$, on scalable problems \ref{eqInvertedTable}-\ref{eqAbsoluteValue}. Ranking is indicated by shades of grey, with darker shades corresponding to higher values for ${\mathcal{M}_2}$}
+	\caption{Averages and standard deviations of ${\mathcal{M}_2}$ for increasing dimensions, $n$, on scalable problems from Table~\ref{functionBenchmarks}. Ranking is indicated by shades of grey, with darker shades corresponding to higher values for ${\mathcal{M}_2}$}
 	\label{tblStaticProblemsNM2}
 	\begin{tabular}{|l|c|c|c|c|c|}
 		\hline
@@ -477,20 +448,20 @@ Tables \ref{tblStaticProblemsNM1} and \ref{tblStaticProblemsNM2} show the values
 	\end{tabular}
 \end{table*}
 
-\begin{figure}[!t]
+\begin{figure}[!ht]
 	\centering
 	\subfloat[]{\includegraphics[width=\linewidth]{neutralityVsDimensionsM1}}%
 	\label{figNeutralityVsDimensionsM1}	
 		
 	\subfloat[]{\includegraphics[width=\linewidth]{neutralityVsDimensionsM2}}%
 	\label{figNeutralityVsDimensionsM2}	
-	\caption{Degree of neutrality measured versus dimensionality on problems \ref{eqInvertedTable}-\ref{eqAbsoluteValue} using (a) ${\mathcal{M}_1}$ and (b) ${\mathcal{M}_2}$ }
+	\caption{Degree of neutrality measured versus dimensionality on problems from Table~\ref{functionBenchmarks} using (a) ${\mathcal{M}_1}$ and (b) ${\mathcal{M}_2}$ }
 	\label{figNeutralityVsDimensions}
 \end{figure}
 
 Figure \ref{figStep2Sampled} shows a projection of the $f_{\textit{St}_2}$ landscape on the XY-plane, together with a sample of the landscape resulting from a single run of the algorithm. This illustrates that, at least in two dimensions, the sample of the surface exhibits good variability and doesn't neglect large parts of the search space.
 
-\begin{figure}[!t]
+\begin{figure}[!ht]
 	\centering
 	\includegraphics[width=\linewidth]{step2Sampled}%
 		
@@ -547,9 +518,6 @@ The parameters of the experiment were the same as in section \ref{visualAnalysis
 In this paper, it was shown how two complementary measures of neutrality, ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$, based on a progressive random walk sample of the landscape, can successfully be used to characterise the search landscape in terms of the presence and size of neutral regions. The measures were tested on a relatively small set of benchmark functions that can be expanded in future research. The definition of the neutrality measures also allow for various levels of sensitivity to be adjusted, optimal values of which have yet to be determined empirically in an extensive study. $\epsilon$ can be increased in cases where the detection of near-neutrality is important. 
 
 ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$ have also helped confirm the saturation-induced neutrality present in NN error landscapes. The results were however in disagreement with other studies that have suggested that regions around the origin are often neutral when using a symmetric activation function \cite{lecun2012efficient}, but further investigation is necessary on a larger benchmark suite and more combinations of loss- and activation functions to determine if the phenomenon does indeed occur.
-
-% use section* for acknowledgment
-\section*{Acknowledgement}
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
