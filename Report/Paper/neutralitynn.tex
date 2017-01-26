@@ -199,7 +199,7 @@ In the algorithm, neighbouring solutions are defined as those that are one Hammi
 	\text{ANR} = \frac{\sum_{\vec{x} \in \mathcal{S}}^{} \frac{\lvert \mathcal{N}(\vec{x}) \rvert}{\lvert \mathcal{V}(\vec{x}) \rvert}}{\lvert \mathcal{S} \rvert}
 \end{equation} 
 
-where $\mathcal{N}(\vec{x})$ are the neighbouring solutions of $\vec{x}$ which bear equal fitness to the latter, $\mathcal{V}(\vec{x})$ is the set of all neighbours of $\vec{x}$, and $\mathcal{S}$ is the sample. The ratio of the cardinality of the two sets produces the neutrality ratio of  $\vec{x}$. This quantity is averaged over all solutions in the sample to obtain the ANR.
+where $\mathcal{N}(\vec{x})$ are the neighbouring solutions of $\vec{x}$ which bear equal fitness to the latter, $\mathcal{V}(\vec{x})$ is the set of all neighbours of $\vec{x}$, and $\mathcal{S}$ is the sample. The ratio of the cardinality of the two sets produces the neutrality ratio of $\vec{x}$. This quantity is averaged over all solutions in the sample to obtain the ANR.
 
 A number of characteristics pertaining to EAs have also been used to estimate neutrality. \citet{huynen1996smoothness} use the number of nucleotide substitutions (mutations) that reach fixation per generation and call this the \textit{rate of evolution}. \citet{katada2003measuring} base their measure on Kimura's neutral theory \cite{kimura1984neutral} and Nei's standard genetic distance \cite{nei1972genetic}. Kimura states that the number of gene substitutions is directly proportional to the neutrality of the fitness landscape. This theory allows the researchers to use a measure of genetic distance between two populations as a neutrality index. In particular, they use the genetic distance per generation (\textit{rate of gene substitution}). Unfortunately, this quantity is also affected by ruggedness in the landscape \cite{katada2003measuring}. Consequently, their metric does not exclusively measure neutrality. Smith, Husbands, and O'Shea's \textit{fitness evolvability portraits} \cite{smith2002fitness} use an online sample of the fitness landscape to calculate the probability of obtaining offspring with equal or higher fitness than the genotypes in the sample. The higher this probability, the less likely it is that solutions in a given fitness range form local optima. To characterise the landscape, this metric is calculated across samples, each containing solutions within a sufficiently small range of fitness values.
 
@@ -409,7 +409,7 @@ The values for the extreme cases of $f_{\text{Fl}}$ and $f_{\text{AV}}$ confirm 
 	\end{tabular}
 \end{table}
 
-Tables \ref{tblStaticProblemsNM1} and \ref{tblStaticProblemsNM2} show the values for measures ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$ on problems whose dimensions were scaled. Importantly, it is evident from both tables that the same order established in two dimensions are preserved across the other dimensions (as indicated by the colour coding). The measures maintain the same level of consistency as in two dimensions. It is worth noting the tendencies for both measures, on all problems, to gravitate to 0 or 1 as the dimensions increase (see figure \ref{figNeutralityVsDimensions}). This behaviour was thought to be associated with the insensitivity of algorithm parameters such as the \textit{stepSize} or perhaps the number of walks, but experiments that were repeated with absurd values that would be computationally infeasible in practice showed that, although more accurate, the measures presented the same tendencies. For reference, the number of walks were set to $2^n$ and \textit{numSteps} for ${\mathcal{M}_1}$ was set to 2000 when the behaviour was still apparent. It can therefore be concluded that the behaviour is either due to neutrality only appearing in a subset of the dimensions, for some problems, as dimensions increase, or the degree of neutrality increases for some problems as they are stretched out in higher dimensions. In both cases the behaviour is due to some change in the fitness landscape in higher dimensions.
+Tables \ref{tblStaticProblemsNM1} and \ref{tblStaticProblemsNM2} show the values for measures ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$ on problems whose dimensions were scaled. It is evident from both tables that the same order established in two dimensions are preserved across the other dimensions (as indicated by the colour coding). The measures maintain the same level of consistency as in two dimensions. It is worth noting the tendencies for both measures, on all problems, to gravitate to 0 or 1 as the dimensions increase (see figure \ref{figNeutralityVsDimensions}). This behaviour was thought to be associated with the insensitivity of algorithm parameters such as the \textit{stepSize} or perhaps the number of walks, but experiments that were repeated with absurd values that would be computationally infeasible in practice showed that, although more accurate, the measures presented the same tendencies. For reference, the number of walks were set to $2^n$ and \textit{numSteps} for ${\mathcal{M}_1}$ was set to 2000 when the behaviour was still apparent. It can therefore be concluded that the behaviour is either due to neutrality only appearing in a subset of the dimensions, for some problems, as dimensions increase, or the degree of neutrality increases for some problems as they are stretched out in higher dimensions. In both cases the behaviour is due to some change in the fitness landscape in higher dimensions.
 
 \begin{table*}[!t]
 	
@@ -460,7 +460,7 @@ Tables \ref{tblStaticProblemsNM1} and \ref{tblStaticProblemsNM2} show the values
 	\label{figNeutralityVsDimensions}
 \end{figure}
 
-Figure \ref{figStep2Sampled} shows a projection of the $f_{\textit{St}_2}$ landscape on the XY-plane, together with a sample of the landscape resulting from a single run of the algorithm. This illustrates that, at least in two dimensions, the sample of the surface exhibits good variability and doesn't neglect large parts of the search space.
+Figure \ref{figStep2Sampled} shows a projection of the $f_{\textit{St}_2}$ landscape on the $x_1x_2$-plane, together with a sample of the landscape resulting from a single run of the algorithm. This illustrates that, at least in two dimensions, the sample of the surface exhibits good variability and doesn't neglect large parts of the search space.
 
 \begin{figure}[!ht]
 	\centering
@@ -476,7 +476,7 @@ One area of application for the proposed neutrality measures, is the study of NN
 
 \subsection{Benchmark Problems}
 \label{nnBenchmarks}
-For this part of the study, apart from the XOR problem, benchmarks of varying complexity were obtained from the UCI Machine Learning Repository \cite{Lichman2013}. Optimal NN architectures for each benchmark were employed, summarised in table \ref{tblNNBenchmarks}. This phase of the study was limited to feed-forward NNs, using the Sigmoid activation function and mean squard error (MSE) as the error function.
+For this phase of the study, apart from the XOR problem, benchmarks of varying complexity were obtained from the UCI Machine Learning Repository \cite{Lichman2013}. Optimal NN architectures for each benchmark were employed, summarised in table \ref{tblNNBenchmarks}. The study was limited to feed-forward NNs, using the sigmoid activation function and the mean squared error (MSE) loss function.
 
 \begin{table}[!t] 
 	\renewcommand{\arraystretch}{1.3}
@@ -499,10 +499,18 @@ All pattern inputs and outputs in the benchmark suite were scaled to the active 
 	
 \subsection{Approach}
 \label{nnApproach}
-The parameters of the experiment were the same as in section \ref{visualAnalysis}, except that the number of walks was restricted to $2n$.
+The parameters of the experiment were similar to that in section \ref{visualAnalysis}, except for a few minor deviations.
+
+\begin{itemize}
+	\item Algorithm \ref{algNeutralityMeasure} was again applied 30 independent times for each measure, to each of the benchmark problems in table \ref{tblNNBenchmarks}. This was done for various values of $x^{\text{max}}$, with the domain of the sample in all dimensions defined as $[-x^{\text{max}}, x^{\text{max}}]$.
+	\item Sampling the NN problems were prohibitively expensive, and therefore the number of walks was restricted to $2n$.
+	\item All other parameters were the same.
+\end{itemize}
 
 \subsection{Results}
 \label{nnResults}
+
+
 
 \begin{figure}[!t]
 	\centering
@@ -511,7 +519,7 @@ The parameters of the experiment were the same as in section \ref{visualAnalysis
 	
 	\subfloat[]{\includegraphics[width=\linewidth]{nnNeutralityVsDomainM2}}%
 	\label{figNNM2}	
-	\caption{Degree of neutrality measured versus the sample bounds on NN benchmarks in section \ref{nnBenchmarks} using (a) ${\mathcal{M}_1}$ and (b) ${\mathcal{M}_2}$. The domain of each dimension, $x_i$, has been fixed to $[x^{\text{min}}, x^{\text{max}}]$ with $\lvert x^{\text{max}} \rvert = \lvert x^{\text{min}} \rvert$}
+	\caption{Degree of neutrality measured versus the sample bounds on NN benchmarks in section \ref{nnBenchmarks} using (a) ${\mathcal{M}_1}$ and (b) ${\mathcal{M}_2}$. The domain of each dimension, $x_i$, has been fixed to $[-x^{\text{max}}, x^{\text{max}}]$}
 	\label{figNNNeutralityVsDomain}
 \end{figure}
 

@@ -23,7 +23,7 @@ public class ProgressiveRandomWalkSampler implements Sampler{
     public ProgressiveRandomWalkSampler(RealProblem _problem, int _stepCount, double _stepRatio) {
         problem = _problem;
         //todo: extract magic number to config file
-        walkCount = 10*problem.getDimensionality();
+        walkCount = 2*problem.getDimensionality();
         stepSize = (problem.getUpperBound() - problem.getLowerBound()) * _stepRatio;
         stepCount = _stepCount;
         startingZoneDelta = (int) Math.ceil(Math.pow(2, problem.getDimensionality()) / (double) walkCount);
