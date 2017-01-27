@@ -56,7 +56,7 @@ public class StudyRunner {
 //            new Study_1D_Tunable_Q().setup(new NeutralityMeasure1()).run();    
 //            new Study_1D_Tunable_S().setup(new NeutralityMeasure1()).run();    
             
-            new Study_2D_Simple().setup(new NeutralityMeasure1()).run();
+//            new Study_2D_Simple().setup(new NeutralityMeasure1()).run();
 //            new Study_2D_Tunable_Q().setup(new NeutralityMeasure1()).run();            
 //            new Study_2D_Tunable_S().setup(new NeutralityMeasure1()).run();            
             
@@ -64,7 +64,7 @@ public class StudyRunner {
 //            new Study_ND_Tunable_R().setup(new NeutralityMeasure1()).run();
 
 //            new Study_NN_Error_Simple().setup(new NeutralityMeasure1()).run();
-//            new Study_NN_Error_Tunable_Dom().setup(new NeutralityMeasure1()).run();
+            new Study_NN_Error_Tunable_Dom().setup(new NeutralityMeasure1()).run();
 
             
 
