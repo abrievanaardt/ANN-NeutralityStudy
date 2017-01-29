@@ -502,7 +502,7 @@ All pattern inputs and outputs in the benchmark suite were scaled to the active 
 The parameters of the experiment were similar to that in section \ref{visualAnalysis}, except for a few minor deviations.
 
 \begin{itemize}
-	\item Algorithm \ref{algNeutralityMeasure} was again applied 30 independent times for each measure, to each of the benchmark problems in table \ref{tblNNBenchmarks}. This was done for various values of $x^{\text{max}}$, with the domain of the sample in all dimensions defined as $[-x^{\text{max}}, x^{\text{max}}]$.
+	\item Algorithm \ref{algNeutralityMeasure} was again applied 30 independent times for each measure, to each of the benchmark problems in table \ref{tblNNBenchmarks}. This was done for various values of $x^{\text{max}}$, with the domain of the sample in all dimensions defined as $[-x^{\text{max}}, x^{\text{max}}]$, with $x^{\text{max}} > 0$.
 	\item Sampling the NN problems were prohibitively expensive, and therefore the number of walks was restricted to $2n$.
 	\item All other parameters were the same.
 \end{itemize}
@@ -519,7 +519,7 @@ The parameters of the experiment were similar to that in section \ref{visualAnal
 	
 	\subfloat[]{\includegraphics[width=\linewidth]{nnNeutralityVsDomainM2}}%
 	\label{figNNM2}	
-	\caption{Degree of neutrality measured versus the sample bounds on NN benchmarks in section \ref{nnBenchmarks} using (a) ${\mathcal{M}_1}$ and (b) ${\mathcal{M}_2}$. The domain of each dimension, $x_i$, has been fixed to $[-x^{\text{max}}, x^{\text{max}}]$}
+	\caption{Degree of neutrality measured versus the sample bounds on NN benchmarks in section \ref{nnBenchmarks} using (a) ${\mathcal{M}_1}$ and (b) ${\mathcal{M}_2}$. The domain of each dimension, $x_i$, has been fixed to $[-x^{\text{max}}, x^{\text{max}}]$, with $x^{\text{max}} > 0$}
 	\label{figNNNeutralityVsDomain}
 \end{figure}
 
