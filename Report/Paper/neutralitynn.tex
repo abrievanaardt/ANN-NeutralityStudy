@@ -484,11 +484,11 @@ Tables \ref{tblStaticProblemsNM1} and \ref{tblStaticProblemsNM2} show the values
 
 \section{Application to Neural Network Error Landscapes}
 \label{nnELApplication}
-One area of application for the proposed neutrality measures is the study of NN error landscapes. As noted in section \ref{backgroundNNEL}, it has long been thought that the NN error surface consists of large neutral regions such as plateaus and ridges. This section of the paper applies ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$ to some well-known benchmark data sets for classification.
+One area of application for the proposed neutrality measures is the study of NN error landscapes. As noted in section \ref{backgroundNNEL}, it has long been thought that the NN error surface consists of large neutral regions such as plateaus and ridges. This section of the paper applies ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$ to some well-known benchmark datasets for classification.
 
 \subsection{Benchmark Problems}
 \label{nnBenchmarks}
-For this phase of the study, apart from the XOR problem, benchmarks of varying complexity were obtained from the UCI Machine Learning Repository \cite{Lichman2013}. Optimal NN architectures for each benchmark were employed, summarised in Table~\ref{tblNNBenchmarks}. The study was limited to feed-forward NNs, using the tanh symmetric activation function and the mean squared error (MSE) loss function.
+For this phase of the study, apart from the XOR problem, benchmarks of varying complexity were obtained from the UCI Machine Learning Repository \cite{Lichman2013}. Optimal NN architectures for each benchmark were employed, summarised in Table~\ref{tblNNBenchmarks}. The study was limited to feed-forward NNs, using the tanh \cite{lecun1989generalization} symmetric activation function ($1.7159\cdot tanh(\frac{2}{3}x)$) and the mean squared error (MSE) loss function.
 
 \begin{table}[!t] 
 	\renewcommand{\arraystretch}{1.3}
@@ -522,8 +522,9 @@ The parameters of the experiment were similar to that in section \ref{visualAnal
 \subsection{Results}
 \label{nnResults}
 
+Figure \ref{figNNNeutralityVsDomain} shows the neutrality measured for datasets in table \ref{tblNNBenchmarks} using ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$, respectively, for increasing domains centred around the origin of the MSE search space. Note the scale applied to the x-axis for readability. The first observation that can be made is the similarity in the behaviour of both measures. This suggests that most of the neutrality measured across all problems can be attributed to large plateaus. These plateaus are larger and occur more frequently further away from the origin. Regions as far as $x^{\text{max}} = 1000$ correspond to large absolute NN weight values that saturate the activation functions, causing all nodes to produce an absolute output close to 1 (in the case of tanh) and leading to the same error values irrespective of the direction of the weight vector. The neutrality induced by the saturation phenomenon is evident from the results.
 
-
+There is also measurable neutrality in regions close to the origin, $x_i \in [0.05, 1]$. This view of the NN landscape produced by symmetric activation functions is shared by \citet{lecun2012efficient}. The results explain why the optimal values for weight initialisation are small, but also not too close to 0. The non-zero gradients in this region provide the most information to gradient-based training algorithms.
 
 \begin{figure}[!t]
 	\centering
@@ -539,7 +540,7 @@ The parameters of the experiment were similar to that in section \ref{visualAnal
 \section{Conclusion}
 This paper proposed two complementary measures of neutrality, ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$, based on a progressive random walk sample of the landscape, to characterise a search landscape in terms of the presence and extent of neutral regions. The measures were tested on a relatively small set of benchmark functions that can be expanded in future research. The definition of the neutrality measures also allow for various levels of sensitivity to be adjusted, optimal values of which have yet to be determined empirically in an extensive study. $\epsilon$ can be increased in cases where the detection of near-neutrality is important. 
 
-${\mathcal{M}_1}$ and ${\mathcal{M}_2}$ have also helped confirm the saturation-induced neutrality present in NN error landscapes. The results also agree with the observation of \citet{lecun2012efficient} that regions around the origin are often neutral when using a symmetric activation function, but further investigation is necessary on a larger benchmark suite and more combinations of loss- and activation functions to determine if the phenomenon does indeed occur.
+${\mathcal{M}_1}$ and ${\mathcal{M}_2}$ have also helped confirm the saturation-induced neutrality present in NN error landscapes. The results agree with the observation of \citet{lecun2012efficient} that regions around the origin are often neutral when using a symmetric activation function, but further investigation is necessary on a larger benchmark suite and more combinations of loss- and activation functions to determine if the phenomenon does indeed occur.
 
 The proposed measures could be used to study the relationship between the degree of neutrality and search algorithm performance, and could ultimately be added to the FLA practitioner's arsenal to perform algorithm selection based on problem characteristics.
 
