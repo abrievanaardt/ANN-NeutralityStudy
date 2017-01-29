@@ -21,6 +21,7 @@ import ac.up.cos700.neutralitystudy.neuralnet.util.FFNeuralNetBuilder;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ThresholdOutOfBoundsException;
 import ac.up.cos700.neutralitystudy.neuralnet.util.ZeroNeuronException;
 import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure1;
+import ac.up.cos700.neutralitystudy.neutralitymeasure.NeutralityMeasure2;
 import ac.up.cos700.neutralitystudy.sampling.ProgressiveRandomWalkSampler;
 import ac.up.malan.phd.sampling.Walk;
 import ac.up.malan.phd.sampling.util.SampleException;
@@ -82,7 +83,7 @@ public class StudyRunner {
 //            new Study_ND_Tunable_R().setup(new NeutralityMeasure2()).run();
 //
 //            new Study_NN_Error_Simple().setup(new NeutralityMeasure2()).run();
-//            new Study_NN_Error_Tunable_Dom().setup(new NeutralityMeasure2()).run();
+            new Study_NN_Error_Tunable_Dom().setup(new NeutralityMeasure2()).run();
             
             
 //NOT WORKING WITH MEASURE 3 ANYMORE

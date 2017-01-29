@@ -30,7 +30,7 @@ public class Study_NN_Error extends Study {
 
             String[] datasetNames = new String[]{
                 "cancer",
-//                  "xor",
+                  "xor",
 //                  "and",
                 "diabetes",
                 "glass",
