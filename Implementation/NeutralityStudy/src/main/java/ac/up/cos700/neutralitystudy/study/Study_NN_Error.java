@@ -29,13 +29,13 @@ public class Study_NN_Error extends Study {
         try {
 
             String[] datasetNames = new String[]{
-//                "cancer",
+                "cancer",
                   "xor",
 //                  "and",
-//                "diabetes",
-//                "glass",
-//                "heart",
-//                "iris"
+                "diabetes",
+                "glass",
+                "heart",
+                "iris"
             };
 
             problems = new RealProblem[datasetNames.length];
@@ -43,7 +43,7 @@ public class Study_NN_Error extends Study {
             for (int i = 0; i < problems.length; i++) {
                 Dataset dataset = Dataset
                         .fromFile(PATH_PREFIX
-                                + Sigmoid.class.getSimpleName().toLowerCase()
+                                + Tanh.class.getSimpleName().toLowerCase()
                                 + "/" + datasetNames[i]                                
                                 + EXT);
 
