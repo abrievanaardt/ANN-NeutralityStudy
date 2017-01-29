@@ -276,15 +276,15 @@ Two metrics are extracted from the neighbourhood information provided by a walk,
 	\item Measure 1 (${\mathcal{M}_1}$) - The proportion of neutral structures in $\mathcal{W}$. This measure estimates to what degree neutrality is present in the landscape. ${\mathcal{M}_1}$ is defined as:
           \begin{equation}
             \label{eqNeutralityM1}
-	    {\mathcal{M}_1} = \frac{s_{neutral}}{s_{total}}
+	    {\mathcal{M}_1} = \frac{s_{\text{neutral}}}{\lvert \mathcal{W} \rvert}
           \end{equation}
-where $s_{neutral}$ is the number of neutral 3-point structures in $\mathcal{W}$ (see Equation~(\ref{eqNeutralityDef})), and $s_{total}$ is the total number of 3-point structures in $\mathcal{W}$.
+where $s_{\text{neutral}}$ is the number of neutral 3-point structures in $\mathcal{W}$ (see Equation~(\ref{eqNeutralityDef})), and $\lvert \mathcal{W} \rvert$ is the total number of 3-point structures in $\mathcal{W}$.
 	\item Measure 2 (${\mathcal{M}_2}$) - The length of the largest subsequence of neutral structures in $\mathcal{W}$, proportionate to $\lvert \mathcal{W} \rvert$. This measure estimates the size of the largest neutral region. ${\mathcal{M}_2}$ is defined as:
           \begin{equation}
             \label{eqNeutralityM2}
-	    {\mathcal{M}_2} = \frac{\lvert w_{max} \rvert}{\lvert \mathcal{W} \rvert}
+	    {\mathcal{M}_2} = \frac{\lvert w_{\text{max}} \rvert}{\lvert \mathcal{W} \rvert}
           \end{equation}
-where $w_{max}$ is the largest subset of $\mathcal{W}$ consisting of neutral 3-point objects only.
+where $w_{\text{max}}$ is the largest subset of $\mathcal{W}$ consisting of neutral 3-point objects only.
 \end{itemize}
 
 Both measures produce an output in the range~$[0,1]$, where $0$ indicates that the landscape contains no neutral regions (as per the granularity of the algorithm parameters), and $1$ indicates a completely flat landscape where all solutions lie on a single fitness level.
