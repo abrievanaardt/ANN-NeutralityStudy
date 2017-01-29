@@ -488,7 +488,7 @@ One area of application for the proposed neutrality measures is the study of NN 
 
 \subsection{Benchmark Problems}
 \label{nnBenchmarks}
-For this phase of the study, apart from the XOR problem, benchmarks of varying complexity were obtained from the UCI Machine Learning Repository \cite{Lichman2013}. Optimal NN architectures for each benchmark were employed, summarised in Table~\ref{tblNNBenchmarks}. The study was limited to feed-forward NNs, using the sigmoid activation function and the mean squared error (MSE) loss function.
+For this phase of the study, apart from the XOR problem, benchmarks of varying complexity were obtained from the UCI Machine Learning Repository \cite{Lichman2013}. Optimal NN architectures for each benchmark were employed, summarised in Table~\ref{tblNNBenchmarks}. The study was limited to feed-forward NNs, using the tanh symmetric activation function and the mean squared error (MSE) loss function.
 
 \begin{table}[!t] 
 	\renewcommand{\arraystretch}{1.3}
@@ -507,7 +507,7 @@ For this phase of the study, apart from the XOR problem, benchmarks of varying c
 	\end{tabular}
 \end{table}
 
-All pattern inputs and outputs in the benchmark suite were scaled to the active domain and range of the Sigmoid activation function, $[-1,1]$ and $[0.1,0.9]$, respectively.
+All pattern inputs and outputs in the benchmark suite were scaled to the active domain and range of the tanh function, $[-1,1]$.
 	
 \subsection{Approach}
 \label{nnApproach}
