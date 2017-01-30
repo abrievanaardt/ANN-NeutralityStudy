@@ -510,7 +510,7 @@ The parameters of the experiment were similar to that in Section \ref{visualAnal
 
 \subsection{Results}
 \label{nnResults}
-Figure \ref{figNNNeutralityVsDomain} shows the neutrality measured for the various NNs problems using ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$, respectively, for increasing domains centred around the origin of the MSE search space. Note the scale applied to the x-axis for readability. The first observation that can be made is the similarity in the behaviour of both measures across all problems: 
+Figure \ref{figNNNeutralityVsDomain} shows the neutrality measured for the various NN problems using ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$, respectively, for increasing domains centred around the origin of the MSE search space. Note the scale applied to the x-axis for readability. The first observation that can be made is the similarity in the behaviour of both measures across all problems: 
 \begin{itemize}
   \item Some neutrality is observed around the origin.
   \item No neutrality is observed for $1 < x_{\text{max}} < 10$.
@@ -550,7 +550,7 @@ No neutrality for $1 < x_{\text{max}} < 10$ indicates that this part of the sear
 
 Finally, increasing neutrality for $x_{\text{max}} > 10$ corresponds to growing plateaus associated with neuron saturation. Regions as far as $x_{\text{max}} = 1000$ correspond to large absolute NN weight values that saturate the activation functions, causing all nodes to produce outputs close to the asymptotic values of the activation functions. A saturated neuron becomes insensitive to small fluctuations in the weights, causing the NN fitness to remain the same even if some of the weights change their value. The neutrality induced by the saturation phenomenon is evident from the results.
 
-Interestingly, iris and glass, even though follow the general trend of increasing saturation, exhibit lower levels of neutrality than the remaining problems. It has already been pointed out that iris and glass have more than one output neuron. Thus, the fitness of the resulting NN is the composite fitness of the numerous outputs. If the fitness of at least one of the few outputs changes, the overall fitness of the NN would change, too.
+Interestingly, iris and glass, even though they follow the general trend of increasing saturation, exhibit lower levels of neutrality than the remaining problems. It has already been pointed out that iris and glass have more than one output neuron. Thus, the fitness of the resulting NN is the composite fitness of the numerous outputs. If the fitness of at least one of the few outputs changes, the overall fitness of the NN would change, too.
 
 \section{Conclusion}
 This paper proposed two complementary measures of neutrality, ${\mathcal{M}_1}$ and ${\mathcal{M}_2}$, based on a progressive random walk sample of the landscape, to characterise a search landscape in terms of the presence and extent of neutral regions. The measures were tested on a relatively small set of benchmark functions that can be expanded in future research. The definition of the neutrality measures also allows for various levels of sensitivity to be adjusted, optimal values of which have yet to be determined empirically in an extensive study. Neutrality threshold $\epsilon$ can be increased in cases where the detection of near-neutrality is important. 
