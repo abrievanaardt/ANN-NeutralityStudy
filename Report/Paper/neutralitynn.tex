@@ -147,9 +147,9 @@ In search problems with low dimensionality, the space of candidate solutions to 
 
 When training an artificial neural network (NN), the objective is to find a weight configuration for which the error of the task the network is performing, is minimal \cite{gallagher2000multi}. NN training is therefore an optimisation problem and the notion of an error surface then emerges in a dimension above weight space. Typically, NN training is a hyperdimensional problem given the rapid increase in the number of weights for every unit added to the network. For this reason, visualising and describing the landscape are difficult tasks. Nevertheless, studies have suggested that NN error landscapes often feature large neutral regions on different levels of fitness, akin to a staircase, that extend into the extremes of the weights \cite{gallagher2000multi,hush1992error}. \citet{owen2007adapting} stress that search algorithms have to be modified in the presence of neutrality to ensure that good solutions are obtained. In particular, evolutionary algorithms (EAs) may appear to converge on local minima when they are in fact navigating neutral regions that could lead to areas of higher fitness \cite{barnett2001netcrawling}. It is therefore important to detect neutrality in fitness landscapes in general. Furthermore, a measure of neutrality would allow future research to investigate the relationship between the performance of search algorithms and the degree of neutrality present. 
 
-To the best of the authors' knowledge, there is currently no offline method for evaluating neutrality in continuous search spaces. This paper proposes two normalised measures of neutrality based on a progressive random walk sample. The measures are evaluated on a set of two-dimensional benchmark problems by performing a visual analysis. The relative values acquired on problems of increasing dimensions are then compared to ascertain whether the measures scale well. These measures are then applied to NN error landscapes produced by benchmark classification data sets. The study was restricted to static, continuous, boundary-constrained optimisation problems, and fully-connected feed-forward NNs.
+To the best of the authors' knowledge, there is currently no offline method for quantifying neutrality in continuous search spaces. This paper proposes two normalised measures of neutrality based on a progressive random walk sample. The measures are evaluated on a set of two-dimensional benchmark problems by performing a visual analysis. The relative values acquired on problems of increasing dimensions are then compared to ascertain whether the measures scale well. These measures are then applied to NN error landscapes produced by benchmark classification data sets. The study was restricted to static, continuous, boundary-constrained optimisation problems, and fully-connected feed-forward NNs.
 
-Section \ref{backgroundNeutralityFL} discusses neutrality in more detail. The current picture of the NN error landscape is sketched in Section \ref{backgroundNNEL}. Section \ref{backgroundDiscreteNeutrality} provides background on neutrality measures used in discrete spaces. Measures proposed in this paper are discussed in Section \ref{continuousNeutrality}, and analysed in Sections \ref{visualAnalysis} and \ref{nnELApplication}.
+Section \ref{backgroundNeutralityFL} discusses neutrality in more detail. The current picture of the NN error landscape is discussed in Section \ref{backgroundNNEL}. Section \ref{backgroundDiscreteNeutrality} provides background on neutrality measures used in discrete spaces. Measures proposed in this paper are discussed in Section \ref{continuousNeutrality}, and analysed in Sections \ref{visualAnalysis} and \ref{nnELApplication}.
 
 \section{Neutrality in Fitness Landscapes}
 \label{backgroundNeutralityFL}
@@ -214,13 +214,13 @@ This study is largely based on the progressive random walk proposed by \citet{ma
 
 \subsection{Neighbourhood and Neutrality}
 \label{neutralityMeasures}
-In order to characterise neutrality it is necessary to provide a definition for neighbourhood. In discrete spaces, neighbouring solutions of any solution $\vec{x}_j$ are unambiguously defined as those solutions immediately adjacent to $\vec{x}_j$. Determining such neighbours for real-encoded vectors would be an infinite process. Instead, a neighbourhood is defined as all solutions within radius $r$ from $\vec{x}_j$. The sampling method used in this study (see section \ref{sampling}) takes steps along the axes of the hypercube, with step sizes up to \textit{stepSize} large. In this case, $r = \sqrt{2 \cdot {\textit{stepSize}}^2}= \sqrt{2} \cdot \textit{stepSize}$. Furthermore, a three-point structure is wholly regarded as neutral when, for neighbouring solutions $\vec{x}_{j-1}$, $\vec{x}_j$ and $\vec{x}_{j+1}$, the following condition holds:
+In order to characterise neutrality it is necessary to provide a definition for neighbourhood. In discrete spaces, neighbouring solutions of any solution $\vec{x}_j$ are defined as those solutions that can be reached by applying an operator to $\vec{x}_j$. Determining such neighbours for real-encoded vectors would be an infinite process. Instead, a neighbourhood is defined as all solutions within the hypercube with $\vec{x}_j$ as centre point and length of side $s$. The sampling method used in this study (see section \ref{sampling}) takes steps along the axes of the hypercube, with step sizes up to \textit{stepSize}, where \textit{stepSize} = $\frac{1}{2}\times s$. Furthermore, a three-point structure is wholly regarded as neutral when, for neighbouring solutions $\vec{x}_{j-1}$, $\vec{x}_j$ and $\vec{x}_{j+1}$, the following condition holds:
 
 \begin{equation}
 \label{eqNeutralityDef}
 	f(\vec{x}_{i^{\text{max}}}) - f(\vec{x}_{i^{\text{min}}}) \le \epsilon			 
 \end{equation}
-where $i^{\text{max}} = \text{argmax}_i\{f(\vec{x}_i)\}$, $i^{\text{min}} = \text{argmin}_i\{f(\vec{x}_i)\}$, $i \in [j-1,j+1]$, and $f(\cdot)$ refers to the quality (fitness) of the solution. The next section describes the sampling algorithm used to generate the three-point objects.
+where $i^{\text{max}} = \text{argmax}_i\{f(\vec{x}_i)\}$, $i^{\text{min}} = \text{argmin}_i\{f(\vec{x}_i)\}$, $i \in \{j-1, j, j+1\}$, and $f(\cdot)$ refers to the quality (fitness) of the solution. The next section describes the sampling algorithm used to generate the three-point objects.
 
 \subsection{Sampling Method}
 \label{sampling}
@@ -240,7 +240,7 @@ The progressive random walk \cite{malan2014progressive} algorithm used in this s
 		\STATE Initialise \textit{stepSize} to the maximum size of any step;
 		\STATE Initialise the \textit{startingZone} bit mask of size $n$; 
 		\STATE Initialise the sequence \textit{walk}, with $\lvert \textit{walk} \rvert = \textit{numSteps} + 1$;
-		\FOR{$\forall i \in [1,n] \cap \mathbb{Z}$}	
+		\FOR{$\forall i \in \{1,...,n\} \cap \mathbb{Z}$}	
 			\STATE	$r \gets$ a random value $\in [0, \frac{x_i^{\text{max}} - x_i^{\text{min}}}{2})$;	
 			\IF{${startingZone}_i = 1$}
 				\STATE ${{\textit{walk}}_0}_i \gets x_i^{\text{max}} - r$;
@@ -288,7 +288,7 @@ where $s_{\text{neutral}}$ is the number of neutral 3-point structures in $\math
             \label{eqNeutralityM2}
 	    {\mathcal{M}_2} = \frac{\lvert w_{\text{max}} \rvert}{\lvert \mathcal{W} \rvert}
           \end{equation}
-where $w_{\text{max}}$ is the largest subset of $\mathcal{W}$ consisting of neutral 3-point objects only.
+where $w_{\text{max}}$ is the longest sub-walk of $\mathcal{W}$ consisting of neutral 3-point objects only.
 \end{itemize}
 
 Both measures produce an output in the range~$[0,1]$, where $0$ indicates that the landscape contains no neutral regions (as per the granularity of the algorithm parameters), and $1$ indicates a completely flat landscape where all solutions lie on a single fitness level.
@@ -310,7 +310,7 @@ The generic algorithm for applying measures ${\mathcal{M}_1}$ and ${\mathcal{M}_
 			\delta = \biggr\lceil \frac{2^n}{n_w} \biggr\rceil
 		\end{equation}
 		%\STATE Initialise \textit{numSteps}, \textit{stepSize} and \textit{startingZone} used by algorithm \ref{algProgRandomWalk};
-		\FOR{$\forall i \in [1,n_w] \cap \mathbb{Z}$}
+		\FOR{$\forall i \in \{1,...,n_w\}$}
 			\STATE \textit{walk} $\gets$ sample the input problem using a progressive random walk~\cite{malan2014progressive};
 			\STATE Normalise the sample fitness range in \textit{walk} to $[0,1]$;
 			\IF{$\mathcal{M}$ is ${\mathcal{M}_1}$}
@@ -332,7 +332,7 @@ In this section, measures $\mathcal{M}_1$ and $\mathcal{M}_2$ are analysed by co
 
 \subsection{Benchmark Problems}
 \label{visualBenchmarks}
-Seven functions, summarised in Table~\ref{functionBenchmarks} and Figure~\ref{figVisBenchmark}, were selected for the analysis. These benchmarks exhibit a varying degree of neutrality, from the completely neutral landscape of $f_{\text{Fl}}$  to the landscape of $f_{\text{AV}}$, in which no neighbouring solutions have equal fitness. For reference, the functions were ranked from most to least neutral, as identified by the authors. When the proposed measures are applied to the benchmarks, it should be expected that they rank the functions in the same order. Note that $f_{\text{Ea}}$ is the only problem defined in two dimensions only, and will therefore not be used for scalability testing. Also note that $f_{\textit{St}_2}$ is the same as $f_{\textit{St}_1}$, except zoomed in on a smaller domain. The small plateaus that occur on multiple levels of the landscape are clear from the plot of $f_{\textit{St}_2}$. From the perspective of FLA, although these problems have the same definitions, the difference in their domain implies they will not be treated the same by either an optimisation algorithm or any FLA technique. $f_{\text{Ea}}$ is less neutral than $f_{\text{IT}}$ due to the soft edges and sharp point of the protruding cone. Although the rest of the surface may look more neutral than the surface of $f_{\text{IT}}$, the impact of the gradients near the cone cannot be appreciated at this scale.
+Seven functions, summarised in Table~\ref{functionBenchmarks} and Figure~\ref{figVisBenchmark}, were selected for the analysis. These benchmarks exhibit a varying degree of neutrality, from the completely neutral landscape of $f_{\text{Fl}}$  to the landscape of $f_{\text{AV}}$, in which no neighbouring solutions have equal fitness. For reference, the functions were ranked from most to least neutral, as identified by the authors. When the proposed measures are applied to the benchmarks, it should be expected that they rank the functions in the same order. Note that $f_{\text{Ea}}$ is the only problem defined in two dimensions only, and will therefore not be used for scalability testing. Also note that $f_{\textit{St}_2}$ is the same as $f_{\textit{St}_1}$, except zoomed in on a smaller domain. The small plateaus that occur on multiple levels of the landscape are clear from the plot of $f_{\textit{St}_2}$. From the perspective of FLA, although these functions have the same definitions, the difference in their domain implies they will not be treated the same by either an optimisation algorithm or any FLA technique. $f_{\text{Ea}}$ is less neutral than $f_{\text{IT}}$ due to the soft edges and sharp point of the protruding cone. Although the rest of the surface may look more neutral than the surface of $f_{\text{IT}}$, the impact of the gradients near the cone cannot be appreciated at this scale.
 
 \begin{table*}[!htb]
 %% increase table row spacing, adjust to taste
@@ -352,11 +352,11 @@ Rank & Function & Name, Source & Definition & Domain\\
 \hline\noalign{\smallskip}
 1&$f_{\text{Fl}}$ & Flat & $f_{\text{Fl}}(\vec{x})= 1$ & $x_i \in [-5,5]$ \\
 2&$f_{\text{IA}}$ &Inverted Almost-flat \cite{malan2014characterising}&$f_{\text{IA}}(\vec{x}) = \begin{cases} 
-								0 & \exists i \in [1,n] \text{ such that } x_i \in [-0.5, 0.5] \\
+								0 & \forall i \in \{1,...,n\}, x_i \in [-0.5, 0.5]  \\
 								1 & \text{otherwise} \\							
 						     \end{cases}$ & $x_i \in [-5,5]$ \\
 3&$f_{\text{IT}}$ & Inverted Table \cite{malan2009quantifying}& $f_{\text{IT}}(\vec{x}) = \begin{cases} 
-							0 & \exists i \in [1,n] \text{ such that } x_i \in [-2.5, 2.5] \\
+							0 & \forall i \in \{1,...,n\}, x_i \in [-2.5, 2.5] \\
 							1 & \text{otherwise} \\							
 						  \end{cases}$ & $x_i \in [-5,5]$ \\
 4&$f_{\text{Ea}}$ & Easom \cite{van2006study}& $f_{\text{Ea}}(x_1, x_2)= 1 - cos(x_1) \cdot cos(x_2) \cdot e^{-{(x_1 - \pi)}^2-{(x_2-\pi)}^2}$ & $x_1, x_2 \in [-10,10]$\\
