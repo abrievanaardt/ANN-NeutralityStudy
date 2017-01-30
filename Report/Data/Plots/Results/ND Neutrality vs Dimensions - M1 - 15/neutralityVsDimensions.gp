@@ -19,9 +19,10 @@ set bmargin at screen bm
 set tmargin at screen bm + size * (abs(y2-y1) / (abs(y2-y1) + abs(y4-y3) ) )
 
 set yrange [y1:y2]
-plot 'Step 2.dat' title 'f_{{St}}_2' with linespoints lc 'black' dt 4 pt 4,\
-'Step 1.dat' title 'f_{{St}}_1' with linespoints lc 'black' dt 5 pt 6,\
-'AbsoluteValue.dat' title 'f_{AV}' with linespoints lc 'black' dt 6 pt 3
+set xrange [2:15]
+plot 'Step 2.dat' title 'f_{{St}}_2' with linespoints lc 'black' lt 4 pt 4,\
+'Step 1.dat' title 'f_{{St}}_1' with linespoints lc 'black' lt 5 pt 6,\
+'AbsoluteValue.dat' title 'f_{AV}' with linespoints lc 'black' lt 6 pt 3
 
 unset xtics
 unset xlabel
@@ -46,8 +47,8 @@ rm + gap / 4.0, bm + size * (abs(y2-y1) / (abs(y2-y1) + abs(y4-y3) ) ) + gap / 4
 set arrow from screen rm - gap / 4.0, bm + size * (abs(y2-y1) / (abs(y2-y1)+abs(y4-y3) ) ) - gap / 4.0  + gap to screen \
 rm + gap / 4.0, bm + size * (abs(y2-y1) / (abs(y2-y1) + abs(y4-y3) ) ) + gap / 4.0 + gap nohead
 
-plot 'Flat.dat' title 'f_{Fl}' with linespoints lc 'black' dt 1 pt 8,\
-'AlmostFlat.dat' title 'f_{IA}' with linespoints lc 'black' dt 2 pt 2,\
-'Table.dat' title 'f_{IT}' with linespoints lc 'black' dt 3 pt 1
+plot 'Flat.dat' title 'f_{Fl}' with linespoints lc 'black' lt 1 pt 8,\
+'AlmostFlat.dat' title 'f_{IA}' with linespoints lc 'black' lt 2 pt 2,\
+'Table.dat' title 'f_{IT}' with linespoints lc 'black' lt 3 pt 1
 
 unset multiplot
