@@ -20,4 +20,4 @@ buildNumber.properties
 *.run.xml
 *.synctex.gz
 #Careful here
-*.pdf
+/**/Report/Paper/**/*.pdf
