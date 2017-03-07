@@ -12,3 +12,12 @@ buildNumber.properties
 /Implementation/NeutralityStudy/log/*.lck
 /Implementation/NeutralityStudy/log/*.log.lck
 /Implementation/NeutralityStudy/Studies/*
+
+#Ignore temp latex files
+*.aux
+*.bbl
+*.blg
+*.run.xml
+*.synctex.gz
+#Careful here
+*.pdf
